@@ -31,4 +31,8 @@ public class PresentationRepository {
                 ? Optional.of(presentations.get(id))
                 : Optional.empty();
     }
+
+    public void deletePresentationById(Integer id) {
+        presentations.remove(id);
+    }
 }

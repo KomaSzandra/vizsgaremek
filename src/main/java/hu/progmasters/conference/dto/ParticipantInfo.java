@@ -9,5 +9,5 @@ public class ParticipantInfo {
     private Integer id;
     private String name;
     private String email;
-    private ConferenceInfo conferences;
+    private ConferenceInfo conference;
 }

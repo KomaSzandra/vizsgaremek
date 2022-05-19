@@ -2,6 +2,7 @@ package hu.progmasters.conference.controller;
 
 import hu.progmasters.conference.dto.PresentationCreateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
+import hu.progmasters.conference.dto.PresentationUpdateCommand;
 import hu.progmasters.conference.service.PresentationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,20 @@ public class PresentationController {
         return new ResponseEntity<>(presentationFound, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PresentationInfo> update(@Valid @PathVariable("id") Integer id,
+                                                   @Valid @RequestBody PresentationUpdateCommand command) {
+        LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
+        PresentationInfo updated = presentationService.update(id, command);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + id));
+        presentationService.delete(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

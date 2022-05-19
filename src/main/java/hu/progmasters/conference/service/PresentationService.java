@@ -5,6 +5,7 @@ import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.LecturerInfo;
 import hu.progmasters.conference.dto.PresentationCreateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
+import hu.progmasters.conference.dto.PresentationUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
@@ -57,5 +58,23 @@ public class PresentationService {
             throw new PresentationNotFoundException();
         }
         return modelMapper.map(presentationOptional.get(), PresentationInfo.class);
+    }
+
+    public PresentationInfo update(Integer id, PresentationUpdateCommand command) {
+        Optional<Presentation> presentationOptional = presentationRepository.findPresentationById(id);
+        if (presentationOptional.isEmpty()) {
+            throw new PresentationNotFoundException();
+        }
+        Presentation presentation = presentationOptional.get();
+        presentation.setStartTime(command.getStartTime());
+        return modelMapper.map(presentationOptional.get(), PresentationInfo.class);
+    }
+
+    public void delete(Integer id) {
+        Optional<Presentation> optionalPresentation = presentationRepository.findPresentationById(id);
+        if (optionalPresentation.isEmpty()) {
+            throw new PresentationNotFoundException();
+        }
+        presentationRepository.deletePresentationById(id);
     }
 }

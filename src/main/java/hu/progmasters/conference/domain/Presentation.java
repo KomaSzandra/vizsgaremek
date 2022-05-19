@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class Presentation {
     private Integer id;
     private Lecturer lecturer;
+    // private String lecturer;
     private String title;
     private LocalDateTime startTime;
     // private List<Participant> participants;

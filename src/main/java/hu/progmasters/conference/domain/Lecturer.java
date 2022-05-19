@@ -11,4 +11,5 @@ public class Lecturer {
     private Integer id;
     private String name;
     private String institution;
+    // private Presentation presentation;
 }
