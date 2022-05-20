@@ -1,20 +1,16 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.LecturerCreateUpdateCommand;
-import hu.progmasters.conference.dto.LecturerInfo;
-import hu.progmasters.conference.dto.ParticipantCreateCommand;
-import hu.progmasters.conference.dto.ParticipantInfo;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.service.ParticipantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Path;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/participants")
@@ -36,6 +32,39 @@ public class ParticipantController {
         ParticipantInfo participant = participantService.saveParticipant(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", participant));
         return new ResponseEntity<>(participant, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ParticipantListInfo>> listParticipants() {
+        LOGGER.info(String.format(LOG_GET, ""));
+        List<ParticipantListInfo> participants = participantService.findAll();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", participants));
+        return new ResponseEntity<>(participants, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ParticipantInfo> findParticipantById(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_GET, "/" + id));
+        ParticipantInfo byId = participantService.findById(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", byId));
+        return new ResponseEntity<>(byId, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ParticipantInfo> updateParticipant(@PathVariable("id") Integer id,
+                                                         @Valid @RequestBody ParticipantUpdateCommand command) {
+        LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
+        ParticipantInfo participantModified = participantService.update(id, command);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", participantModified));
+        return new ResponseEntity<>(participantModified, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{participantId}")
+    public ResponseEntity<Void> deleteParticipant(@PathVariable("participantId") Integer participantId, Integer conferenceId) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + participantId));
+        participantService.deleteParticipant(conferenceId, participantId);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

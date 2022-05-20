@@ -3,8 +3,8 @@ package hu.progmasters.conference.repository;
 import hu.progmasters.conference.domain.Participant;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class ParticipantRepository {
@@ -18,5 +18,19 @@ public class ParticipantRepository {
         participants.put(nextId, toSave);
         nextId++;
         return toSave;
+    }
+
+    public List<Participant> findAll() {
+        return participants.values().stream()
+                .sorted(Comparator.comparing(Participant::getId))
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Participant> findById(Integer id) {
+        return participants.containsKey(id) ? Optional.of(participants.get(id)) : Optional.empty();
+    }
+
+    public void deleteById(Integer participantId) {
+        participants.remove(participantId);
     }
 }

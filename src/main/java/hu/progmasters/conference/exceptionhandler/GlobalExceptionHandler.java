@@ -36,4 +36,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handlePresentationNotFoundException() {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ParticipantNotFoundException.class)
+    public ResponseEntity<Void> handleParticipantNotFoundException() {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
