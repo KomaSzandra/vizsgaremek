@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ConferenceUpdateCommand {
 
-    @NotNull
-    @Future
+    @NotNull(message = "must not be null")
+    @Future(message = "must be future date")
     private LocalDate localDate;
 }

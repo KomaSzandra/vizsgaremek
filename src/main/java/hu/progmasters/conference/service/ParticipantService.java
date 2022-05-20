@@ -74,7 +74,6 @@ public class ParticipantService {
         return modelMapper.map(participant, ParticipantInfo.class);
     }
 
-
     public void deleteParticipant(Integer conferenceId, Integer participantId) {
         Optional<Conference> conferenceOptional = conferenceRepository.findById(conferenceId);
         if (conferenceOptional.isEmpty()) {

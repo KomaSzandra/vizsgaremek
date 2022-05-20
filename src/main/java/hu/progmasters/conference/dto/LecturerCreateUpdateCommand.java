@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LecturerCreateUpdateCommand {
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     private String institution;
 }

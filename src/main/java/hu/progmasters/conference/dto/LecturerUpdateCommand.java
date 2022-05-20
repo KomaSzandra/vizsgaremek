@@ -11,6 +11,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class LecturerUpdateCommand {
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     private String institution;
 }

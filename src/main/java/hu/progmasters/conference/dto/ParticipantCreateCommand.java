@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ParticipantCreateCommand {
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     private String name;
 
-    @Email
-    @NotBlank
+    @Email(message = "must be an email")
+    @NotNull(message = "must not be null")
     private String email;
 
-    @NotNull
+    @NotNull(message = "must not be null")
     private Integer conferenceId;
 }

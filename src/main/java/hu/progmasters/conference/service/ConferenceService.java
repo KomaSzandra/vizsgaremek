@@ -3,6 +3,7 @@ package hu.progmasters.conference.service;
 import hu.progmasters.conference.domain.Conference;
 import hu.progmasters.conference.dto.ConferenceCreateCommand;
 import hu.progmasters.conference.dto.ConferenceInfo;
+import hu.progmasters.conference.dto.ConferenceListInfo;
 import hu.progmasters.conference.dto.ConferenceUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.ConferenceNotFoundException;
 import hu.progmasters.conference.repository.ConferenceRepository;
@@ -32,10 +33,10 @@ public class ConferenceService {
         return modelMapper.map(saved, ConferenceInfo.class);
     }
 
-    public List<ConferenceInfo> listAllConferences() {
+    public List<ConferenceListInfo> listAllConferences() {
         List<Conference> conferences = conferenceRepository.listAllConferences();
         return conferences.stream()
-                .map(conference -> modelMapper.map(conference, ConferenceInfo.class))
+                .map(conference -> modelMapper.map(conference, ConferenceListInfo.class))
                 .collect(Collectors.toList());
     }
 

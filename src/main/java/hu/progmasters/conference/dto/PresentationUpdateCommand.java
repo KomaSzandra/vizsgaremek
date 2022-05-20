@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PresentationUpdateCommand {
 
-    @NotNull
-    @Future
+    @NotNull(message = "must not be null")
+    @Future(message = "must be future date")
     private LocalDateTime startTime;
 }

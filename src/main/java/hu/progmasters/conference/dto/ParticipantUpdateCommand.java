@@ -9,6 +9,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ParticipantUpdateCommand {
 
-    @NotNull
+    @NotNull(message = "must not be null")
     private Integer conferenceId;
 }

@@ -2,6 +2,7 @@ package hu.progmasters.conference.controller;
 
 import hu.progmasters.conference.dto.ConferenceCreateCommand;
 import hu.progmasters.conference.dto.ConferenceInfo;
+import hu.progmasters.conference.dto.ConferenceListInfo;
 import hu.progmasters.conference.dto.ConferenceUpdateCommand;
 import hu.progmasters.conference.service.ConferenceService;
 import org.slf4j.Logger;
@@ -39,9 +40,9 @@ public class ConferenceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ConferenceInfo>> listAllConferences() {
+    public ResponseEntity<List<ConferenceListInfo>> listAllConferences() {
         LOGGER.info(String.format(LOG_GET, ""));
-        List<ConferenceInfo> conferences = conferenceService.listAllConferences();
+        List<ConferenceListInfo> conferences = conferenceService.listAllConferences();
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", conferences));
         return new ResponseEntity<>(conferences, HttpStatus.OK);
     }
