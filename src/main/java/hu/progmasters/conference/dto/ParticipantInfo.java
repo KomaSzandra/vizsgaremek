@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 public class ParticipantInfo {
     private Integer id;
     private String name;
-    private String email;
-    private ConferenceInfo conference;
+    private String institution;
+    private PresentationInfo presentation;
 }

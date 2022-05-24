@@ -3,33 +3,41 @@ package hu.progmasters.conference.repository;
 import hu.progmasters.conference.domain.Lecturer;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class LecturerRepository {
 
-    private Map<Integer, Lecturer> lecturers = new HashMap<>();
-    private Integer nextId = 1;
+    @PersistenceContext
+    private EntityManager entityManager;
+
 
     public Lecturer save(Lecturer toSave) {
-        toSave.setId(nextId);
-        lecturers.put(nextId, toSave);
-        nextId++;
+        entityManager.persist(toSave);
         return toSave;
     }
 
-    public Optional<Lecturer> findById(Integer id) {
-        return lecturers.containsKey(id) ? Optional.of(lecturers.get(id)) : Optional.empty();
-    }
-
     public List<Lecturer> findAll() {
-        return lecturers.values().stream()
-                .sorted(Comparator.comparing(Lecturer::getInstitution))
-                .collect(Collectors.toList());
+        return entityManager.createQuery("SELECT l FROM Lecturer l", Lecturer.class)
+                .getResultList();
     }
 
-    public void deleteById(Integer lecturerId) {
-        lecturers.remove(lecturerId);
+    public Optional<Lecturer> findById(Integer id) {
+        return Optional.ofNullable(entityManager.find(Lecturer.class, id));
+    }
+
+    public Lecturer findByName(String name) {
+        TypedQuery<Lecturer> query = entityManager.createQuery("SELECT l FROM Lecturer l WHERE l.name = :nameParam", Lecturer.class);
+        query.setParameter("nameParam", name);
+        Lecturer lecturerWithName = query.getSingleResult();
+        return lecturerWithName;
+    }
+
+    public void deleteLecturer(Lecturer toDelete) {
+        entityManager.remove(toDelete);
     }
 }

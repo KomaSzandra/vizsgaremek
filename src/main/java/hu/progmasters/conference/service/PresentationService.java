@@ -2,10 +2,7 @@ package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Presentation;
-import hu.progmasters.conference.dto.LecturerInfo;
-import hu.progmasters.conference.dto.PresentationCreateCommand;
-import hu.progmasters.conference.dto.PresentationInfo;
-import hu.progmasters.conference.dto.PresentationUpdateCommand;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
@@ -13,68 +10,74 @@ import hu.progmasters.conference.repository.PresentationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PresentationService {
 
     private PresentationRepository presentationRepository;
     private ModelMapper modelMapper;
-    private LecturerService lecturerService;
     private LecturerRepository lecturerRepository;
 
-    public PresentationService(PresentationRepository presentationRepository, ModelMapper modelMapper, LecturerService lecturerService, LecturerRepository lecturerRepository) {
+    public PresentationService(PresentationRepository presentationRepository, ModelMapper modelMapper, LecturerRepository lecturerRepository) {
         this.presentationRepository = presentationRepository;
         this.modelMapper = modelMapper;
-        this.lecturerService = lecturerService;
         this.lecturerRepository = lecturerRepository;
     }
 
     public PresentationInfo savePresentation(PresentationCreateCommand command) {
-        Presentation presentationToSave = modelMapper.map(command, Presentation.class);
-        Optional<Lecturer> lecturerOptional = lecturerService.findLecturerById(command.getLecturerId());
-        if(lecturerOptional.isEmpty()) {
+        Presentation toSave = modelMapper.map(command, Presentation.class);
+        Optional<Lecturer> lecturer = lecturerRepository.findById(command.getLecturerId());
+        if (lecturer.isEmpty()) {
             throw new LecturerNotFoundException();
         }
-        presentationToSave.setLecturer(lecturerOptional.get());
-        Presentation saved = presentationRepository.save(presentationToSave);
-        PresentationInfo info = modelMapper.map(saved, PresentationInfo.class);
-        info.setLecturerInfo(modelMapper.map(lecturerOptional.get(), LecturerInfo.class));
-        return info;
-    }
-
-    public List<PresentationInfo> findAll() {
-        List<Presentation> presentations = presentationRepository.findAll();
-        return presentations.stream()
-                .map(presentation -> modelMapper.map(presentation, PresentationInfo.class))
-                .collect(Collectors.toList());
+        toSave.setLecturer(lecturer.get());
+        Presentation saved = presentationRepository.save(toSave);
+        PresentationInfo savedInfo = modelMapper.map(saved, PresentationInfo.class);
+        savedInfo.setLecturer(modelMapper.map(lecturer.get(), LecturerInfo.class));
+        return savedInfo;
     }
 
     public PresentationInfo findById(Integer id) {
-        Optional<Presentation> presentationOptional = presentationRepository.findPresentationById(id);
-        if (presentationOptional.isEmpty()) {
+        Optional<Presentation> presentation = presentationRepository.findById(id);
+        if (presentation.isPresent()) {
+            return modelMapper.map(presentation.get(), PresentationInfo.class);
+        } else {
             throw new PresentationNotFoundException();
         }
-        return modelMapper.map(presentationOptional.get(), PresentationInfo.class);
     }
 
-    public PresentationInfo update(Integer id, PresentationUpdateCommand command) {
-        Optional<Presentation> presentationOptional = presentationRepository.findPresentationById(id);
-        if (presentationOptional.isEmpty()) {
-            throw new PresentationNotFoundException();
-        }
-        Presentation presentation = presentationOptional.get();
-        presentation.setStartTime(command.getStartTime());
-        return modelMapper.map(presentationOptional.get(), PresentationInfo.class);
+    public List<PresentationListItem> findAll() {
+        List<Presentation> presentations = presentationRepository.findAll();
+        return presentations.stream()
+                .map(presentation -> modelMapper.map(presentation, PresentationListItem.class))
+                .collect(Collectors.toList());
     }
 
-    public void delete(Integer id) {
-        Optional<Presentation> optionalPresentation = presentationRepository.findPresentationById(id);
-        if (optionalPresentation.isEmpty()) {
+    public PresentationInfo findByTitle(String title) {
+        return modelMapper.map(presentationRepository.findByTitle(title), PresentationInfo.class);
+    }
+
+    public PresentationInfo updatePresentation(Integer id, PresentationUpdateCommand command) {
+        Optional<Presentation> presentation = presentationRepository.findById(id);
+        if(presentation.isEmpty()) {
             throw new PresentationNotFoundException();
         }
-        presentationRepository.deletePresentationById(id);
+        Presentation presentationFound = presentation.get();
+        presentationFound.setStartTime(command.getStartTime());
+        return modelMapper.map(presentation, PresentationInfo.class);
+    }
+
+    public void deletePresentation(Integer presentationId) {
+        Optional<Presentation> presentation = presentationRepository.findById(presentationId);
+        if(presentation.isEmpty()) {
+            throw new PresentationNotFoundException();
+        }
+        Presentation presentationFound = presentation.get();
+        presentationRepository.delete(presentationFound);
     }
 }

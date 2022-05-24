@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ParticipantListInfo {
+public class ParticipantListItem {
     private String name;
-    private String email;
+    private String institution;
 }

@@ -1,4 +1,4 @@
 package hu.progmasters.conference.exceptionhandler;
 
-public class LecturerNotFoundException extends RuntimeException{
+public class LecturerNotFoundException extends RuntimeException {
 }

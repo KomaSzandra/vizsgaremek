@@ -3,36 +3,45 @@ package hu.progmasters.conference.repository;
 import hu.progmasters.conference.domain.Presentation;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PresentationRepository {
 
-    private Map<Integer, Presentation> presentations = new HashMap<>();
-    private Integer nextId = 1;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-
-    public Presentation save(Presentation presentationToSave) {
-        presentationToSave.setId(nextId);
-        presentations.put(nextId, presentationToSave);
-        nextId++;
-        return presentationToSave;
+    public Presentation save(Presentation toSave) {
+        entityManager.persist(toSave);
+        return toSave;
     }
 
     public List<Presentation> findAll() {
-        return presentations.values().stream()
-                .sorted(Comparator.comparing(Presentation::getStartTime))
-                .collect(Collectors.toList());
+        return entityManager.createQuery("SELECT p FROM Presentation p", Presentation.class)
+                .getResultList();
     }
 
-    public Optional<Presentation> findPresentationById(Integer id) {
-        return presentations.containsKey(id)
-                ? Optional.of(presentations.get(id))
-                : Optional.empty();
+    public Optional<Presentation> findById(Integer presentationId) {
+        return Optional.ofNullable(entityManager.find(Presentation.class, presentationId));
     }
 
-    public void deletePresentationById(Integer id) {
-        presentations.remove(id);
+    public Presentation findByTitle(String titleToFind) {
+        TypedQuery<Presentation> query = entityManager.createQuery("SELECT p FROM Presentation p " +
+                "WHERE p.title = :titleParam", Presentation.class);
+        query.setParameter("titleParam", titleToFind);
+        Presentation presentationWithTitle = query.getSingleResult();
+        return presentationWithTitle;
+    }
+
+    public Presentation update(Presentation toUpdate) {
+        return entityManager.merge(toUpdate);
+    }
+
+    public void delete(Presentation toDelete) {
+        entityManager.remove(toDelete);
     }
 }

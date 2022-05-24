@@ -7,9 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class PresentationInfo {
-    private Integer id;
-    private LecturerInfo lecturer;
+public class PresentationListItem {
+    private Integer lecturerId;
     private String title;
     private LocalDateTime startTime;
     private int maxParticipants;

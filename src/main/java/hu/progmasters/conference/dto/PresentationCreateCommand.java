@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -20,4 +21,7 @@ public class PresentationCreateCommand {
     @NotNull(message = "must not be null")
     @Future(message = "must be in the future")
     private LocalDateTime startTime;
+
+    @Min(value = 10, message = "minimum 10")
+    private int maxParticipants;
 }

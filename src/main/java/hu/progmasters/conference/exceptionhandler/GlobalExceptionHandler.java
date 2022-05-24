@@ -13,32 +13,28 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ValidationError>> handleValidationException(MethodArgumentNotValidException exception) {
-        List<ValidationError> validationErrors = exception.getBindingResult().getFieldErrors().stream()
+    public ResponseEntity<List<ValidationError>> handleValidationError(MethodArgumentNotValidException exception) {
+        List<ValidationError> validationErrors = exception.getFieldErrors()
+                .stream()
                 .map(fieldError -> new ValidationError(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(LecturerNotFoundException.class)
-    public ResponseEntity<List<ValidationError>> handleLecturerNotFoundException() {
+    @ExceptionHandler(PresentationNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handlePresentationNotFound() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("lecturerId", "no lecturer found with id")),
+                List.of(new ValidationError("presentationId", "no presentation found with id")),
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ConferenceNotFoundException.class)
-    public ResponseEntity<Void> handleConferenceNotFoundException() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(PresentationNotFoundException.class)
-    public ResponseEntity<Void> handlePresentationNotFoundException() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(ParticipantNotFoundException.class)
-    public ResponseEntity<Void> handleParticipantNotFoundException() {
+    public ResponseEntity<Void> handleParticipantNotFound() {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(LecturerNotFoundException.class)
+    public ResponseEntity<Void> handleLecturerNotFound() {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

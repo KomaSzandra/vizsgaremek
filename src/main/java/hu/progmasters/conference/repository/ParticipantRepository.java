@@ -3,34 +3,27 @@ package hu.progmasters.conference.repository;
 import hu.progmasters.conference.domain.Participant;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Optional;
 
 @Repository
 public class ParticipantRepository {
 
-    private Map<Integer, Participant> participants = new HashMap<>();
-    private Integer nextId = 1;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
-    public Participant saveParticipant(Participant toSave) {
-        toSave.setId(nextId);
-        participants.put(nextId, toSave);
-        nextId++;
+    public Participant save(Participant toSave) {
+        entityManager.persist(toSave);
         return toSave;
     }
 
-    public List<Participant> findAll() {
-        return participants.values().stream()
-                .sorted(Comparator.comparing(Participant::getId))
-                .collect(Collectors.toList());
+    public Optional<Participant> findParticipantById(Integer participantId) {
+        return Optional.ofNullable(entityManager.find(Participant.class, participantId));
     }
 
-    public Optional<Participant> findById(Integer id) {
-        return participants.containsKey(id) ? Optional.of(participants.get(id)) : Optional.empty();
-    }
-
-    public void deleteById(Integer participantId) {
-        participants.remove(participantId);
+    public void deleteParticipant(Participant participant) {
+        entityManager.remove(participant);
     }
 }
