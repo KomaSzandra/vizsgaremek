@@ -8,7 +8,6 @@ import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.ParticipantRepository;
-import hu.progmasters.conference.repository.PresentationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +20,18 @@ public class ParticipantService {
 
     private ParticipantRepository participantRepository;
     private ModelMapper modelMapper;
-    private PresentationRepository presentationRepository;
+    private PresentationService presentationService;
 
-    public ParticipantService(ParticipantRepository participantRepository, ModelMapper modelMapper, PresentationRepository presentationRepository) {
+    public ParticipantService(ParticipantRepository participantRepository, ModelMapper modelMapper, PresentationService presentationService) {
         this.participantRepository = participantRepository;
         this.modelMapper = modelMapper;
-        this.presentationRepository = presentationRepository;
+
+        this.presentationService = presentationService;
     }
 
     public ParticipantInfo saveParticipant(ParticipantCreateCommand command, Integer presentationId) {
         Participant toSave = modelMapper.map(command, Participant.class);
-        Optional<Presentation> presentation = presentationRepository.findById(presentationId);
+        Optional<Presentation> presentation = presentationService.findPresentationById(presentationId);
         if (presentation.isEmpty()) {
             throw new PresentationNotFoundException();
         }
@@ -43,7 +43,7 @@ public class ParticipantService {
     }
 
     public void deleteParticipant(Integer presentationId, Integer participantId) {
-        Optional<Presentation> presentation = presentationRepository.findById(presentationId);
+        Optional<Presentation> presentation = presentationService.findPresentationById(presentationId);
         if (presentation.isEmpty()) {
             throw new PresentationNotFoundException();
         }

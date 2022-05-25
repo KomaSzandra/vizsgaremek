@@ -5,7 +5,6 @@ import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
-import hu.progmasters.conference.repository.LecturerRepository;
 import hu.progmasters.conference.repository.PresentationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,17 +20,17 @@ public class PresentationService {
 
     private PresentationRepository presentationRepository;
     private ModelMapper modelMapper;
-    private LecturerRepository lecturerRepository;
+    private LecturerService lecturerService;
 
-    public PresentationService(PresentationRepository presentationRepository, ModelMapper modelMapper, LecturerRepository lecturerRepository) {
+    public PresentationService(PresentationRepository presentationRepository, ModelMapper modelMapper, LecturerService lecturerService) {
         this.presentationRepository = presentationRepository;
         this.modelMapper = modelMapper;
-        this.lecturerRepository = lecturerRepository;
+        this.lecturerService = lecturerService;
     }
 
     public PresentationInfo savePresentation(PresentationCreateCommand command) {
         Presentation toSave = modelMapper.map(command, Presentation.class);
-        Optional<Lecturer> lecturer = lecturerRepository.findById(command.getLecturerId());
+        Optional<Lecturer> lecturer = lecturerService.findLecturerById(command.getLecturerId());
         if (lecturer.isEmpty()) {
             throw new LecturerNotFoundException();
         }
@@ -80,4 +79,9 @@ public class PresentationService {
         Presentation presentationFound = presentation.get();
         presentationRepository.delete(presentationFound);
     }
+
+    public Optional<Presentation> findPresentationById(int id) {
+        return presentationRepository.findById(id);
+    }
+
 }

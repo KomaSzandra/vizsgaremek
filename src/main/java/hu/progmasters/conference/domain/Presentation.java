@@ -18,7 +18,8 @@ public class Presentation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "presentation_id")
     private Integer id;
-
+    @ManyToOne
+    @JoinColumn(name = "lecturer_lecturer_id")
     private Lecturer lecturer;
     @Column(name = "presentation_name")
     private String title;

@@ -60,4 +60,8 @@ public class LecturerService {
         Lecturer lecturerFound = lecturer.get();
         lecturerRepository.deleteLecturer(lecturerFound);
     }
+
+    public Optional<Lecturer> findLecturerById(Integer id) {
+        return lecturerRepository.findById(id);
+    }
 }

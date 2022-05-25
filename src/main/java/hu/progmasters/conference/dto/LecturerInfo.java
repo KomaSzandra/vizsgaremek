@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class LecturerInfo {
     private Integer id;
     private String name;
-    private String institute;
+    private String institution;
 }

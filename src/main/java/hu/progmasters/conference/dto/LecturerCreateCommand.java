@@ -15,6 +15,6 @@ public class LecturerCreateCommand {
     private String name;
 
     @NotBlank(message = "must not be blank")
-    private String institute;
+    private String institution;
 
 }

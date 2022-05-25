@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PresentationCreateCommand {
 
+    @NotNull(message = "must not be null")
     private Integer lecturerId;
 
     @NotBlank(message = "must not be blank")

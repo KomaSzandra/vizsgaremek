@@ -17,8 +17,8 @@ public class Lecturer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecturer_id")
     private Integer id;
-    @Column(name = "name")
+    @Column(name = "lecturer_name")
     private String name;
-    @Column(name = "institute")
-    private String institute;
+    @Column(name = "institution")
+    private String institution;
 }

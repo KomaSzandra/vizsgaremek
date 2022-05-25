@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LecturerListInfo {
     private String name;
-    private String institute;
+    private String institution;
 }
