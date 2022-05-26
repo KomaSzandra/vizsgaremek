@@ -88,3 +88,4 @@ public class ParticipantController {
         return participantService.update(id, command);
     }
 }
+
