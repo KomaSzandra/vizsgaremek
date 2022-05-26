@@ -35,7 +35,7 @@ public class PresentationController {
     }
 
     @PostMapping
-    @Operation(summary = "Save a presentation")
+    @Operation(summary = "Save a presentation with lecturer")
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
     public ResponseEntity<PresentationInfo> savePresentation(Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {

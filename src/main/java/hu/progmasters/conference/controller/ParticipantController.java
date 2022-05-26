@@ -59,19 +59,32 @@ public class ParticipantController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get a participant by given id")
+    @ApiResponse(responseCode = "200", description = "Participant has been found")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
+    @ApiResponse(responseCode = "404", description = "Participant has not been found")
     public ParticipantInfo findById(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_GET, "/" + id));
         return participantService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Lists all participants")
+    @ApiResponse(responseCode = "200", description = "Participants have been listed")
+    @ApiResponse(responseCode = "400", description = "Bad request, participants cannot be listed")
     public List<ParticipantInfo> findAll() {
+        LOGGER.info(String.format(LOG_GET, ""));
         return participantService.findAll();
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Transferring a participant to another presentation")
+    @ApiResponse(responseCode = "200", description = "Participant has been updated")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
     public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
+        LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         return participantService.update(id, command);
     }
 }
