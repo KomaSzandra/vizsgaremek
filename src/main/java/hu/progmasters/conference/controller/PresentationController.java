@@ -2,6 +2,7 @@ package hu.progmasters.conference.controller;
 
 import hu.progmasters.conference.dto.PresentationCreateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
+import hu.progmasters.conference.dto.PresentationListItem;
 import hu.progmasters.conference.dto.PresentationUpdateCommand;
 import hu.progmasters.conference.service.PresentationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Tag(name = "The controller for presentations")
