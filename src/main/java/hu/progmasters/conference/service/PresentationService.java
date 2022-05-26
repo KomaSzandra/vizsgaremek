@@ -68,7 +68,7 @@ public class PresentationService {
         }
         Presentation presentationFound = presentation.get();
         presentationFound.setStartTime(command.getStartTime());
-        return modelMapper.map(presentation, PresentationInfo.class);
+        return modelMapper.map(presentationFound, PresentationInfo.class);
     }
 
     public void deletePresentation(Integer presentationId) {
