@@ -28,9 +28,9 @@ public class PresentationService {
         this.lecturerService = lecturerService;
     }
 
-    public PresentationInfo savePresentation(PresentationCreateCommand command) {
+    public PresentationInfo savePresentation(Integer lecturerId, PresentationCreateCommand command) {
         Presentation toSave = modelMapper.map(command, Presentation.class);
-        Optional<Lecturer> lecturer = lecturerService.findLecturerById(command.getLecturerId());
+        Optional<Lecturer> lecturer = lecturerService.findLecturerById(lecturerId);
         if (lecturer.isEmpty()) {
             throw new LecturerNotFoundException();
         }
@@ -68,7 +68,7 @@ public class PresentationService {
         }
         Presentation presentationFound = presentation.get();
         presentationFound.setStartTime(command.getStartTime());
-        return modelMapper.map(presentation, PresentationInfo.class);
+        return modelMapper.map(presentationFound, PresentationInfo.class);
     }
 
     public void deletePresentation(Integer presentationId) {

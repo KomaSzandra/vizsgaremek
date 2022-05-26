@@ -4,6 +4,7 @@ import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.ParticipantInfo;
+import hu.progmasters.conference.dto.ParticipantUpdateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
@@ -12,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -55,5 +58,45 @@ public class ParticipantService {
         Participant participantFound = participant.get();
 
         participantRepository.deleteParticipant(participantFound);
+    }
+
+    public ParticipantInfo findById(Integer id) {
+        Optional<Participant> participant = participantRepository.findParticipantById(id);
+        if (participant.isPresent()) {
+            return modelMapper.map(participant.get(), ParticipantInfo.class);
+        } else {
+            throw new ParticipantNotFoundException();
+        }
+    }
+
+    public List<ParticipantInfo> findAll() {
+        List<Participant> participants = participantRepository.findAll();
+        return participants.stream()
+                .map(participant -> modelMapper.map(participant, ParticipantInfo.class))
+                .collect(Collectors.toList());
+    }
+
+    public ParticipantInfo update(Integer id, ParticipantUpdateCommand command) {
+//        Optional<Participant> participantById = participantRepository.findParticipantById(id);
+//        if (participantById.isEmpty()) {
+//            throw new ParticipantNotFoundException();
+//        }
+//        Participant participant = participantById.get();
+//        Optional<Presentation> presentation = presentationService.findPresentationById(command.getConferenceId());
+//        if (presentation.isEmpty()) {
+//            throw new PresentationNotFoundException();
+//        }
+//        participant.setPresentation(presentation.get());
+//        return modelMapper.map(participant, ParticipantInfo.class);
+        Participant toUpdate = modelMapper.map(command, Participant.class);
+        toUpdate.setId(id);
+        Participant updated = participantRepository.update(toUpdate);
+        Optional<Presentation> presentationOptional = presentationService.findPresentationById(command.getConferenceId());
+        if (presentationOptional.isEmpty()) {
+            throw new PresentationNotFoundException();
+        }
+        Presentation presentation = presentationOptional.get();
+        updated.setPresentation(presentation);
+        return modelMapper.map(updated, ParticipantInfo.class);
     }
 }

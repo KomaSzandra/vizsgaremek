@@ -12,5 +12,4 @@ public class PresentationInfo {
     private LecturerInfo lecturer;
     private String title;
     private LocalDateTime startTime;
-    private int maxParticipants;
 }

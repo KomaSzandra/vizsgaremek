@@ -2,7 +2,11 @@ package hu.progmasters.conference.controller;
 
 import hu.progmasters.conference.dto.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.ParticipantInfo;
+import hu.progmasters.conference.dto.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -10,8 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
+@Tag(name = "The Controller for participants")
 @RequestMapping("/api/participants")
 public class ParticipantController {
 
@@ -30,13 +36,20 @@ public class ParticipantController {
     }
 
     @PostMapping("/{presentationId}/participants")
+    @Operation(summary = "Creates a participant and adds it to a presentation")
+    @ApiResponse(responseCode = "201", description = "Participant has been created and added to a presentation")
+    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
     public ResponseEntity<ParticipantInfo> saveParticipant(@PathVariable("presentationId") Integer presentationId, @Valid @RequestBody ParticipantCreateCommand command) {
-        LOGGER.info("HTTP POST /api/presentations/" + presentationId + "/participants , command: " + command);
+        LOGGER.info(LOG_POST, String.format(command.toString()));
         ParticipantInfo saved = participantService.saveParticipant(command, presentationId);
+        LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{presentationId}/participants/{participantId}")
+    @Operation(summary = "Deletes an exact participant by given id")
+    @ApiResponse(responseCode = "200", description = "Participant has been found")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
     public ResponseEntity<Void> deleteParticipant(@PathVariable("presentationId") Integer presentationId,
                                                   @PathVariable("participantId") Integer participantId) {
         LOGGER.info("HTTP DELETE /api/presentations/" + presentationId + "/participants/" + participantId);
@@ -44,6 +57,21 @@ public class ParticipantController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipantInfo findById(@PathVariable("id") Integer id) {
+        return participantService.findById(id);
+    }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipantInfo> findAll() {
+        return participantService.findAll();
+    }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
+        return participantService.update(id, command);
+    }
 }

@@ -1,5 +1,6 @@
 package hu.progmasters.conference.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,16 +14,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PresentationCreateCommand {
 
-    @NotNull(message = "must not be null")
-    private Integer lecturerId;
+//    @NotNull(message = "must not be null")
+//    @Schema(description = "Id of the lecturer", example = "2")
+//    private Integer lecturerId;
 
     @NotBlank(message = "must not be blank")
+    @Schema(description = "Title of the presentation", example = "Researchers in the cloud")
     private String title;
 
     @NotNull(message = "must not be null")
     @Future(message = "must be in the future")
+    @Schema(description = "The start time of the presentation", example ="2022-09-26T10:00:00.000Z" )
     private LocalDateTime startTime;
 
-    @Min(value = 10, message = "minimum 10")
-    private int maxParticipants;
 }
