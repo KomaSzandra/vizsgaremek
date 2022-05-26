@@ -38,7 +38,7 @@ public class ParticipantController {
     @PostMapping("/{presentationId}/participants")
     @Operation(summary = "Creates a participant and adds it to a presentation")
     @ApiResponse(responseCode = "201", description = "Participant has been created and added to a presentation")
-    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be created")
     public ResponseEntity<ParticipantInfo> saveParticipant(@PathVariable("presentationId") Integer presentationId, @Valid @RequestBody ParticipantCreateCommand command) {
         LOGGER.info(LOG_POST, String.format(command.toString()));
         ParticipantInfo saved = participantService.saveParticipant(command, presentationId);
