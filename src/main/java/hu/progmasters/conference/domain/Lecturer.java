@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +22,8 @@ public class Lecturer {
     private String name;
     @Column(name = "institution")
     private String institution;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "academic_rank")
+    private String academicRank;
 }

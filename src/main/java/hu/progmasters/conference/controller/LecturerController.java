@@ -1,7 +1,7 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.LecturerCreateCommand;
-import hu.progmasters.conference.dto.LecturerInfo;
+import hu.progmasters.conference.domain.Lecturer;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.service.LecturerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Tag(name = "The Controller for lecturers")
@@ -44,16 +45,16 @@ public class LecturerController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-//    @GetMapping
-//    @Operation(summary = "Lists all lecturers")
-//    @ApiResponse(responseCode = "200", description = "Lecturers have been listed")
-//    @ApiResponse(responseCode = "400", description = "Bad request, lecturers cannot be listed")
-//    public ResponseEntity<List<LecturerListInfo>> findAllLecturer() {
-//        LOGGER.info(String.format(LOG_GET, ""));
-//        List<LecturerListInfo> lecturerInfos = lecturerService.findAllLecturer();
-//        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerInfos));
-//        return new ResponseEntity<>(lecturerInfos, HttpStatus.OK);
-//    }
+    @GetMapping
+    @Operation(summary = "Lists all lecturers")
+    @ApiResponse(responseCode = "200", description = "Lecturers have been listed")
+    @ApiResponse(responseCode = "400", description = "Bad request, lecturers cannot be listed")
+    public ResponseEntity<List<LecturerListInfo>> findAllLecturer() {
+        LOGGER.info(String.format(LOG_GET, ""));
+        List<LecturerListInfo> lecturerInfos = lecturerService.findAllLecturer();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerInfos));
+        return new ResponseEntity<>(lecturerInfos, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get an exact lecturer by given id")
@@ -67,16 +68,26 @@ public class LecturerController {
         return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/{name}")
     @Operation(summary = "Finds the lecturer by name")
     @ApiResponse(responseCode = "200", description = "Lecturer has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
     @ApiResponse(responseCode = "404", description = "Lecturer has not been found")
-    public ResponseEntity<LecturerInfo> findByName(@RequestParam("name") String name) {
+    public ResponseEntity<LecturerInfo> findByName(@PathVariable @RequestParam("name") String name) {
         LOGGER.info(String.format(LOG_GET, "/" + name));
         LecturerInfo lecturerFound = lecturerService.findByName(name);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerFound));
         return new ResponseEntity<>(lecturerFound, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update the lecturer's rank")
+    @ApiResponse(responseCode = "200", description = "Lecturer has been updated")
+    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be updated")
+    public LecturerInfo update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
+        LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
+        return lecturerService.update(id, command);
     }
 
     @DeleteMapping("/{id}")

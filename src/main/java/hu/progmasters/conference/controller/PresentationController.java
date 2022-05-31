@@ -47,16 +47,16 @@ public class PresentationController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-//    @GetMapping
-//    @Operation(summary = "Lists all presentations")
-//    @ApiResponse(responseCode = "200", description = "Presentations have been listed")
-//    @ApiResponse(responseCode = "400", description = "Bad request, presentations cannot be listed")
-//    public ResponseEntity<List<PresentationListItem>> findAll() {
-//        LOGGER.info(String.format(LOG_GET, ""));
-//        List<PresentationListItem> presentations = presentationService.findAll();
-//        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentations));
-//        return new ResponseEntity<>(presentations, HttpStatus.OK);
-//    }
+    @GetMapping
+    @Operation(summary = "Lists all presentations")
+    @ApiResponse(responseCode = "200", description = "Presentations have been listed")
+    @ApiResponse(responseCode = "400", description = "Bad request, presentations cannot be listed")
+    public ResponseEntity<List<PresentationListItem>> findAll() {
+        LOGGER.info(String.format(LOG_GET, ""));
+        List<PresentationListItem> presentations = presentationService.findAll();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentations));
+        return new ResponseEntity<>(presentations, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get an exact presentation by given id")
@@ -70,17 +70,17 @@ public class PresentationController {
         return new ResponseEntity<>(presentationInfo, HttpStatus.OK);
     }
 
-    @GetMapping
-    @Operation(summary = "Finds the presentation by title")
-    @ApiResponse(responseCode = "200", description = "Presentation has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
-    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
-    public ResponseEntity<PresentationInfo> findByTitle(@RequestParam("title") String title) {
-        LOGGER.info(String.format(LOG_GET, "/" + title));
-        PresentationInfo presentationFound = presentationService.findByTitle(title);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentationFound));
-        return new ResponseEntity<>(presentationFound, HttpStatus.OK);
-    }
+//    @GetMapping("/{title}")
+//    @Operation(summary = "Finds the presentation by title")
+//    @ApiResponse(responseCode = "200", description = "Presentation has been found")
+//    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
+//    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
+//    public ResponseEntity<PresentationInfo> findByTitle(@PathVariable @RequestParam("title") String title) {
+//        LOGGER.info(String.format(LOG_GET, "/" + title));
+//        PresentationInfo presentationFound = presentationService.findByTitle(title);
+//        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentationFound));
+//        return new ResponseEntity<>(presentationFound, HttpStatus.OK);
+//    }
 
     @PutMapping("/{id}")
     @Operation(summary = "Updates presentation's start time")

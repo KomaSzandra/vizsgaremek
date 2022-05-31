@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,13 +19,14 @@ public class Presentation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "presentation_id")
     private Integer id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "lecturer_lecturer_id")
     private Lecturer lecturer;
     @Column(name = "presentation_name")
     private String title;
     @Column(name = "start_time")
     private LocalDateTime startTime;
-    @Column(name = "max_participants")
-    private int maxParticipants;
+    @OneToMany(mappedBy = "presentation")
+    private List<Participant> participants;
+
 }

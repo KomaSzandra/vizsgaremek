@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LecturerListInfo {
+    private Integer id;
     private String name;
+    private String academicRank;
     private String institution;
 }

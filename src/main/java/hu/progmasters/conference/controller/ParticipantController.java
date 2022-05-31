@@ -87,5 +87,14 @@ public class ParticipantController {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         return participantService.update(id, command);
     }
+
+//    @GetMapping("/{name}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @Operation(summary = "Get a participant by name")
+//    @ApiResponse(responseCode = "200", description = "Participant has been updated")
+//    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
+//    public List<ParticipantInfo> findByName(@PathVariable @RequestParam(value = "name", required = false) String name) {
+//        return participantService.findByName(name);
+//    }
 }
 

@@ -37,4 +37,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleLecturerNotFound() {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ParticipantsByNameNotFoundException.class)
+    public ResponseEntity<Void> handleParticipantsByNameNotFoundException() {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

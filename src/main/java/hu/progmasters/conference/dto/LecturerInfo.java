@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class LecturerInfo {
     private Integer id;
     private String name;
+    private String academicRank;
     private String institution;
+    private String email;
 }

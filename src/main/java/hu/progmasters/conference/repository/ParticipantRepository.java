@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,13 @@ public class ParticipantRepository {
     public List<Participant> findAll() {
         return entityManager.createQuery("SELECT p FROM Participant p", Participant.class)
                 .getResultList();
+    }
+
+    public List<Participant> findByName(String name) {
+        TypedQuery<Participant> query = entityManager.createQuery("SELECT p FROM Participant p " +
+                "WHERE :nameParam IS NULL OR p.name = :nameParam", Participant.class);
+        query.setParameter("nameParam", name);
+        return query.getResultList();
     }
 
     public Participant update(Participant toUpdate) {

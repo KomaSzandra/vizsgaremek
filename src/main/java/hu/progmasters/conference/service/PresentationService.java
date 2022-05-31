@@ -1,6 +1,7 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
+import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +37,11 @@ public class PresentationService {
             throw new LecturerNotFoundException();
         }
         toSave.setLecturer(lecturer.get());
+        toSave.setParticipants(new ArrayList<>());
         Presentation saved = presentationRepository.save(toSave);
         PresentationInfo savedInfo = modelMapper.map(saved, PresentationInfo.class);
         savedInfo.setLecturer(modelMapper.map(lecturer.get(), LecturerInfo.class));
+
         return savedInfo;
     }
 
@@ -51,10 +55,18 @@ public class PresentationService {
     }
 
     public List<PresentationListItem> findAll() {
-        List<Presentation> presentations = presentationRepository.findAll();
-        return presentations.stream()
-                .map(presentation -> modelMapper.map(presentation, PresentationListItem.class))
-                .collect(Collectors.toList());
+       List<Presentation> presentations = presentationRepository.findAll();
+       List<PresentationListItem> presentationInfos = new ArrayList<>();
+        for (Presentation presentation : presentations) {
+            PresentationListItem info = modelMapper.map(presentation, PresentationListItem.class);
+            List<ParticipantListItem> participantInfos = new ArrayList<>();
+            for (Participant participant : presentation.getParticipants()) {
+                participantInfos.add(modelMapper.map(participant, ParticipantListItem.class));
+            }
+            info.setParticipants(participantInfos);
+            presentationInfos.add(info);
+        }
+        return presentationInfos;
     }
 
     public PresentationInfo findByTitle(String title) {

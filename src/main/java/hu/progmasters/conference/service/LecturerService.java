@@ -1,10 +1,10 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
-import hu.progmasters.conference.dto.LecturerCreateCommand;
-import hu.progmasters.conference.dto.LecturerInfo;
-import hu.progmasters.conference.dto.LecturerListInfo;
+import hu.progmasters.conference.domain.Presentation;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
+import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,11 @@ public class LecturerService {
     }
 
     public LecturerInfo saveLecturer(LecturerCreateCommand command) {
-        Lecturer toSave = modelMapper.map(command, Lecturer.class);
+        Lecturer toSave = new Lecturer();
+        toSave.setName(command.getName());
+        toSave.setAcademicRank(command.getAcademicRank());
+        toSave.setInstitution(command.getInstitution());
+        toSave.setEmail(command.getEmail());
         Lecturer saved = lecturerRepository.save(toSave);
         return modelMapper.map(saved, LecturerInfo.class);
     }
@@ -63,5 +67,15 @@ public class LecturerService {
 
     public Optional<Lecturer> findLecturerById(Integer id) {
         return lecturerRepository.findById(id);
+    }
+
+    public LecturerInfo update(Integer id, LecturerUpdateCommand command) {
+        Optional<Lecturer> lecturer = lecturerRepository.findById(id);
+        if(lecturer.isEmpty()) {
+            throw new PresentationNotFoundException();
+        }
+        Lecturer lecturerFound = lecturer.get();
+        lecturerFound.setAcademicRank(command.getAcademicRank());
+        return modelMapper.map(lecturerFound, LecturerInfo.class);
     }
 }
