@@ -68,17 +68,17 @@ public class LecturerController {
         return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
-    @GetMapping("/{name}")
-    @Operation(summary = "Finds the lecturer by name")
-    @ApiResponse(responseCode = "200", description = "Lecturer has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
-    @ApiResponse(responseCode = "404", description = "Lecturer has not been found")
-    public ResponseEntity<LecturerInfo> findByName(@PathVariable @RequestParam("name") String name) {
-        LOGGER.info(String.format(LOG_GET, "/" + name));
-        LecturerInfo lecturerFound = lecturerService.findByName(name);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerFound));
-        return new ResponseEntity<>(lecturerFound, HttpStatus.OK);
-    }
+//    @GetMapping("/{name}")
+//    @Operation(summary = "Finds the lecturer by name")
+//    @ApiResponse(responseCode = "200", description = "Lecturer has been found")
+//    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
+//    @ApiResponse(responseCode = "404", description = "Lecturer has not been found")
+//    public ResponseEntity<LecturerInfo> findByName(@PathVariable @RequestParam("name") String name) {
+//        LOGGER.info(String.format(LOG_GET, "/" + name));
+//        LecturerInfo lecturerFound = lecturerService.findByName(name);
+//        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerFound));
+//        return new ResponseEntity<>(lecturerFound, HttpStatus.OK);
+//    }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

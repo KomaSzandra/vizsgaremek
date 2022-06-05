@@ -1,6 +1,5 @@
 package hu.progmasters.conference.repository;
 
-import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Participant;
 import org.springframework.stereotype.Repository;
 

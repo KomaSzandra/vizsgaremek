@@ -48,7 +48,7 @@ public class LecturerService {
         if(lecturer.isPresent()) {
             return modelMapper.map(lecturer.get(), LecturerInfo.class);
         } else {
-            throw new LecturerNotFoundException();
+            throw new LecturerNotFoundException(id);
         }
     }
 
@@ -59,7 +59,7 @@ public class LecturerService {
     public void deleteLecturer(Integer lecturerId) {
         Optional<Lecturer> lecturer = lecturerRepository.findById(lecturerId);
         if (lecturer.isEmpty()) {
-            throw new LecturerNotFoundException();
+            throw new LecturerNotFoundException(lecturerId);
         }
         Lecturer lecturerFound = lecturer.get();
         lecturerRepository.deleteLecturer(lecturerFound);
@@ -72,7 +72,7 @@ public class LecturerService {
     public LecturerInfo update(Integer id, LecturerUpdateCommand command) {
         Optional<Lecturer> lecturer = lecturerRepository.findById(id);
         if(lecturer.isEmpty()) {
-            throw new PresentationNotFoundException();
+            throw new LecturerNotFoundException(id);
         }
         Lecturer lecturerFound = lecturer.get();
         lecturerFound.setAcademicRank(command.getAcademicRank());

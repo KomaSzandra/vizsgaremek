@@ -29,17 +29,28 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ParticipantNotFoundException.class)
-    public ResponseEntity<Void> handleParticipantNotFound() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<ValidationError>> handleParticipantNotFound() {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("participantId", "no participant found with id")),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(LecturerNotFoundException.class)
-    public ResponseEntity<Void> handleLecturerNotFound() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<ValidationError>> handleLecturerNotFound() {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("lecturerId", "no lecturer found with id")),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ParticipantsByNameNotFoundException.class)
     public ResponseEntity<Void> handleParticipantsByNameNotFoundException() {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RegistrationClosedException.class)
+    public ResponseEntity<List<ValidationError>> handleRegistrationClosed() {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("presentationId", "registration deadline has expired")),
+                HttpStatus.BAD_REQUEST);
     }
 }

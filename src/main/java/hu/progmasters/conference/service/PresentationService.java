@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,7 +33,7 @@ public class PresentationService {
         Presentation toSave = modelMapper.map(command, Presentation.class);
         Optional<Lecturer> lecturer = lecturerService.findLecturerById(lecturerId);
         if (lecturer.isEmpty()) {
-            throw new LecturerNotFoundException();
+            throw new LecturerNotFoundException(lecturerId);
         }
         toSave.setLecturer(lecturer.get());
         toSave.setParticipants(new ArrayList<>());
@@ -50,7 +49,7 @@ public class PresentationService {
         if (presentation.isPresent()) {
             return modelMapper.map(presentation.get(), PresentationInfo.class);
         } else {
-            throw new PresentationNotFoundException();
+            throw new PresentationNotFoundException(id);
         }
     }
 
@@ -76,7 +75,7 @@ public class PresentationService {
     public PresentationInfo updatePresentation(Integer id, PresentationUpdateCommand command) {
         Optional<Presentation> presentation = presentationRepository.findById(id);
         if(presentation.isEmpty()) {
-            throw new PresentationNotFoundException();
+            throw new PresentationNotFoundException(id);
         }
         Presentation presentationFound = presentation.get();
         presentationFound.setStartTime(command.getStartTime());
@@ -86,7 +85,7 @@ public class PresentationService {
     public void deletePresentation(Integer presentationId) {
         Optional<Presentation> presentation = presentationRepository.findById(presentationId);
         if(presentation.isEmpty()) {
-            throw new PresentationNotFoundException();
+            throw new PresentationNotFoundException(presentationId);
         }
         Presentation presentationFound = presentation.get();
         presentationRepository.delete(presentationFound);

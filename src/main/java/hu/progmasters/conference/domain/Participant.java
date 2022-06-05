@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,13 +17,15 @@ public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participant_id")
+    @Column(name = "id")
     private Integer id;
-    @Column(name = "participant_name")
+    @Column(name = "name")
     private String name;
     @Column(name = "institution")
     private String institution;
-    @ManyToOne
-    @JoinColumn(name = "presentation_presentation_id")
-    private Presentation presentation;
+    @Column
+    private LocalDateTime registration;
+    @ManyToMany
+    @JoinColumn(name = "presentation_id")
+    private List<Presentation> presentations;
 }
