@@ -70,6 +70,7 @@ public class PresentationController {
         return new ResponseEntity<>(presentationInfo, HttpStatus.OK);
     }
 
+
 //    @GetMapping("/{title}")
 //    @Operation(summary = "Finds the presentation by title")
 //    @ApiResponse(responseCode = "200", description = "Presentation has been found")

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -26,5 +25,4 @@ public class PresentationCreateCommand {
     @Future(message = "must be in the future")
     @Schema(description = "The start time of the presentation", example ="2022-09-26T10:00:00.000Z" )
     private LocalDateTime startTime;
-
 }

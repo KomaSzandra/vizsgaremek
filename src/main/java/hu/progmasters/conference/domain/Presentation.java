@@ -26,7 +26,7 @@ public class Presentation {
     private String title;
     @Column(name = "start_time")
     private LocalDateTime startTime;
-    @ManyToMany(mappedBy = "presentations")
+    @OneToMany(mappedBy = "presentation")
     private List<Participant> participants;
 
 }

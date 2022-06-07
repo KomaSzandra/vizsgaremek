@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -18,12 +19,20 @@ public class Lecturer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "date_of_birth", nullable = true)
+    private LocalDate dateOfBirth;
+
     @Column(name = "institution")
     private String institution;
-    @Column(name = "email")
+
+    @Column(name = "email", unique = true)
     private String email;
+
     @Column(name = "academic_rank")
-    private String academicRank;
+    @Enumerated(EnumType.STRING)
+    private AcademicRank academicRank;
 }

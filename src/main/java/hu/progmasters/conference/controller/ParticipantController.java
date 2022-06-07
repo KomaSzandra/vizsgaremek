@@ -29,7 +29,6 @@ public class ParticipantController {
     private static final String LOG_GET = "Http request, GET /api/participants%s";
     private static final String LOG_POST = "Http request, POST /api/participants, body: {}";
     private static final String LOG_PUT = "Http request, PUT /api/participants%s, body: %s";
-    private static final String LOG_DELETE = "Http request, DELETE /api/participants%s";
 
     public ParticipantController(ParticipantService participantService) {
         this.participantService = participantService;

@@ -94,5 +94,4 @@ public class PresentationService {
     public Optional<Presentation> findPresentationById(int id) {
         return presentationRepository.findById(id);
     }
-
 }

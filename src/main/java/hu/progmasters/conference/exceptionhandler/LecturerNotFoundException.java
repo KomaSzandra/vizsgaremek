@@ -8,12 +8,4 @@ public class LecturerNotFoundException extends RuntimeException {
         this.lecturerId = lecturerId;
     }
 
-    public Integer getLecturerId() {
-        return lecturerId;
-    }
-
-    public LecturerNotFoundException setLecturerId(Integer lecturerId) {
-        this.lecturerId = lecturerId;
-        return this;
-    }
 }

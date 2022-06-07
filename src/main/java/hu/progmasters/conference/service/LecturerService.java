@@ -1,5 +1,6 @@
 package hu.progmasters.conference.service;
 
+import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.*;
@@ -32,6 +33,7 @@ public class LecturerService {
         toSave.setAcademicRank(command.getAcademicRank());
         toSave.setInstitution(command.getInstitution());
         toSave.setEmail(command.getEmail());
+        toSave.setDateOfBirth(command.getDateOfBirth());
         Lecturer saved = lecturerRepository.save(toSave);
         return modelMapper.map(saved, LecturerInfo.class);
     }
