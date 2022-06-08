@@ -30,6 +30,7 @@ public class ParticipantCreateCommand {
     private LocalDateTime registration;
 
     @Email(message = "Must be an e-mail address")
+    @NotNull(message = "Must not be null")
     @Schema(description = "E-mail address", example = "doedr@participant.com")
     private String email;
 

@@ -22,7 +22,7 @@ public class Lecturer {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "date_of_birth", nullable = true)
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "institution")
