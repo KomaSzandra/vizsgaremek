@@ -3,7 +3,7 @@ CREATE TABLE lecturer (
     name varchar(255),
     academic_rank varchar(255),
     institution varchar(255),
-    dateOfBirth date,
+    date_of_birth date,
     email varchar(255),
 
     PRIMARY KEY (id)

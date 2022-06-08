@@ -8,6 +8,7 @@ import hu.progmasters.conference.service.PresentationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class PresentationController {
     @Operation(summary = "Save a presentation with lecturer")
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
-    public ResponseEntity<PresentationInfo> savePresentation(Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {
+    public ResponseEntity<PresentationInfo> savePresentation(@UniqueElements Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {
         LOGGER.info(LOG_POST, String.format(command.toString()));
         PresentationInfo saved = presentationService.savePresentation(lecturerId, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));

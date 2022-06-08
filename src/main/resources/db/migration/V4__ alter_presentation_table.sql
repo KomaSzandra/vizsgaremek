@@ -1,0 +1,1 @@
+ALTER TABLE presentation ADD CONSTRAINT fk_presentation_lecturer FOREIGN KEY (lecturer_id) REFERENCES lecturer (id);
