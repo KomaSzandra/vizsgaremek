@@ -1,8 +1,6 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.ParticipantCreateCommand;
-import hu.progmasters.conference.dto.ParticipantInfo;
-import hu.progmasters.conference.dto.ParticipantUpdateCommand;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.service.ParticipantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -62,7 +60,7 @@ public class ParticipantController {
     @ApiResponse(responseCode = "200", description = "Participant has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
     @ApiResponse(responseCode = "404", description = "Participant has not been found")
-    public ParticipantInfo findById(@PathVariable("id") Integer id) {
+    public ParticipantByIdInfo findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         return participantService.findById(id);
     }
@@ -72,7 +70,7 @@ public class ParticipantController {
     @Operation(summary = "Lists all participants")
     @ApiResponse(responseCode = "200", description = "Participants have been listed")
     @ApiResponse(responseCode = "400", description = "Bad request, participants cannot be listed")
-    public List<ParticipantInfo> findAll() {
+    public List<ParticipantListItem> findAll() {
         LOGGER.info(String.format(LOG_GET, ""));
         return participantService.findAll();
     }

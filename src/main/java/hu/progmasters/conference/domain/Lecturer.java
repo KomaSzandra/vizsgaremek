@@ -34,4 +34,7 @@ public class Lecturer {
     @Column(name = "academic_rank")
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
+
+    @OneToOne(mappedBy = "lecturer")
+    private Presentation presentation;
 }

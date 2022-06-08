@@ -31,7 +31,7 @@ public class ParticipantCreateCommand {
 
     @Email(message = "Must be an e-mail address")
     @NotNull(message = "Must not be null")
-    @Schema(description = "E-mail address", example = "doedr@participant.com")
+    @Schema(description = "E-mail address", example = "Dr.doe@participant.com")
     private String email;
 
     @Rank(anyOf = {AcademicRank.ASSISTANT_LECTURER, AcademicRank.CANDIDATE, AcademicRank.PROFESSOR,

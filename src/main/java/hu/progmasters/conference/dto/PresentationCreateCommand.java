@@ -13,10 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PresentationCreateCommand {
 
-//    @NotNull(message = "must not be null")
-//    @Schema(description = "Id of the lecturer", example = "2")
-//    private Integer lecturerId;
-
     @NotBlank(message = "must not be blank")
     @Schema(description = "Title of the presentation", example = "Researchers in the cloud")
     private String title;

@@ -17,6 +17,6 @@ public class LecturerUpdateCommand {
             AcademicRank.ASSISTANT_RESEARCH_FELLOW, AcademicRank.ASSOCIATE_PROFESSOR, AcademicRank.SCIENTIFIC_ADVISOR,
             AcademicRank.PROFESSOR_EMERITUS, AcademicRank.SENIOR_LECTURER, AcademicRank.RESEARCH_FELLOW,
             AcademicRank.RESEARCH_PROFESSOR, AcademicRank.SENIOR_RESEARCH_FELLOW})
-    @Schema(description = "Rank of the lecturer", example = "Full professor")
+    @Schema(description = "Rank of the lecturer", example = "Professor")
     private AcademicRank academicRank;
 }

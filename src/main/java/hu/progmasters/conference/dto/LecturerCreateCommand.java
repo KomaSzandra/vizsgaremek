@@ -1,6 +1,7 @@
 package hu.progmasters.conference.dto;
 
 import hu.progmasters.conference.domain.AcademicRank;
+import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.exceptionhandler.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class LecturerCreateCommand {
             AcademicRank.ASSISTANT_RESEARCH_FELLOW, AcademicRank.ASSOCIATE_PROFESSOR, AcademicRank.SCIENTIFIC_ADVISOR,
             AcademicRank.PROFESSOR_EMERITUS, AcademicRank.SENIOR_LECTURER, AcademicRank.RESEARCH_FELLOW,
             AcademicRank.RESEARCH_PROFESSOR, AcademicRank.SENIOR_RESEARCH_FELLOW})
-    @Schema(description = "Rank of the lecturer")
+    @Schema(description = "Rank of the lecturer", example = "PROFESSOR")
     private AcademicRank academicRank;
 
     @NotBlank(message = "Must not be blank")
@@ -35,11 +36,12 @@ public class LecturerCreateCommand {
     private String institution;
 
     @Email(message = "Email should be valid")
-    @Schema(description = "The Lecturer's e-mail address", example = "ludwig@ceu.com")
+    @Schema(description = "The Lecturer's e-mail address", example = "doeProfessor@lecturer.com")
     private String email;
 
     @NotNull(message = "Date of birth should not be empty")
     @Past(message = "Date of birth should be in the past")
     @Schema(description = "The lecturer's date of birth", format = "date", example = "1964-04-20")
     private LocalDate dateOfBirth;
+
 }

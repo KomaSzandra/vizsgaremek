@@ -2,10 +2,7 @@ package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.domain.Presentation;
-import hu.progmasters.conference.dto.ParticipantCreateCommand;
-import hu.progmasters.conference.dto.ParticipantInfo;
-import hu.progmasters.conference.dto.ParticipantUpdateCommand;
-import hu.progmasters.conference.dto.PresentationInfo;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.*;
 import hu.progmasters.conference.repository.ParticipantRepository;
 import org.modelmapper.ModelMapper;
@@ -72,19 +69,19 @@ public class ParticipantService {
         participantRepository.deleteParticipant(participantFound);
     }
 
-    public ParticipantInfo findById(Integer id) {
+    public ParticipantByIdInfo findById(Integer id) {
         Optional<Participant> participant = participantRepository.findParticipantById(id);
         if (participant.isPresent()) {
-            return modelMapper.map(participant.get(), ParticipantInfo.class);
+            return modelMapper.map(participant.get(), ParticipantByIdInfo.class);
         } else {
             throw new ParticipantNotFoundException(id);
         }
     }
 
-    public List<ParticipantInfo> findAll() {
+    public List<ParticipantListItem> findAll() {
         List<Participant> participants = participantRepository.findAll();
         return participants.stream()
-                .map(participant -> modelMapper.map(participant, ParticipantInfo.class))
+                .map(participant -> modelMapper.map(participant, ParticipantListItem.class))
                 .collect(Collectors.toList());
     }
 

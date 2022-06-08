@@ -4,7 +4,7 @@ CREATE TABLE participant (
     academic_rank varchar(255),
     date_of_birth date,
     institution varchar(255),
-    email varchar(255),
+    email varchar(255) unique,
     presentation_id integer,
     PRIMARY KEY (id)
 );

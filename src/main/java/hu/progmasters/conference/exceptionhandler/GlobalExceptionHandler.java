@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailNotValidException.class)
     public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException(EmailNotValidException e) {
         return new ResponseEntity<>(
-                List.of(new ValidationError("email", "Already registered, must be unique!")),
+                List.of(new ValidationError("email", "Already registered")),
                 HttpStatus.BAD_REQUEST);
     }
 
