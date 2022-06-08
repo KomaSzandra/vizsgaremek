@@ -40,4 +40,8 @@ public class LecturerRepository {
     public void deleteLecturer(Lecturer toDelete) {
         entityManager.remove(toDelete);
     }
+
+    public void flush() {
+        entityManager.flush();
+    }
 }

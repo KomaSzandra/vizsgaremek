@@ -6,10 +6,7 @@ import hu.progmasters.conference.dto.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipantUpdateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
-import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
-import hu.progmasters.conference.exceptionhandler.ParticipantsByNameNotFoundException;
-import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
-import hu.progmasters.conference.exceptionhandler.RegistrationClosedException;
+import hu.progmasters.conference.exceptionhandler.*;
 import hu.progmasters.conference.repository.ParticipantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -46,7 +43,13 @@ public class ParticipantService {
         }
         toSave.setPresentation(presentation);
         presentation.getParticipants().add(toSave);
-        Participant saved = participantRepository.save(toSave);
+        Participant saved;
+        try {
+            saved = participantRepository.save(toSave);
+            participantRepository.flush();
+        } catch (Exception e) {
+            throw  new EmailNotValidException(toSave.getEmail());
+        }
         ParticipantInfo savedInfo = modelMapper.map(saved, ParticipantInfo.class);
         savedInfo.setPresentation(modelMapper.map(presentation, PresentationInfo.class));
         return savedInfo;

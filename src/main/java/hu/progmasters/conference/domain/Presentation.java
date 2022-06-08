@@ -19,13 +19,17 @@ public class Presentation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @OneToOne
-    @JoinColumn(name = "lecturer_id", unique = true)
+    @JoinColumn(name = "lecturer_id")
     private Lecturer lecturer;
+
     @Column(name = "title", unique = true)
     private String title;
+
     @Column(name = "start_time")
     private LocalDateTime startTime;
+
     @OneToMany(mappedBy = "presentation")
     private List<Participant> participants;
 

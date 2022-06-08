@@ -45,4 +45,7 @@ public class ParticipantRepository {
         Participant merged = entityManager.merge(toUpdate);
         return merged;
     }
+    public void flush() {
+        entityManager.flush();
+    }
 }

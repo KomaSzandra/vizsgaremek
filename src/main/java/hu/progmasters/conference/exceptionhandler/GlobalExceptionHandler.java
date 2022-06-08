@@ -50,7 +50,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RegistrationClosedException.class)
     public ResponseEntity<List<ValidationError>> handleRegistrationClosed() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("presentationId", "Registration deadline has expired")),
+                List.of(new ValidationError("presentationId", "Registration deadline has expired!")),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailNotValidException.class)
+    public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException(EmailNotValidException e) {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("email", "Already registered, must be unique!")),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TitleNotValidException.class)
+    public ResponseEntity<List<ValidationError>> handleTitleNotUniqueException(TitleNotValidException e) {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("title", "The title already exists")),
                 HttpStatus.BAD_REQUEST);
     }
 }

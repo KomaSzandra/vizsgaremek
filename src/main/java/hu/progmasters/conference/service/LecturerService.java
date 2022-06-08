@@ -1,11 +1,12 @@
 package hu.progmasters.conference.service;
 
-import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Lecturer;
-import hu.progmasters.conference.domain.Presentation;
-import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.dto.LecturerCreateCommand;
+import hu.progmasters.conference.dto.LecturerInfo;
+import hu.progmasters.conference.dto.LecturerListInfo;
+import hu.progmasters.conference.dto.LecturerUpdateCommand;
+import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
-import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,13 @@ public class LecturerService {
         toSave.setInstitution(command.getInstitution());
         toSave.setEmail(command.getEmail());
         toSave.setDateOfBirth(command.getDateOfBirth());
-        Lecturer saved = lecturerRepository.save(toSave);
+        Lecturer saved;
+        try {
+             saved = lecturerRepository.save(toSave);
+             lecturerRepository.flush();
+        } catch (Exception e) {
+            throw new EmailNotValidException(toSave.getEmail());
+        }
         return modelMapper.map(saved, LecturerInfo.class);
     }
 

@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +24,7 @@ public class ParticipantCreateCommand {
     @Schema(description = "Name of the institution", example = "Wigner Adatközpont")
     private String institution;
 
-    @NotNull
+    @NotNull(message = "Must not be null")
     @Schema(description = "Date of the registration")
     private LocalDateTime registration;
 
@@ -33,7 +32,7 @@ public class ParticipantCreateCommand {
     @Schema(description = "E-mail address", example = "doedr@participant.com")
     private String email;
 
-    @NotNull
+    @NotNull(message = "Must not be null")
     @Schema(description = "Rank of the lecturer")
     private AcademicRank academicRank;
 

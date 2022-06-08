@@ -44,4 +44,8 @@ public class PresentationRepository {
     public void delete(Presentation toDelete) {
         entityManager.remove(toDelete);
     }
+
+    public void flush() {
+        entityManager.flush();
+    }
 }

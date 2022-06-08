@@ -6,6 +6,7 @@ import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
+import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,13 @@ public class PresentationService {
         }
         toSave.setLecturer(lecturer.get());
         toSave.setParticipants(new ArrayList<>());
-        Presentation saved = presentationRepository.save(toSave);
+        Presentation saved;
+        try {
+            saved = presentationRepository.save(toSave);
+            presentationRepository.flush();
+        } catch (Exception e) {
+            throw new TitleNotValidException(command.getTitle());
+        }
         PresentationInfo savedInfo = modelMapper.map(saved, PresentationInfo.class);
         savedInfo.setLecturer(modelMapper.map(lecturer.get(), LecturerInfo.class));
 

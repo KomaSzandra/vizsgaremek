@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class LecturerCreateCommand {
     @Schema(description = "Name of the Lecturer", example = "Dr. John Doe")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Must not be null")
     @Schema(description = "Rank of the lecturer", enumAsRef = true)
     private AcademicRank academicRank;
 
