@@ -1,9 +1,6 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.LecturerCreateCommand;
-import hu.progmasters.conference.dto.LecturerInfo;
-import hu.progmasters.conference.dto.LecturerListInfo;
-import hu.progmasters.conference.dto.LecturerUpdateCommand;
+import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.service.LecturerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

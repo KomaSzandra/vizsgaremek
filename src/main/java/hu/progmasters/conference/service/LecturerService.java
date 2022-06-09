@@ -1,12 +1,14 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
+import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.LecturerCreateCommand;
 import hu.progmasters.conference.dto.LecturerInfo;
 import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.LecturerUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
+import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

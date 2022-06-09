@@ -41,7 +41,7 @@ public class PresentationController {
     @Operation(summary = "Save a presentation with lecturer")
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
-    public ResponseEntity<PresentationInfo> savePresentation(@UniqueElements Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {
+    public ResponseEntity<PresentationInfo> savePresentation(Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {
         LOGGER.info(LOG_POST, String.format(command.toString()));
         PresentationInfo saved = presentationService.savePresentation(lecturerId, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));

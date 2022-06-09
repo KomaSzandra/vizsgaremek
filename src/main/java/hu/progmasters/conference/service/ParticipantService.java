@@ -44,7 +44,7 @@ public class ParticipantService {
         try {
             saved = participantRepository.save(toSave);
             participantRepository.flush();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw  new EmailNotValidException(toSave.getEmail());
         }
         ParticipantInfo savedInfo = modelMapper.map(saved, ParticipantInfo.class);

@@ -4,6 +4,7 @@ import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.exceptionhandler.LecturerAlreadyHasAPresentationException;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
@@ -37,12 +38,16 @@ public class PresentationService {
             throw new LecturerNotFoundException(lecturerId);
         }
         toSave.setLecturer(lecturer.get());
+        Lecturer lecturerFound = lecturer.get();
+        if (lecturerFound.getPresentation().getId() != null) {
+            throw new LecturerAlreadyHasAPresentationException(toSave.getId());
+        }
         toSave.setParticipants(new ArrayList<>());
         Presentation saved;
         try {
             saved = presentationRepository.save(toSave);
             presentationRepository.flush();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new TitleNotValidException(command.getTitle());
         }
         PresentationInfo savedInfo = modelMapper.map(saved, PresentationInfo.class);
@@ -61,8 +66,8 @@ public class PresentationService {
     }
 
     public List<PresentationListItem> findAll() {
-       List<Presentation> presentations = presentationRepository.findAll();
-       List<PresentationListItem> presentationInfos = new ArrayList<>();
+        List<Presentation> presentations = presentationRepository.findAll();
+        List<PresentationListItem> presentationInfos = new ArrayList<>();
         for (Presentation presentation : presentations) {
             PresentationListItem info = modelMapper.map(presentation, PresentationListItem.class);
             List<ParticipantListItem> participantInfos = new ArrayList<>();
@@ -81,7 +86,7 @@ public class PresentationService {
 
     public PresentationInfo updatePresentation(Integer id, PresentationUpdateCommand command) {
         Optional<Presentation> presentation = presentationRepository.findById(id);
-        if(presentation.isEmpty()) {
+        if (presentation.isEmpty()) {
             throw new PresentationNotFoundException(id);
         }
         Presentation presentationFound = presentation.get();
@@ -91,7 +96,7 @@ public class PresentationService {
 
     public void deletePresentation(Integer presentationId) {
         Optional<Presentation> presentation = presentationRepository.findById(presentationId);
-        if(presentation.isEmpty()) {
+        if (presentation.isEmpty()) {
             throw new PresentationNotFoundException(presentationId);
         }
         Presentation presentationFound = presentation.get();
