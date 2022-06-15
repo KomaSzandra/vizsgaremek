@@ -64,7 +64,7 @@ public class ParticipantService {
                     .map(participant -> modelMapper.map(participant, ParticipantInfo.class))
                     .collect(Collectors.toList());
         } else {
-            throw new ParticipantsByNameNotFoundException();
+            throw new ParticipantsByNameNotFoundException(name);
         }
     }
 

@@ -43,8 +43,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ParticipantsByNameNotFoundException.class)
-    public ResponseEntity<Void> handleParticipantsByNameNotFoundException() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<ValidationError>> handleParticipantsByNameNotFoundException() {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("name", "No participant found with a given name")),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RegistrationClosedException.class)
@@ -57,7 +59,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailNotValidException.class)
     public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException(EmailNotValidException e) {
         return new ResponseEntity<>(
-                List.of(new ValidationError("email", "Already registered")),
+                List.of(new ValidationError("email", "Email already registered")),
                 HttpStatus.BAD_REQUEST);
     }
 
