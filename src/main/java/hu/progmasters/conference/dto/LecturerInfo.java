@@ -16,18 +16,24 @@ public class LecturerInfo {
     @Schema(description = "Id of the Lecturer", example = "1")
     private Integer id;
 
-    @Schema(description = "The lecturer's date of birth", format = "date", example = "1964-04-20")
-    private LocalDate dateOfBirth;
-
     @Schema(description = "Name of the Lecturer", example = "Dr. John Doe")
     private String name;
 
-    @Schema(description = "Rank of the lecturer")
-    private AcademicRank academicRank;
+    @Schema(description = "The lecturer's date of birth", format = "date", example = "1964-04-20")
+    private LocalDate dateOfBirth;
 
     @Schema(description = "Name of the Institution", example = "Central European University")
     private String institution;
 
     @Schema(description = "The Lecturer's e-mail address", example = "ludwig@ceu.com")
     private String email;
+
+    @Schema(description = "Rank of the lecturer")
+    private AcademicRank academicRank;
+
+    private Integer presentationId;
+
+    private String presentationTitle;
+
+
 }

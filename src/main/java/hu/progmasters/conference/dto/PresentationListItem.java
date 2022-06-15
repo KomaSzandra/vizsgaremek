@@ -26,5 +26,4 @@ public class PresentationListItem {
     @Schema(description = "The start time of the presentation", example ="2022-09-26T10:00:00.000Z" )
     private LocalDateTime startTime;
 
-    private List<ParticipantListItem> participants;
 }

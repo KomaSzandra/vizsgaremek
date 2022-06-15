@@ -22,7 +22,7 @@ public class LecturerRepository {
     }
 
     public List<Lecturer> findAll() {
-        return entityManager.createQuery("SELECT l FROM Lecturer l", Lecturer.class)
+        return entityManager.createQuery("SELECT l FROM Lecturer l ORDER BY l.id asc", Lecturer.class)
                 .getResultList();
     }
 

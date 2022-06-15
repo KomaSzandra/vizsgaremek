@@ -14,7 +14,7 @@ public class PresentationInfo {
     @Schema(description = "Id of the presentation", example = "1")
     private Integer id;
 
-    private LecturerInfo lecturer;
+    private LecturerListInfo lecturer;
 
     @Schema(description = "Title of the presentation", example = "Researchers in the cloud")
     private String title;
@@ -22,5 +22,4 @@ public class PresentationInfo {
     @Schema(description = "The start time of the presentation", example ="2022-09-26T10:00:00.000Z" )
     private LocalDateTime startTime;
 
-    private List<ParticipantListItem> participants;
 }

@@ -74,4 +74,12 @@ public class GlobalExceptionHandler {
                 List.of(new ValidationError("lecturerId", "Reserved, the lecturer already has a lecture")),
                 HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(AlreadyRegisteredException.class)
+    public ResponseEntity<List<ValidationError>> handleAlreadyRegisteredException(AlreadyRegisteredException e) {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("participantId", "Participant already registered to this presentation")),
+                HttpStatus.BAD_REQUEST);
+    }
 }

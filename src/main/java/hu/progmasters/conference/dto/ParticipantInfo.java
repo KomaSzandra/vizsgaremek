@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,5 +30,4 @@ public class ParticipantInfo {
     @Schema(description = "The participant's date of birth", type = "string", format = "date", example = "1964-04-20")
     private LocalDate dateOfBirth;
 
-    private PresentationInfo presentation;
 }

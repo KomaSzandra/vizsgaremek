@@ -29,6 +29,4 @@ public class ParticipantByIdInfo {
     @Schema(description = "Rank of the lecturer")
     private AcademicRank academicRank;
 
-    @Schema(description = "Title of presentation", example = "The beauty of data")
-    private String presentationTitle;
 }

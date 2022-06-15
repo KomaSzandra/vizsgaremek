@@ -1,6 +1,8 @@
 package hu.progmasters.conference.controller;
 
 import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
+import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,30 +29,31 @@ public class ParticipantController {
     private static final String LOG_GET = "Http request, GET /api/participants%s";
     private static final String LOG_POST = "Http request, POST /api/participants, body: {}";
     private static final String LOG_PUT = "Http request, PUT /api/participants%s, body: %s";
+    static final String LOG_DELETE = "Http request, DELETE /api/participants%s";
 
     public ParticipantController(ParticipantService participantService) {
         this.participantService = participantService;
     }
 
-    @PostMapping("/{presentationId}/participants")
-    @Operation(summary = "Creates a participant and adds it to a presentation")
+    @PostMapping()
+    @Operation(summary = "Creates a participant")
     @ApiResponse(responseCode = "201", description = "Participant has been created and added to a presentation")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be created")
-    public ResponseEntity<ParticipantInfo> saveParticipant(@PathVariable("presentationId") Integer presentationId, @Valid @RequestBody ParticipantCreateCommand command) {
+    public ResponseEntity<ParticipantInfo> saveParticipant(@Valid @RequestBody ParticipantCreateCommand command) {
         LOGGER.info(LOG_POST, String.format(command.toString()));
-        ParticipantInfo saved = participantService.saveParticipant(command, presentationId);
+        ParticipantInfo saved = participantService.saveParticipant(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{presentationId}/participants/{participantId}")
+    @DeleteMapping("{id}")
     @Operation(summary = "Deletes an exact participant by given id")
     @ApiResponse(responseCode = "200", description = "Participant has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
-    public ResponseEntity<Void> deleteParticipant(@PathVariable("presentationId") Integer presentationId,
-                                                  @PathVariable("participantId") Integer participantId) {
-        LOGGER.info("HTTP DELETE /api/presentations/" + presentationId + "/participants/" + participantId);
-        participantService.deleteParticipant(presentationId, participantId);
+    public ResponseEntity<Void> deleteParticipant(@PathVariable("id") Integer id) {
+        LOGGER.info(LOG_DELETE, "/" + id);
+        participantService.deleteParticipant(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -77,7 +80,7 @@ public class ParticipantController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Transferring a participant to another presentation")
+    @Operation(summary = "Update participant's institution")
     @ApiResponse(responseCode = "200", description = "Participant has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
     public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
@@ -85,13 +88,16 @@ public class ParticipantController {
         return participantService.update(id, command);
     }
 
-//    @GetMapping("/{name}")
-//    @ResponseStatus(HttpStatus.OK)
-//    @Operation(summary = "Get a participant by name")
-//    @ApiResponse(responseCode = "200", description = "Participant has been updated")
-//    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
-//    public List<ParticipantInfo> findByName(@PathVariable @RequestParam(value = "name", required = false) String name) {
-//        return participantService.findByName(name);
-//    }
+    @GetMapping("findAllByName")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get participants by name")
+    @ApiResponse(responseCode = "200", description = "Participant has been updated")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
+    public ResponseEntity<List<ParticipantInfo>> findAllByName(@RequestParam("name") String name) {
+        LOGGER.info(String.format(LOG_GET, "/" + name));
+        List<ParticipantInfo> participants = participantService.findAllByName(name);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", participants));
+        return new ResponseEntity<>(participants, HttpStatus.OK);
+    }
 }
 

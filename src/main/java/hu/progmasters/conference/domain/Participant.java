@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,22 +24,20 @@ public class Participant {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "institution")
-    private String institution;
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
     @Column(name = "academic_rank")
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
 
-    private LocalDateTime registration;
-
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    @Column(name = "institution")
+    private String institution;
 
     @Column(name ="email", unique = true)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "presentation_id")
-    private Presentation presentation;
+    @OneToMany
+    @JoinColumn(name = "participation_id")
+    private List<Participation> participations;
 }

@@ -26,6 +26,4 @@ public class LecturerListInfo {
     @Schema(description = "Lecturer's email address", example = "doedr@lecturer.com")
     private String email;
 
-    @Schema(description = "Title of the presentation", example = "Beautiful data structures")
-    private String presentationTitle;
 }

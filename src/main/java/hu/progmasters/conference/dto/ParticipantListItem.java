@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ParticipantListItem {
 
+    private Integer id;
+
     @Schema(description = "Name of the participant", example = "Dr. Jack Doe")
     private String name;
 

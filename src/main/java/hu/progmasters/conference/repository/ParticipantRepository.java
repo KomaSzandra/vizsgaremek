@@ -1,6 +1,8 @@
 package hu.progmasters.conference.repository;
 
 import hu.progmasters.conference.domain.Participant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,42 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ParticipantRepository {
+public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    List<Participant> findAllByName(String name);
 
-
-    public Participant save(Participant toSave) {
-        entityManager.persist(toSave);
-        return toSave;
-    }
-
-    public Optional<Participant> findParticipantById(Integer participantId) {
-        return Optional.ofNullable(entityManager.find(Participant.class, participantId));
-    }
-
-    public void deleteParticipant(Participant participant) {
-        entityManager.remove(participant);
-    }
-
-    public List<Participant> findAll() {
-        return entityManager.createQuery("SELECT p FROM Participant p", Participant.class)
-                .getResultList();
-    }
-
-    public List<Participant> findByName(String name) {
-        TypedQuery<Participant> query = entityManager.createQuery("SELECT p FROM Participant p " +
-                "WHERE :nameParam IS NULL OR p.name = :nameParam", Participant.class);
-        query.setParameter("nameParam", name);
-        return query.getResultList();
-    }
-
-    public Participant update(Participant toUpdate) {
-        Participant merged = entityManager.merge(toUpdate);
-        return merged;
-    }
-    public void flush() {
-        entityManager.flush();
-    }
 }

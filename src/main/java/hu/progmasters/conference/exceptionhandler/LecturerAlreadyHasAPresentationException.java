@@ -1,9 +1,11 @@
 package hu.progmasters.conference.exceptionhandler;
 
 public class LecturerAlreadyHasAPresentationException extends RuntimeException{
-    private Integer id;
+    private Integer presentationId;
+    private Integer lecturerId;
 
-    public LecturerAlreadyHasAPresentationException(Integer id) {
-        this.id = id;
+    public LecturerAlreadyHasAPresentationException(Integer presentationId, Integer lecturerId) {
+        this.presentationId = presentationId;
+        this.lecturerId = lecturerId;
     }
 }

@@ -1,14 +1,13 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.PresentationCreateCommand;
+import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.PresentationListItem;
-import hu.progmasters.conference.dto.PresentationUpdateCommand;
+import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
 import hu.progmasters.conference.service.PresentationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -41,9 +40,9 @@ public class PresentationController {
     @Operation(summary = "Save a presentation with lecturer")
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
-    public ResponseEntity<PresentationInfo> savePresentation(Integer lecturerId, @Valid @RequestBody PresentationCreateCommand command) {
+    public ResponseEntity<PresentationInfo> savePresentation(@Valid @RequestBody PresentationCreateCommand command) {
         LOGGER.info(LOG_POST, String.format(command.toString()));
-        PresentationInfo saved = presentationService.savePresentation(lecturerId, command);
+        PresentationInfo saved = presentationService.savePresentation( command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -72,17 +71,17 @@ public class PresentationController {
     }
 
 
-//    @GetMapping("/{title}")
-//    @Operation(summary = "Finds the presentation by title")
-//    @ApiResponse(responseCode = "200", description = "Presentation has been found")
-//    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
-//    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
-//    public ResponseEntity<PresentationInfo> findByTitle(@PathVariable @RequestParam("title") String title) {
-//        LOGGER.info(String.format(LOG_GET, "/" + title));
-//        PresentationInfo presentationFound = presentationService.findByTitle(title);
-//        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentationFound));
-//        return new ResponseEntity<>(presentationFound, HttpStatus.OK);
-//    }
+    @GetMapping("findByTitle")
+    @Operation(summary = "Finds the presentation by title")
+    @ApiResponse(responseCode = "200", description = "Presentation has been found")
+    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
+    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
+    public ResponseEntity<PresentationInfo> findByTitle(@RequestParam("title") String title) {
+        LOGGER.info(String.format(LOG_GET, "/" + title));
+        PresentationInfo presentationFound = presentationService.findByTitle(title);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentationFound));
+        return new ResponseEntity<>(presentationFound, HttpStatus.OK);
+    }
 
     @PutMapping("/{id}")
     @Operation(summary = "Updates presentation's start time")
