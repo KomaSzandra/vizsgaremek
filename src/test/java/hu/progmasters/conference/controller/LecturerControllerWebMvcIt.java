@@ -36,9 +36,6 @@ public class LecturerControllerWebMvcIt {
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.lecturerController).build();
     }
 
-//    @Autowired
-//    MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
 
@@ -54,8 +51,6 @@ public class LecturerControllerWebMvcIt {
 
     @Test
     void testFindLecturerByName_success() throws Exception {
-//        when(lecturerService.findByName(anyString()))
-//                .thenReturn(new LecturerInfo(1, "Dr. John Doe", LocalDate.now(), "CEU", "profDoe@ceu.com", AcademicRank.PROFESSOR));
         LecturerCreateCommand command = new LecturerCreateCommand();
         command.setName("Jsoa");
         command.setAcademicRank(AcademicRank.CANDIDATE);

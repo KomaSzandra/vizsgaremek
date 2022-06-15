@@ -80,7 +80,7 @@ public class ParticipantController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Update participant's institution")
+    @Operation(summary = "Update a participant's institution")
     @ApiResponse(responseCode = "200", description = "Participant has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
     public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {

@@ -41,6 +41,5 @@ public class PresentationRepositoryTest {
         assertEquals(1, foundById.get().getId());
         assertEquals("Reset", foundById.get().getTitle());
         assertEquals(startTime, foundById.get().getStartTime());
-
     }
 }

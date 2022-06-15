@@ -4,7 +4,6 @@ import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.domain.Participation;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.ParticipationInfo;
-import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
 import hu.progmasters.conference.exceptionhandler.*;
 import hu.progmasters.conference.repository.ParticipationRepository;
@@ -30,7 +29,8 @@ public class ParticipationService {
     public ParticipationInfo registrate(ParticipationCreateCommand command) {
         Presentation presentation = presentationService.findPresentationById(command.getPresentationId())
                 .orElseThrow(()-> new PresentationNotFoundException(command.getPresentationId()));
-        Participant participant = participantService.findParticipantById(command.getParticipantId()).orElseThrow(()-> new ParticipantNotFoundException(command.getParticipantId()));;
+        Participant participant = participantService.findParticipantById(command.getParticipantId())
+                .orElseThrow(()-> new ParticipantNotFoundException(command.getParticipantId()));;
 
         if(alreadyRegistrated(participant, presentation)) {
             throw new AlreadyRegisteredException(presentation.getId(), participant.getId());
@@ -64,5 +64,4 @@ public class ParticipationService {
                 .orElseThrow(()-> new ParticipationNotFoundException(id));
         return modelMapper.map(participationById, ParticipationInfo.class);
     }
-
 }
