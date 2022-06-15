@@ -6,16 +6,15 @@ import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
-import hu.progmasters.conference.exceptionhandler.AlreadyRegisteredException;
-import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
-import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
-import hu.progmasters.conference.exceptionhandler.RegistrationClosedException;
+import hu.progmasters.conference.exceptionhandler.*;
 import hu.progmasters.conference.repository.ParticipationRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -52,4 +51,18 @@ public class ParticipationService {
     private boolean alreadyRegistrated(Participant participant, Presentation presentation) {
         return participationRepository.hasRegistration(participant, presentation);
     }
+
+    public List<ParticipationInfo> findAll() {
+        List<Participation> participations = participationRepository.findAll();
+        return participations.stream()
+                .map(participation -> modelMapper.map(participation, ParticipationInfo.class))
+                .collect(Collectors.toList());
+    }
+
+    public ParticipationInfo findById(Integer id) {
+        Participation participationById = participationRepository.findById(id)
+                .orElseThrow(()-> new ParticipationNotFoundException(id));
+        return modelMapper.map(participationById, ParticipationInfo.class);
+    }
+
 }

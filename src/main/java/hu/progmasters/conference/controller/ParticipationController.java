@@ -11,12 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/participations")
@@ -35,7 +33,7 @@ public class ParticipationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LecturerController.class);
 
     @PostMapping
-    @Operation(summary = "Registrate participant to a presentation")
+    @Operation(summary = "Registrate a participant to a presentation")
     @ApiResponse(responseCode = "201", description = "Participation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be saved")
     public ResponseEntity<ParticipationInfo> registrate(@Valid @RequestBody ParticipationCreateCommand command) {
@@ -43,5 +41,21 @@ public class ParticipationController {
         ParticipationInfo saved = participationService.registrate(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    @Operation(summary = "Lists all participation")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationInfo> findAll() {
+        LOGGER.info(String.format(LOG_GET, ""));
+        return participationService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get a participation by given id")
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipationInfo findById(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_GET, "/" + id));
+        return participationService.findById(id);
     }
 }

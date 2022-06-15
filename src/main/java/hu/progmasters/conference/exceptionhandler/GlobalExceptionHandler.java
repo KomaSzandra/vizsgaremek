@@ -84,4 +84,12 @@ public class GlobalExceptionHandler {
                 List.of(new ValidationError("participantId", "Participant already registered to this presentation")),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ParticipationNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handleParticipationNotFoundException(ParticipationNotFoundException e) {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("participationId", "No participation found with id: " + e.getId())),
+                HttpStatus.BAD_REQUEST);
+    }
+
 }
