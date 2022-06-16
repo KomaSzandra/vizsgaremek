@@ -28,12 +28,12 @@ public class Lecturer {
     @Column(name = "institution")
     private String institution;
 
-    @Column(name = "email", unique = true)
-    private String email;
-
     @Column(name = "academic_rank")
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
+
+    @Column(name = "email", unique = true)
+    private String email;
 
     @OneToOne(mappedBy = "lecturer")
     private Presentation presentation;

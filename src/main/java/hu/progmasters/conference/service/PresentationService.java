@@ -65,15 +65,6 @@ public class PresentationService {
     }
 
     public void deletePresentation(Integer id) {
-        Optional<Presentation> optionalPresentation = presentationRepository.findById(id);
-        if(optionalPresentation.isEmpty()) {
-            throw new PresentationNotFoundException(id);
-        }
-        Presentation presentation = optionalPresentation.get();
-        Lecturer lecturer = presentation.getLecturer();
-        if(lecturer != null){
-            throw new LecturerAlreadyHasAPresentationException(id, lecturer.getId());
-        }
 
         presentationRepository.deleteById(id);
     }
