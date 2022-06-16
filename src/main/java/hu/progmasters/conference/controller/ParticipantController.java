@@ -46,16 +46,6 @@ public class ParticipantController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("{id}")
-    @Operation(summary = "Deletes an exact participant by given id")
-    @ApiResponse(responseCode = "200", description = "Participant has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
-    public ResponseEntity<Void> deleteParticipant(@PathVariable("id") Integer id) {
-        LOGGER.info(LOG_DELETE, "/" + id);
-        participantService.deleteParticipant(id);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -98,6 +88,14 @@ public class ParticipantController {
         List<ParticipantInfo> participants = participantService.findAllByName(name);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", participants));
         return new ResponseEntity<>(participants, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + id));
+        participantService.delete(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
     }
 }
 

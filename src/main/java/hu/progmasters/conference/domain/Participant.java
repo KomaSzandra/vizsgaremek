@@ -40,4 +40,5 @@ public class Participant {
     @OneToMany
     @JoinColumn(name = "participation_id")
     private List<Participation> participations;
+
 }

@@ -1,6 +1,7 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Participant;
+import hu.progmasters.conference.domain.Participation;
 import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
@@ -23,6 +24,7 @@ public class ParticipantService {
     private final ParticipantRepository participantRepository;
     private final ModelMapper modelMapper;
 
+
     public ParticipantInfo saveParticipant(ParticipantCreateCommand command) {
         Participant toSave = modelMapper.map(command, Participant.class);
         Participant saved;
@@ -35,12 +37,9 @@ public class ParticipantService {
         return modelMapper.map(saved, ParticipantInfo.class);
     }
 
-    public void deleteParticipant(Integer participantId) {
-        participantRepository.deleteById(participantId);
-    }
-
     public ParticipantByIdInfo findById(Integer id) {
-        Participant participantById = participantRepository.findById(id).orElseThrow(()-> new ParticipantNotFoundException(id));
+        Participant participantById = participantRepository.findById(id).orElseThrow(()
+                -> new ParticipantNotFoundException(id));
         return modelMapper.map(participantById, ParticipantByIdInfo.class);
     }
 
@@ -52,7 +51,8 @@ public class ParticipantService {
     }
 
     public ParticipantInfo update(Integer id, ParticipantUpdateCommand command) {
-        Participant participantById = participantRepository.findById(id).orElseThrow(()-> new ParticipantNotFoundException(id));
+        Participant participantById = participantRepository.findById(id).orElseThrow(()
+                -> new ParticipantNotFoundException(id));
         participantById.setInstitution(command.getInstitution());
         return modelMapper.map(participantById, ParticipantInfo.class);
     }
@@ -70,5 +70,17 @@ public class ParticipantService {
 
     public Optional<Participant> findParticipantById(Integer id) {
         return participantRepository.findById(id);
+    }
+
+    public void delete(Integer id) {
+        Participant participant = participantRepository.findById(id).orElseThrow(()
+                -> new ParticipantNotFoundException(id));
+        List<Participation> participations = participant.getParticipations();
+
+        if(!participations.isEmpty()) {
+            throw new AlreadyHasAParticipationException(id);
+        }
+
+        participantRepository.delete(participant);
     }
 }

@@ -1,7 +1,9 @@
 package hu.progmasters.conference.controller;
 
+import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
 import hu.progmasters.conference.dto.ParticipationInfo;
+import hu.progmasters.conference.dto.command.ParticipationUpdateCommand;
 import hu.progmasters.conference.service.ParticipationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,4 +60,26 @@ public class ParticipationController {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         return participationService.findById(id);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a participation")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + id));
+        participationService.delete(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Transferring a participant's participation to another presentation")
+    @ApiResponse(responseCode = "200", description = "Participant has been updated")
+    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
+    public ParticipationInfo updateParticipantsPresentation(@PathVariable("id") Integer id,
+                                                          @RequestBody ParticipationUpdateCommand command) {
+        LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
+        return participationService.updateParticipantsPresentation(id, command);
+    }
+
 }

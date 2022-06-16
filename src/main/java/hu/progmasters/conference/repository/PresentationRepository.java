@@ -13,13 +13,6 @@ import java.util.Optional;
 @Repository
 public interface PresentationRepository extends JpaRepository<Presentation, Integer> {
 
-
     Presentation findPresentationByTitle(String title);
 
-//    public Presentation findByTitle(String titleToFind) {
-//        TypedQuery<Presentation> query = entityManager.createQuery("SELECT p FROM Presentation p " +
-//                "WHERE p.title = :titleParam", Presentation.class);
-//        query.setParameter("titleParam", titleToFind);
-//        Presentation presentationWithTitle = query.getSingleResult();
-//        return presentationWithTitle;
 }

@@ -68,14 +68,14 @@ public class LecturerService {
     }
 
     public void deleteLecturer(Integer id) {
-        Optional<Lecturer> lecturerOptional = lecturerRepository.findById(id);
-        if (lecturerOptional.isEmpty()) {
+        Optional<Lecturer> lecturer = lecturerRepository.findById(id);
+        if (lecturer.isEmpty()) {
             throw new LecturerNotFoundException(id);
         }
-        Lecturer lecturerFound = lecturerOptional.get();
+        Lecturer lecturerFound = lecturer.get();
         Presentation presentation = lecturerFound.getPresentation();
-        if(lecturerFound.getPresentation() != null) {
-            presentationService.deletePresentation(presentation.getId());
+        if(presentation != null) {
+            throw new LecturerAlreadyHasAPresentationException(presentation.getId(), id);
         }
         lecturerRepository.deleteLecturer(lecturerFound);
     }

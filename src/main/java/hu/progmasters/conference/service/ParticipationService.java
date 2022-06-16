@@ -5,6 +5,7 @@ import hu.progmasters.conference.domain.Participation;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
+import hu.progmasters.conference.dto.command.ParticipationUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.*;
 import hu.progmasters.conference.repository.ParticipationRepository;
 import lombok.AllArgsConstructor;
@@ -64,4 +65,26 @@ public class ParticipationService {
                 .orElseThrow(()-> new ParticipationNotFoundException(id));
         return modelMapper.map(participationById, ParticipationInfo.class);
     }
+
+    public void delete(Integer id) {
+        Participation participation = participationRepository.findById(id).orElseThrow(()->
+                new ParticipationNotFoundException(id));
+        participationRepository.delete(participation);
+    }
+
+    public ParticipationInfo updateParticipantsPresentation(Integer participationId, ParticipationUpdateCommand command) {
+        Participation participation = participationRepository.findById(participationId).orElseThrow(()
+                -> new ParticipationNotFoundException(participationId));
+        Presentation presentation = presentationService.findPresentationById(command.getPresentationId()).orElseThrow(()
+        -> new PresentationNotFoundException(command.getPresentationId()));
+        participation.setPresentation(presentation);
+        participationRepository.update(participation);
+        return modelMapper.map(participation, ParticipationInfo.class);
+    }
+
+    public Participation findParticipationById(Integer id) {
+        return participationRepository.findById(id).orElseThrow(()-> new ParticipationNotFoundException(id));
+    }
+
+
 }

@@ -40,4 +40,12 @@ public class ParticipationRepository {
                 .getResultList().isEmpty();
     }
 
+    public void delete(Participation participation) {
+        entityManager.remove(participation);
+    }
+
+    public Participation update(Participation participationToUpdate) {
+        Participation merged = entityManager.merge(participationToUpdate);
+        return merged;
+    }
 }

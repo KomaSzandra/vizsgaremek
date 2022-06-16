@@ -1,19 +1,20 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
-import hu.progmasters.conference.domain.Participation;
 import hu.progmasters.conference.domain.Presentation;
-import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.dto.PresentationInfo;
+import hu.progmasters.conference.dto.PresentationListItem;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
-import hu.progmasters.conference.exceptionhandler.*;
+import hu.progmasters.conference.exceptionhandler.LecturerAlreadyHasAPresentationException;
+import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
+import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +65,16 @@ public class PresentationService {
     }
 
     public void deletePresentation(Integer id) {
+        Optional<Presentation> optionalPresentation = presentationRepository.findById(id);
+        if(optionalPresentation.isEmpty()) {
+            throw new PresentationNotFoundException(id);
+        }
+        Presentation presentation = optionalPresentation.get();
+        Lecturer lecturer = presentation.getLecturer();
+        if(lecturer != null){
+            throw new LecturerAlreadyHasAPresentationException(id, lecturer.getId());
+        }
+
         presentationRepository.deleteById(id);
     }
 

@@ -92,7 +92,7 @@ public class LecturerController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletes an exact lecturer by given id")
+    @Operation(summary = "Deletes a passive lecturer by given id")
     @ApiResponse(responseCode = "200", description = "Lecturer has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
     public ResponseEntity<Void> deleteLecturer(@PathVariable("id") Integer id) {

@@ -71,24 +71,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LecturerAlreadyHasAPresentationException.class)
-    public ResponseEntity<List<ValidationError>> handleLecturerAlreadyHasAPresentation(LecturerAlreadyHasAPresentationException e) {
+    public ResponseEntity<List<ValidationError>> handleLecturerHasAPresentation(LecturerAlreadyHasAPresentationException e) {
         return new ResponseEntity<>(
-                List.of(new ValidationError("lecturerId", "Reserved, the lecturer already has a lecture")),
+                List.of(new ValidationError("lecturerId", "The lecturer already has a lecture")),
                 HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(AlreadyRegisteredException.class)
     public ResponseEntity<List<ValidationError>> handleAlreadyRegisteredException(AlreadyRegisteredException e) {
         return new ResponseEntity<>(
-                List.of(new ValidationError("participantId", "Participant already registered to this presentation")),
+                List.of(new ValidationError("participantId",
+                        "Participant already registered to this presentation")),
                 HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ParticipationNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleParticipationNotFoundException(ParticipationNotFoundException e) {
         return new ResponseEntity<>(
-                List.of(new ValidationError("participationId", "No participation found with id: " + e.getId())),
+                List.of(new ValidationError("participationId", "No participation found with id: "
+                        + e.getId())),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AlreadyHasAParticipationException.class)
+    public ResponseEntity<List<ValidationError>> handleAlreadyHasAParticipation(AlreadyHasAParticipationException e) {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("id", "Participant with id:" + e.getId() +
+                        " already has a participation")),
                 HttpStatus.BAD_REQUEST);
     }
 
