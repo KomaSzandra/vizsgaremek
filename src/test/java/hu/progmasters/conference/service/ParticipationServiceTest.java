@@ -1,5 +1,6 @@
 package hu.progmasters.conference.service;
 
+import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.PresentationInfo;
@@ -7,16 +8,23 @@ import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ParticipationServiceTest {
 
-
+    @Autowired
     ParticipationService participationService;
+    @Autowired
     ParticipantService participantService;
+    @Autowired
     PresentationService presentationService;
 
     @Test
@@ -25,8 +33,11 @@ public class ParticipationServiceTest {
         PresentationInfo presentationInfo = createPresentation();
 
         ParticipationCreateCommand command = new ParticipationCreateCommand();
+        LocalDateTime registrate = LocalDateTime.of(2022, Month.AUGUST, 26, 10, 0, 0);
+
         command.setParticipantId(participantInfo.getId());
         command.setPresentationId(presentationInfo.getId());
+        command.setRegistration(registrate);
 
         ParticipationInfo participationInfo = null;
         try {
@@ -43,7 +54,12 @@ public class ParticipationServiceTest {
 
     private ParticipantInfo createParticipant() {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
+        LocalDate dateOfBirth = LocalDate.of(1990, Month.SEPTEMBER, 26);
         command.setName("Dr. Jack Doe");
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setEmail("lilDoe@uni.com");
+        command.setInstitution("BME");
+        command.setDateOfBirth(dateOfBirth);
 
         ParticipantInfo info = participantService.saveParticipant(command);
         return info;
@@ -51,7 +67,9 @@ public class ParticipationServiceTest {
 
     private PresentationInfo createPresentation() {
         PresentationCreateCommand command = new PresentationCreateCommand();
+        LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 10, 0, 0);
         command.setTitle("Test project");
+        command.setStartTime(startTime);
         PresentationInfo info = presentationService.savePresentation(command);
         return info;
     }
