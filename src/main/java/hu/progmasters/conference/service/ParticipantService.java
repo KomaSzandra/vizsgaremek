@@ -37,10 +37,10 @@ public class ParticipantService {
         return modelMapper.map(saved, ParticipantInfo.class);
     }
 
-    public ParticipantByIdInfo findById(Integer id) {
+    public ParticipantInfo findById(Integer id) {
         Participant participantById = participantRepository.findById(id).orElseThrow(()
                 -> new ParticipantNotFoundException(id));
-        return modelMapper.map(participantById, ParticipantByIdInfo.class);
+        return modelMapper.map(participantById, ParticipantInfo.class);
     }
 
     public List<ParticipantListItem> findAll() {

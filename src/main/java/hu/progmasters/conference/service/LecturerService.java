@@ -41,7 +41,7 @@ public class LecturerService {
         try {
              saved = lecturerRepository.save(toSave);
              lecturerRepository.flush();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new EmailNotValidException(toSave.getEmail());
         }
         return modelMapper.map(saved, LecturerInfo.class);

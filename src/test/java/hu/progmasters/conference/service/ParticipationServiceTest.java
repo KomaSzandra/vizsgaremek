@@ -73,4 +73,9 @@ public class ParticipationServiceTest {
         PresentationInfo info = presentationService.savePresentation(command);
         return info;
     }
+
+    @Test
+    void testDeleteParticipation_success() {
+
+    }
 }

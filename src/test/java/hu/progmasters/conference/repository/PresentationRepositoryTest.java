@@ -24,16 +24,16 @@ public class PresentationRepositoryTest {
     @Transactional
     void testSave() {
         Presentation toSave = new Presentation();
-        toSave.setTitle("Reset");
-        LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 10, 0, 0);
+        toSave.setTitle("Datas");
+        LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0, 0);
         toSave.setStartTime(startTime);
 
-        Optional<Presentation> expectedNull = repository.findById(1);
+        Optional<Presentation> expectedNull = repository.findById(2);
         assertTrue(expectedNull.isEmpty());
 
         Presentation saved = repository.save(toSave);
-        assertEquals(1, saved.getId());
-        assertEquals("Reset", saved.getTitle());
+        assertEquals(2, saved.getId());
+        assertEquals("Datas", saved.getTitle());
         assertEquals(startTime, saved.getStartTime());
 
         Optional<Presentation> foundById = repository.findById(1);

@@ -56,7 +56,7 @@ public class ParticipantController {
     @ApiResponse(responseCode = "200", description = "Participant has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
     @ApiResponse(responseCode = "404", description = "Participant has not been found")
-    public ParticipantByIdInfo findById(@PathVariable("id") Integer id) {
+    public ParticipantInfo findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         return participantService.findById(id);
     }

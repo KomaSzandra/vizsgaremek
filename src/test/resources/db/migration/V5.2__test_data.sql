@@ -1,0 +1,1 @@
+INSERT INTO presentation (title, start_time) VALUES ('Reset', '2022-09-26 08:00:00');
