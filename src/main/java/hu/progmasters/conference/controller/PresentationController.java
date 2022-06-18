@@ -4,6 +4,7 @@ import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.PresentationListItem;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
+import hu.progmasters.conference.service.ParticipationService;
 import hu.progmasters.conference.service.PresentationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +24,7 @@ import java.util.List;
 public class PresentationController {
 
     private PresentationService presentationService;
+    private ParticipationService participationService;
 
     private static final String HTTP_RESPONSE = "Http response: %s, %s";
     private static final String LOG_GET = "Http request, GET /api/presentations%s";
@@ -32,12 +34,13 @@ public class PresentationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LecturerController.class);
 
-    public PresentationController(PresentationService presentationService) {
+    public PresentationController(PresentationService presentationService, ParticipationService participationService) {
         this.presentationService = presentationService;
+        this.participationService = participationService;
     }
 
     @PostMapping
-    @Operation(summary = "Save a presentation with lecturer")
+    @Operation(summary = "Save a presentation")
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
     public ResponseEntity<PresentationInfo> savePresentation(@Valid @RequestBody PresentationCreateCommand command) {
@@ -95,13 +98,13 @@ public class PresentationController {
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Deletes an exact presentation by given id")
+    @DeleteMapping("/{presentationId}")
+    @Operation(summary = "Cancellation of presentation")
     @ApiResponse(responseCode = "200", description = "Presentation has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
-    public ResponseEntity<Void> deletePresentation(@PathVariable("id") Integer id) {
-        LOGGER.info(String.format(LOG_DELETE, "/" + id));
-        presentationService.deletePresentation(id);
+    public ResponseEntity<Void> cancelPresentation(@PathVariable("presentationId") Integer presentationId) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + presentationId));
+        participationService.cancelPresentation(presentationId);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
         return new ResponseEntity<>(HttpStatus.OK);
     }

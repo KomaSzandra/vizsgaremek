@@ -1,6 +1,7 @@
 package hu.progmasters.conference.repository;
 
 import hu.progmasters.conference.domain.Participant;
+import hu.progmasters.conference.domain.Participation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

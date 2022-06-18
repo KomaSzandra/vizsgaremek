@@ -61,12 +61,23 @@ public class ParticipationController {
         return participationService.findById(id);
     }
 
+    @GetMapping("findAllByParticipant")
+    @Operation(summary = "Get participations by participant")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationInfo> findAllByParticipant(@RequestParam("participantId") Integer participantId) {
+        LOGGER.info(String.format(LOG_GET, "/" + participantId));
+        List<ParticipationInfo> participations = participationService.findByParticipant(participantId);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", participations));
+        return participations;
+    }
+
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a participation")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_DELETE, "/" + id));
-        participationService.delete(id);
+        participationService.deleteParticipation(id);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
         return new ResponseEntity<>(HttpStatus.OK);
     }

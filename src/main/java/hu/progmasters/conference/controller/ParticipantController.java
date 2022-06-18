@@ -4,6 +4,7 @@ import hu.progmasters.conference.dto.*;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
+import hu.progmasters.conference.service.ParticipationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ParticipantController {
 
     private ParticipantService participantService;
+    private ParticipationService participationService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LecturerController.class);
 
@@ -31,8 +33,9 @@ public class ParticipantController {
     private static final String LOG_PUT = "Http request, PUT /api/participants%s, body: %s";
     static final String LOG_DELETE = "Http request, DELETE /api/participants%s";
 
-    public ParticipantController(ParticipantService participantService) {
+    public ParticipantController(ParticipantService participantService, ParticipationService participationService) {
         this.participantService = participantService;
+        this.participationService = participationService;
     }
 
     @PostMapping()
@@ -90,11 +93,12 @@ public class ParticipantController {
         return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{participantId}")
+    @Operation(summary = "Cancels all participation of the participant")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Integer id) {
-        LOGGER.info(String.format(LOG_DELETE, "/" + id));
-        participantService.delete(id);
+    public void delete(@PathVariable("participantId") Integer participantId) {
+        LOGGER.info(String.format(LOG_DELETE, "/" + participantId));
+        participationService.deleteParticipations(participantId);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
     }
 }

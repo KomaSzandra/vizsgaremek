@@ -1,6 +1,7 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
+import hu.progmasters.conference.domain.Participation;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.PresentationListItem;
@@ -64,12 +65,8 @@ public class PresentationService {
         return modelMapper.map(presentationFound, PresentationInfo.class);
     }
 
-    public void deletePresentation(Integer id) {
-
-        presentationRepository.deleteById(id);
-    }
-
     public Optional<Presentation> findPresentationById(Integer id) {
         return presentationRepository.findById(id);
     }
+
 }

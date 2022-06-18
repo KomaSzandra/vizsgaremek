@@ -72,15 +72,4 @@ public class ParticipantService {
         return participantRepository.findById(id);
     }
 
-    public void delete(Integer id) {
-        Participant participant = participantRepository.findById(id).orElseThrow(()
-                -> new ParticipantNotFoundException(id));
-        List<Participation> participations = participant.getParticipations();
-
-        if(!participations.isEmpty()) {
-            throw new AlreadyHasAParticipationException(id);
-        }
-
-        participantRepository.delete(participant);
-    }
 }

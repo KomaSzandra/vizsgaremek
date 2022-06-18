@@ -66,10 +66,38 @@ public class ParticipationService {
         return modelMapper.map(participationById, ParticipationInfo.class);
     }
 
-    public void delete(Integer id) {
-        Participation participation = participationRepository.findById(id).orElseThrow(()->
-                new ParticipationNotFoundException(id));
+    public List<ParticipationInfo> findByParticipant(Integer participantId) {
+        List<Participation> byParticipant = participationRepository.findByParticipant(participantId);
+        return byParticipant.stream()
+                .map(participation -> modelMapper.map(participation, ParticipationInfo.class))
+                .collect(Collectors.toList());
+    }
+
+    public void deleteParticipation(Integer participationId) {
+        Participation participation = participationRepository.findById(participationId).orElseThrow(()->
+                new ParticipationNotFoundException(participationId));
         participationRepository.delete(participation);
+    }
+
+    public void deleteParticipations(Integer participantId) {
+        participantService.findParticipantById(participantId).orElseThrow(()
+                -> new ParticipationNotFoundException(participantId));
+        for (Participation participation : participationRepository.findAll()) {
+            if(participation.getParticipant().getId().equals(participantId)) {
+                participationRepository.delete(participation);
+            }
+        }
+    }
+
+    public void cancelPresentation(Integer presentationId) {
+        Presentation presentation = presentationService.findPresentationById(presentationId).orElseThrow(()
+                -> new PresentationNotFoundException(presentationId));
+        presentation.setLecturer(null);
+        for (Participation participation : participationRepository.findAll()) {
+            if(participation.getPresentation().getId().equals(presentationId)) {
+                participationRepository.delete(participation);
+            }
+        }
     }
 
     public ParticipationInfo updateParticipantsPresentation(Integer participationId, ParticipationUpdateCommand command) {

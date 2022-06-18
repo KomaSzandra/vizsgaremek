@@ -48,4 +48,11 @@ public class ParticipationRepository {
         Participation merged = entityManager.merge(participationToUpdate);
         return merged;
     }
+
+    public List<Participation> findByParticipant(Integer participantId) {
+        return entityManager.createQuery("SELECT p FROM Participation p " +
+                "WHERE p.participant.id IN :participantParam", Participation.class)
+                .setParameter("participantParam", participantId)
+                .getResultList();
+    }
 }
