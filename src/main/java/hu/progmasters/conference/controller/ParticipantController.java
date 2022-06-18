@@ -8,6 +8,7 @@ import hu.progmasters.conference.service.ParticipationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @Tag(name = "The Controller for participants")
 @RequestMapping("/api/participants")
 public class ParticipantController {
@@ -31,12 +33,8 @@ public class ParticipantController {
     private static final String LOG_GET = "Http request, GET /api/participants%s";
     private static final String LOG_POST = "Http request, POST /api/participants, body: {}";
     private static final String LOG_PUT = "Http request, PUT /api/participants%s, body: %s";
-    static final String LOG_DELETE = "Http request, DELETE /api/participants%s";
+    private static final String LOG_DELETE = "Http request, DELETE /api/participants%s";
 
-    public ParticipantController(ParticipantService participantService, ParticipationService participationService) {
-        this.participantService = participantService;
-        this.participationService = participationService;
-    }
 
     @PostMapping()
     @Operation(summary = "Creates a participant")
@@ -49,7 +47,6 @@ public class ParticipantController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get a participant by given id")
@@ -58,7 +55,9 @@ public class ParticipantController {
     @ApiResponse(responseCode = "404", description = "Participant has not been found")
     public ParticipantInfo findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
-        return participantService.findById(id);
+        ParticipantInfo byId = participantService.findById(id);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", byId));
+        return byId;
     }
 
     @GetMapping
@@ -78,14 +77,16 @@ public class ParticipantController {
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
     public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
-        return participantService.update(id, command);
+        ParticipantInfo info = participantService.update(id, command);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return info;
     }
 
     @GetMapping("findAllByName")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get participants by name")
-    @ApiResponse(responseCode = "200", description = "Participant has been updated")
-    @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
+    @ApiResponse(responseCode = "200", description = "Participants have been found")
+    @ApiResponse(responseCode = "400", description = "Bad request, participants cannot be found")
     public ResponseEntity<List<ParticipantInfo>> findAllByName(@RequestParam("name") String name) {
         LOGGER.info(String.format(LOG_GET, "/" + name));
         List<ParticipantInfo> participants = participantService.findAllByName(name);

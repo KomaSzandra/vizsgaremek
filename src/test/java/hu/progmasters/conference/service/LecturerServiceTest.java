@@ -56,12 +56,20 @@ public class LecturerServiceTest {
         lecturerService = new LecturerService( lecturerRepository,new ModelMapper(), presentationService);
         presentation = new Presentation(1, new Lecturer(), "Reset", LocalDateTime.of(
                 2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
-        lecturer = new Lecturer(1, "Dr. John Doe", LocalDate.of(1980, 8, 5), "CEU", AcademicRank.SENIOR_LECTURER, "drDoe@lecturer.com", new Presentation());
-        lecturer1 = new Lecturer(2, "Dr. John Doe", LocalDate.of(1980, 8, 5), "CEU", AcademicRank.SENIOR_RESEARCH_FELLOW, "drDoe@lecturer.com", new Presentation());
-        lecturerInfo = new LecturerInfo(1, "Dr. John Doe", LocalDate.of(1980, 8, 5), "CEU", "drDoe@lecturer.com", AcademicRank.SENIOR_LECTURER, null, null);
+        lecturer = new Lecturer(1, "Dr. John Doe", LocalDate.of(
+                1980, 8, 5), "CEU", AcademicRank.SENIOR_LECTURER,
+                "drDoe@lecturer.com", new Presentation());
+        lecturer1 = new Lecturer(2, "Dr. John Doe", LocalDate.of(
+                1980, 8, 5), "CEU", AcademicRank.SENIOR_RESEARCH_FELLOW,
+                "drDoe@lecturer.com", new Presentation());
+        lecturerInfo = new LecturerInfo(1, "Dr. John Doe", LocalDate.of(
+                1980, 8, 5), "CEU", "drDoe@lecturer.com",
+                AcademicRank.SENIOR_LECTURER, null, null);
         updateCommand = new LecturerUpdateCommand(1);
-        createCommand = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU","drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
-        createCommand1 = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_RESEARCH_FELLOW, "CEU", "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
+        createCommand = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU",
+                "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
+        createCommand1 = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_RESEARCH_FELLOW,
+                "CEU", "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
     }
 
     @Test

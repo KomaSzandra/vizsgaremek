@@ -7,6 +7,7 @@ import hu.progmasters.conference.service.LecturerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @Tag(name = "The Controller for lecturers")
 @RequestMapping("/api/lecturers")
+@AllArgsConstructor
 public class LecturerController {
 
     private LecturerService lecturerService;
@@ -31,9 +33,6 @@ public class LecturerController {
     private static final String LOG_PUT = "Http request, PUT /api/lecturers%s, body: %s";
     private static final String LOG_DELETE = "Http request, DELETE /api/lecturers%s";
 
-    public LecturerController(LecturerService lecturerService) {
-        this.lecturerService = lecturerService;
-    }
 
     @PostMapping
     @Operation(summary = "Save a lecturer")
@@ -88,13 +87,15 @@ public class LecturerController {
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be updated")
     public LecturerInfo update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
-        return lecturerService.addLecturerToPresentation(id, command);
+        LecturerInfo lecturerInfo = lecturerService.addLecturerToPresentation(id, command);
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return lecturerInfo;
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletes a passive lecturer by given id")
-    @ApiResponse(responseCode = "200", description = "Lecturer has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
+    @ApiResponse(responseCode = "200", description = "Lecturer has been deleted")
+    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be deleted")
     public ResponseEntity<Void> deleteLecturer(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_DELETE, "/" + id));
         lecturerService.deleteLecturer(id);

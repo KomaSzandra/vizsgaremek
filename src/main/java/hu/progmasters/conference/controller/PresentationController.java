@@ -9,6 +9,7 @@ import hu.progmasters.conference.service.PresentationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @Tag(name = "The controller for presentations")
 @RequestMapping("/api/presentations")
+@AllArgsConstructor
 public class PresentationController {
 
     private PresentationService presentationService;
@@ -34,10 +36,6 @@ public class PresentationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LecturerController.class);
 
-    public PresentationController(PresentationService presentationService, ParticipationService participationService) {
-        this.presentationService = presentationService;
-        this.participationService = participationService;
-    }
 
     @PostMapping
     @Operation(summary = "Save a presentation")
@@ -73,7 +71,6 @@ public class PresentationController {
         return new ResponseEntity<>(presentationInfo, HttpStatus.OK);
     }
 
-
     @GetMapping("findByTitle")
     @Operation(summary = "Finds the presentation by title")
     @ApiResponse(responseCode = "200", description = "Presentation has been found")
@@ -100,8 +97,8 @@ public class PresentationController {
 
     @DeleteMapping("/{presentationId}")
     @Operation(summary = "Cancellation of presentation")
-    @ApiResponse(responseCode = "200", description = "Presentation has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
+    @ApiResponse(responseCode = "200", description = "Presentation has been cancelled")
+    @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be cancelled")
     public ResponseEntity<Void> cancelPresentation(@PathVariable("presentationId") Integer presentationId) {
         LOGGER.info(String.format(LOG_DELETE, "/" + presentationId));
         participationService.cancelPresentation(presentationId);
