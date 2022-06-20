@@ -28,10 +28,8 @@ public class ParticipationService {
 
 
     public ParticipationInfo registrate(ParticipationCreateCommand command) {
-        Presentation presentation = presentationService.findPresentationById(command.getPresentationId())
-                .orElseThrow(()-> new PresentationNotFoundException(command.getPresentationId()));
-        Participant participant = participantService.findParticipantById(command.getParticipantId())
-                .orElseThrow(()-> new ParticipantNotFoundException(command.getParticipantId()));;
+        Presentation presentation = presentationService.findPresentationById(command.getPresentationId());
+        Participant participant = participantService.findParticipantById(command.getParticipantId());
 
         if(alreadyRegistrated(participant, presentation)) {
             throw new AlreadyRegisteredException(presentation.getId(), participant.getId());
@@ -41,9 +39,6 @@ public class ParticipationService {
         participationToSave.setParticipant(participant);
         participationToSave.setRegistration(command.getRegistration());
 
-        if(presentation.getStartTime().isBefore(command.getRegistration())) {
-            throw new RegistrationClosedException(presentation.getId());
-        }
         Participation participationSaved = participationRepository.save(participationToSave);
 
         return modelMapper.map(participationSaved, ParticipationInfo.class);
@@ -80,8 +75,7 @@ public class ParticipationService {
     }
 
     public void deleteParticipations(Integer participantId) {
-        participantService.findParticipantById(participantId).orElseThrow(()
-                -> new ParticipationNotFoundException(participantId));
+        participantService.findParticipantById(participantId);
         for (Participation participation : participationRepository.findAll()) {
             if(participation.getParticipant().getId().equals(participantId)) {
                 participationRepository.delete(participation);
@@ -90,8 +84,7 @@ public class ParticipationService {
     }
 
     public void cancelPresentation(Integer presentationId) {
-        Presentation presentation = presentationService.findPresentationById(presentationId).orElseThrow(()
-                -> new PresentationNotFoundException(presentationId));
+        Presentation presentation = presentationService.findPresentationById(presentationId);
         presentation.setLecturer(null);
         for (Participation participation : participationRepository.findAll()) {
             if(participation.getPresentation().getId().equals(presentationId)) {
@@ -103,8 +96,7 @@ public class ParticipationService {
     public ParticipationInfo updateParticipantsPresentation(Integer participationId, ParticipationUpdateCommand command) {
         Participation participation = participationRepository.findById(participationId).orElseThrow(()
                 -> new ParticipationNotFoundException(participationId));
-        Presentation presentation = presentationService.findPresentationById(command.getPresentationId()).orElseThrow(()
-        -> new PresentationNotFoundException(command.getPresentationId()));
+        Presentation presentation = presentationService.findPresentationById(command.getPresentationId());
         participation.setPresentation(presentation);
         participationRepository.update(participation);
         return modelMapper.map(participation, ParticipationInfo.class);

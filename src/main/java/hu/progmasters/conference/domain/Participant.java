@@ -37,7 +37,7 @@ public class Participant {
     @Column(name ="email", unique = true)
     private String email;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "participation_id")
     private List<Participation> participations;
 

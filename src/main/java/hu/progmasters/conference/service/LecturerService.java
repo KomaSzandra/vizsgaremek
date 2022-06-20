@@ -2,14 +2,13 @@ package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Presentation;
-import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.LecturerInfo;
 import hu.progmasters.conference.dto.LecturerListInfo;
+import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.LecturerUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
 import hu.progmasters.conference.exceptionhandler.LecturerAlreadyHasAPresentationException;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
-import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -85,8 +84,7 @@ public class LecturerService {
     }
 
     public LecturerInfo addLecturerToPresentation(Integer id, LecturerUpdateCommand command) {
-        Presentation presentation = presentationService.findPresentationById(id).orElseThrow(() ->
-                new PresentationNotFoundException(id));
+        Presentation presentation = presentationService.findPresentationById(id);
         Lecturer lecturer = lecturerRepository.findById(command.getLecturerId()).orElseThrow(() ->
                 new LecturerNotFoundException(command.getLecturerId()));
 

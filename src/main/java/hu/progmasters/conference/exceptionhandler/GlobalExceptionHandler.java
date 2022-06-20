@@ -49,13 +49,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RegistrationClosedException.class)
-    public ResponseEntity<List<ValidationError>> handleRegistrationClosed() {
-        return new ResponseEntity<>(
-                List.of(new ValidationError("presentationId", "Registration deadline has expired!")),
-                HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(EmailNotValidException.class)
     public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException(EmailNotValidException e) {
         return new ResponseEntity<>(

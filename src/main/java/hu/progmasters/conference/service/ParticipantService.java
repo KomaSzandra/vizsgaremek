@@ -1,11 +1,13 @@
 package hu.progmasters.conference.service;
 
 import hu.progmasters.conference.domain.Participant;
-import hu.progmasters.conference.domain.Participation;
-import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.dto.ParticipantInfo;
+import hu.progmasters.conference.dto.ParticipantListItem;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
-import hu.progmasters.conference.exceptionhandler.*;
+import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
+import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
+import hu.progmasters.conference.exceptionhandler.ParticipantsByNameNotFoundException;
 import hu.progmasters.conference.repository.ParticipantRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,8 +69,9 @@ public class ParticipantService {
         }
     }
 
-    public Optional<Participant> findParticipantById(Integer id) {
-        return participantRepository.findById(id);
+    public Participant findParticipantById(Integer id) {
+        return participantRepository.findById(id).orElseThrow(()
+                -> new ParticipantNotFoundException(id));
     }
 
 }
