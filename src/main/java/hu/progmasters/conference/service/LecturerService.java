@@ -79,10 +79,6 @@ public class LecturerService {
         lecturerRepository.deleteLecturer(lecturerFound);
     }
 
-    public Optional<Lecturer> findLecturerById(Integer id) {
-        return lecturerRepository.findById(id);
-    }
-
     public LecturerInfo addLecturerToPresentation(Integer id, LecturerUpdateCommand command) {
         Presentation presentation = presentationService.findPresentationById(id);
         Lecturer lecturer = lecturerRepository.findById(command.getLecturerId()).orElseThrow(() ->

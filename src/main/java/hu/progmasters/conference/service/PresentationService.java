@@ -64,5 +64,4 @@ public class PresentationService {
         return presentationRepository.findById(id).orElseThrow(()
                 -> new PresentationNotFoundException(id));
     }
-
 }

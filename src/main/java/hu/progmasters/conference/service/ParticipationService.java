@@ -74,7 +74,7 @@ public class ParticipationService {
         participationRepository.delete(participation);
     }
 
-    public void deleteParticipations(Integer participantId) {
+    public void cancelParticipant(Integer participantId) {
         participantService.findParticipantById(participantId);
         for (Participation participation : participationRepository.findAll()) {
             if(participation.getParticipant().getId().equals(participantId)) {
@@ -101,10 +101,4 @@ public class ParticipationService {
         participationRepository.update(participation);
         return modelMapper.map(participation, ParticipationInfo.class);
     }
-
-    public Participation findParticipationById(Integer id) {
-        return participationRepository.findById(id).orElseThrow(()-> new ParticipationNotFoundException(id));
-    }
-
-
 }

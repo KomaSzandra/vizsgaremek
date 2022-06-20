@@ -93,5 +93,4 @@ public class GlobalExceptionHandler {
                         " already has a participation")),
                 HttpStatus.BAD_REQUEST);
     }
-
 }

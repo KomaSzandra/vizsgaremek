@@ -97,9 +97,9 @@ public class ParticipantController {
     @DeleteMapping("/{participantId}")
     @Operation(summary = "Cancels all participation of the participant")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("participantId") Integer participantId) {
+    public void deleteParticipations(@PathVariable("participantId") Integer participantId) {
         LOGGER.info(String.format(LOG_DELETE, "/" + participantId));
-        participationService.deleteParticipations(participantId);
+        participationService.cancelParticipant(participantId);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
     }
 }

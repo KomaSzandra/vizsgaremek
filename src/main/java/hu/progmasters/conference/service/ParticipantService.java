@@ -73,5 +73,4 @@ public class ParticipantService {
         return participantRepository.findById(id).orElseThrow(()
                 -> new ParticipantNotFoundException(id));
     }
-
 }
