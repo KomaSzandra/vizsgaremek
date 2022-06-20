@@ -33,16 +33,14 @@ public class ParticipationServiceTest {
         PresentationInfo presentationInfo = createPresentation();
 
         ParticipationCreateCommand command = new ParticipationCreateCommand();
-        LocalDateTime registrate = LocalDateTime.of(2022, Month.AUGUST, 26, 10, 0, 0);
 
         command.setParticipantId(participantInfo.getId());
         command.setPresentationId(presentationInfo.getId());
-        command.setRegistration(registrate);
 
         ParticipationInfo participationInfo = null;
         try {
             participationInfo = participationService.registrate(command);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             fail(e);
         }
 

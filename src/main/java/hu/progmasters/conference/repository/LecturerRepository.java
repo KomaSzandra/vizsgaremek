@@ -33,8 +33,7 @@ public class LecturerRepository {
     public Lecturer findByName(String name) {
         TypedQuery<Lecturer> query = entityManager.createQuery("SELECT l FROM Lecturer l WHERE l.name = :nameParam", Lecturer.class);
         query.setParameter("nameParam", name);
-        Lecturer lecturerWithName = query.getSingleResult();
-        return lecturerWithName;
+        return query.getSingleResult();
     }
 
     public void deleteLecturer(Lecturer toDelete) {
