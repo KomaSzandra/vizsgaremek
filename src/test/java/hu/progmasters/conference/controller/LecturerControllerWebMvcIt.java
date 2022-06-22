@@ -3,6 +3,7 @@ package hu.progmasters.conference.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.dto.command.LecturerCreateCommand;
+import hu.progmasters.conference.dto.command.LecturerUpdateCommand;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 
+
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -38,6 +39,7 @@ public class LecturerControllerWebMvcIt {
 
     @Autowired
     ObjectMapper objectMapper;
+
 
     @Test
     @DisplayName("Lecturer test findAll")
@@ -71,4 +73,75 @@ public class LecturerControllerWebMvcIt {
                 .andExpect(jsonPath("$.name", equalTo("Jsoa")))
                 .andDo(print());
     }
+
+    @Test
+    void testAddLecturerToPresentation() throws Exception {
+        LecturerUpdateCommand command = new LecturerUpdateCommand();
+        command.setLecturerId(1);
+
+        mockMvc.perform(put("/api/lecturers/1")
+                .content(objectMapper.writeValueAsString(command))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.presentationTitle", is("Reset")))
+                .andExpect(jsonPath("$.presentationId", is(1)))
+                .andExpect(jsonPath("$.email", is("ludwig@ceu.com")))
+                .andExpect(jsonPath("$.institution", is("Central European University")));
+    }
+
+//    @Test
+//    void testAddLecturerToPresentation_alreadyHas() throws Exception {
+//        LecturerUpdateCommand command = new LecturerUpdateCommand();
+//        command.setLecturerId(1);
+//
+//        mockMvc.perform(put("/api/lecturers/1")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(put("/api/lecturers/2")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("lecturerId")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("Reserved, lecturer already has a lecture")));
+//    }
+
+//    @Test
+//    void testLecturerNotFound() throws Exception {
+//        LecturerUpdateCommand command = new LecturerUpdateCommand();
+//        command.setLecturerId(3);
+//
+//        mockMvc.perform(put("/api/lecturers/1")
+//        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("lecturerId")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
+//    }
+
+    @Test
+    void testFindById_success() throws Exception {
+        mockMvc.perform(get("/api/lecturers/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.name", equalTo("Dr. John Doe")));
+               // .andExpect(jsonPath("$.academicRank", equalTo(AcademicRank.PROFESSOR)));
+    }
+
+//    @Test
+//    void testFindById_notFound() throws Exception {
+//        mockMvc.perform(get("/api/lecturers/3"))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("lecturerId")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
+//    }
+
+
+
 }

@@ -19,12 +19,12 @@ import java.time.Month;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(controllers = ParticipantController.class)
@@ -43,6 +43,13 @@ public class ParticipantControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    void test_atStart_emptyList() throws Exception {
+        mockMvc.perform(get("/api/participants"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
     void testFindAll_success() throws Exception {
         when(participantService.findAll())
                 .thenReturn(List.of(
@@ -52,7 +59,9 @@ public class ParticipantControllerTest {
 
         mockMvc.perform(get("/api/participants"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", equalTo("Dr. Jack Doe")));
+                .andExpect(jsonPath("$[0].name", equalTo("Dr. Jack Doe")))
+                .andExpect(jsonPath("$[1].name", equalTo("Dr. Jane Doe")))
+                .andExpect(jsonPath("$[0].institution", equalTo("CEU")));
     }
 
     @Test
@@ -72,6 +81,48 @@ public class ParticipantControllerTest {
     }
 
     @Test
+    void testCreateParticipant_inValidName() throws Exception {
+        ParticipantCreateCommand command = new ParticipantCreateCommand();
+        command.setName("");
+        command.setInstitution("CEU");
+        command.setEmail("john@ceu.com");
+        command.setDateOfBirth(LocalDate.now().minusDays(1));
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+
+        mockMvc.perform(post("/api/participants")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
+    }
+
+//    @Test
+//    void testCreateParticipant_invalidEmail() throws Exception {
+//        ParticipantCreateCommand command = new ParticipantCreateCommand();
+//        command.setName("John");
+//        command.setInstitution("CEU");
+//        command.setEmail("john@ceu.com");
+//        command.setDateOfBirth(LocalDate.now().minusDays(1));
+//        command.setAcademicRank(AcademicRank.CANDIDATE);
+//
+//        mockMvc.perform(post("/api/participants")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isCreated());
+//
+//        mockMvc.perform(post("/api/participants")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("email")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("Email already registered")));
+//    }
+
+    @Test
     void findById_success() throws Exception {
         when(participantService.findById(1))
                 .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
@@ -80,7 +131,5 @@ public class ParticipantControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Doe")));
     }
-
-
 
 }

@@ -28,11 +28,11 @@ public class PresentationRepositoryTest {
         LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0, 0);
         toSave.setStartTime(startTime);
 
-        Optional<Presentation> expectedNull = repository.findById(2);
+        Optional<Presentation> expectedNull = repository.findById(3);
         assertTrue(expectedNull.isEmpty());
 
         Presentation saved = repository.save(toSave);
-        assertEquals(2, saved.getId());
+        assertEquals(3, saved.getId());
         assertEquals("Datas", saved.getTitle());
         assertEquals(startTime, saved.getStartTime());
 

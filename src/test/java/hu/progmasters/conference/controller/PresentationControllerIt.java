@@ -1,9 +1,6 @@
 package hu.progmasters.conference.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.dto.ParticipantInfo;
-import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -15,17 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -47,7 +41,6 @@ public class PresentationControllerIt {
     @Test
     @DisplayName("Presentation test findAll")
     void testFindAllPresentation_success() throws Exception {
-
         mockMvc.perform(get("/api/presentations"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -80,5 +73,7 @@ public class PresentationControllerIt {
                 .andExpect(jsonPath("$.title", equalTo("Test title")))
                 .andDo(print());
     }
+
+
 
 }

@@ -31,8 +31,10 @@ public class LecturerInfo {
     @Schema(description = "Rank of the lecturer")
     private AcademicRank academicRank;
 
+    @Schema(description = "Id of a presenattion")
     private Integer presentationId;
 
+    @Schema(description = "Title of a presentation")
     private String presentationTitle;
 
 

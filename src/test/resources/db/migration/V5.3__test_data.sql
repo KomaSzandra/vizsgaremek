@@ -1,0 +1,1 @@
+INSERT INTO lecturer (name, date_of_birth, institution, academic_rank, email) VALUES ('Dr. Jack Doe', '1964-04-20', 'CEU', 'PROFESSOR', 'doe@ceu.com');
