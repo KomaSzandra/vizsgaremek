@@ -8,6 +8,7 @@ import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.LecturerUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
+import hu.progmasters.conference.exceptionhandler.LecturerAlreadyHasAPresentationException;
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,13 +43,16 @@ public class LecturerServiceTest {
     LecturerService lecturerService;
 
     private Presentation presentation;
+    private Presentation presentation2;
     private Lecturer lecturer;
     private Lecturer lecturer1;
     private LecturerCreateCommand createCommand;
     private LecturerCreateCommand createCommand1;
     private LecturerUpdateCommand updateCommand;
+    private LecturerUpdateCommand updateCommand1;
     private LecturerInfo lecturerInfo;
-    private LecturerListInfo lecturerListInfo;
+    private LecturerInfo lecturerInfo1;
+
 
 
     @BeforeEach
@@ -65,7 +69,11 @@ public class LecturerServiceTest {
         lecturerInfo = new LecturerInfo(1, "Dr. John Doe", LocalDate.of(
                 1980, 8, 5), "CEU", "drDoe@lecturer.com",
                 AcademicRank.SENIOR_LECTURER, null, null);
+        lecturerInfo1 = new LecturerInfo(2, "Dr. John Doe", LocalDate.of(
+                1980, 8, 5), "CEU", "drDoe@lecturer.com",
+                AcademicRank.SENIOR_RESEARCH_FELLOW, 1, "Reset");
         updateCommand = new LecturerUpdateCommand(1);
+        updateCommand1 = new LecturerUpdateCommand(2);
         createCommand = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU",
                 "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
         createCommand1 = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_RESEARCH_FELLOW,
@@ -125,5 +133,16 @@ public class LecturerServiceTest {
         assertThrows(LecturerNotFoundException.class, () -> lecturerService.findById(9));
         verify(lecturerRepository, times(1)).findById(9);
         verifyNoMoreInteractions(lecturerRepository);
+    }
+
+    @Test
+    void testAddLecturerToPresentation_alreadyHas() {
+        when(presentationService.findPresentationById(2)).thenReturn(presentation);
+        when(lecturerRepository.findById(2)).thenReturn(Optional.of(lecturer1));
+        assertThrows(LecturerAlreadyHasAPresentationException.class, ()
+                -> lecturerService.addLecturerToPresentation(2, updateCommand1));
+        verify(lecturerRepository, times(1)).findById(2);
+        verify(presentationService, times(1)).findPresentationById(2);
+        verifyNoMoreInteractions(lecturerRepository, presentationService);
     }
 }

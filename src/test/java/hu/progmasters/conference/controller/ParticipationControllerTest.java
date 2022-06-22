@@ -1,6 +1,5 @@
 package hu.progmasters.conference.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -107,4 +104,7 @@ public class ParticipationControllerTest {
 //                .andExpect(jsonPath("$[0].field", is("participantId")))
 //                .andExpect(jsonPath("$[0].errorMessage", is("No participant found with id")));
     }
+
+
+
 }

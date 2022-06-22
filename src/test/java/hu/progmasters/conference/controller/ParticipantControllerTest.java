@@ -1,10 +1,14 @@
 package hu.progmasters.conference.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.domain.AcademicRank;
+import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipantListItem;
+import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
+import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
 import hu.progmasters.conference.service.ParticipationService;
 import org.junit.jupiter.api.Test;
@@ -21,8 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -98,6 +101,20 @@ public class ParticipantControllerTest {
                 .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
     }
 
+    @Test
+    void testUpdateParticipant_success() throws Exception {
+        ParticipantUpdateCommand command = new ParticipantUpdateCommand();
+        command.setInstitution("BMX");
+
+        mockMvc.perform(put("/api/participants/1")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+//                .andExpect(jsonPath("$.institution", is("BMX")));
+
+    }
+
 //    @Test
 //    void testCreateParticipant_invalidEmail() throws Exception {
 //        ParticipantCreateCommand command = new ParticipantCreateCommand();
@@ -121,6 +138,26 @@ public class ParticipantControllerTest {
 //                .andExpect(jsonPath("$[0].field", is("email")))
 //                .andExpect(jsonPath("$[0].errorMessage", is("Email already registered")));
 //    }
+
+    @Test
+    void testFindParticipantByName_success() throws Exception {
+        ParticipantCreateCommand command = new ParticipantCreateCommand();
+        command.setName("Jsoa");
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setEmail("dasha@gmowe.hu");
+        command.setDateOfBirth(LocalDate.now().minusDays(1));
+        command.setInstitution("Bla");
+
+        mockMvc.perform(post("/api/participants")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/participants/findAllByName")
+                        .param("name", "Jsoa"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     void findById_success() throws Exception {

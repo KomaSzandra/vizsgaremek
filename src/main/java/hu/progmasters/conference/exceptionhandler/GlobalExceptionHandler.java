@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(LecturerNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleLecturerNotFound() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("lecturerId", "No lecturer found with id")),
+                List.of(new ValidationError("id", "No lecturer found with id")),
                 HttpStatus.BAD_REQUEST);
     }
 
