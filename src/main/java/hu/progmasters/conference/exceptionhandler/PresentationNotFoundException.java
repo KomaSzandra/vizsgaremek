@@ -8,4 +8,12 @@ public class PresentationNotFoundException extends RuntimeException {
         this.presentationId = presentationId;
     }
 
+    public Integer getPresentationId() {
+        return presentationId;
+    }
+
+    public PresentationNotFoundException setPresentationId(Integer presentationId) {
+        this.presentationId = presentationId;
+        return this;
+    }
 }

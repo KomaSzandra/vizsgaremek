@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LecturerAlreadyHasAPresentationException.class)
-    public ResponseEntity<List<ValidationError>> handleLecturerHasAPresentation(LecturerAlreadyHasAPresentationException e) {
+    public ResponseEntity<List<ValidationError>> handleLecturerHasAPresentation() {
         return new ResponseEntity<>(
                 List.of(new ValidationError("lecturerId", "Reserved, lecturer already has a lecture")),
                 HttpStatus.BAD_REQUEST);

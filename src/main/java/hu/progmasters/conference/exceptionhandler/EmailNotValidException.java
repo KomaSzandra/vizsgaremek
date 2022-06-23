@@ -7,4 +7,13 @@ public class EmailNotValidException extends RuntimeException{
     public EmailNotValidException(String email) {
         this.email = email;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public EmailNotValidException setEmail(String email) {
+        this.email = email;
+        return this;
+    }
 }

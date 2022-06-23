@@ -8,4 +8,12 @@ public class ParticipantNotFoundException extends RuntimeException {
         this.participantId = participantId;
     }
 
+    public Integer getParticipantId() {
+        return participantId;
+    }
+
+    public ParticipantNotFoundException setParticipantId(Integer participantId) {
+        this.participantId = participantId;
+        return this;
+    }
 }

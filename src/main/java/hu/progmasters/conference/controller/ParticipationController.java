@@ -93,7 +93,8 @@ public class ParticipationController {
     @Operation(summary = "Transferring a participant's participation to another presentation")
     @ApiResponse(responseCode = "200", description = "Participation has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be updated")
-    public ResponseEntity<ParticipationInfo> updateParticipantsPresentation(@PathVariable("id") Integer id, @Valid @RequestBody ParticipationUpdateCommand command) {
+    public ResponseEntity<ParticipationInfo> updateParticipantsPresentation(
+            @PathVariable("id") Integer id, @Valid @RequestBody ParticipationUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         ParticipationInfo info = participationService.updateParticipantsPresentation(id, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));

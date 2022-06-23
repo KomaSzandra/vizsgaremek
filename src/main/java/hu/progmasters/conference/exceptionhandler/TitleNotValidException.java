@@ -7,4 +7,13 @@ public class TitleNotValidException extends RuntimeException {
     public TitleNotValidException(String title) {
         this.title = title;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public TitleNotValidException setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 }

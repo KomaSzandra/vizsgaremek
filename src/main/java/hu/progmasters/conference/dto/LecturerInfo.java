@@ -37,5 +37,4 @@ public class LecturerInfo {
     @Schema(description = "Title of a presentation")
     private String presentationTitle;
 
-
 }
