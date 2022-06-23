@@ -39,7 +39,7 @@ public class LecturerController {
     @ApiResponse(responseCode = "201", description = "Lecturer has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be created")
     public ResponseEntity<LecturerInfo> saveLecturer(@Valid @RequestBody LecturerCreateCommand command) {
-        LOGGER.info(LOG_POST, String.format(command.toString()));
+        LOGGER.info(LOG_POST, command.toString());
         LecturerInfo saved = lecturerService.saveLecturer(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -81,15 +81,14 @@ public class LecturerController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Set the lecturer for the presentation")
     @ApiResponse(responseCode = "200", description = "Lecturer has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be updated")
-    public LecturerInfo update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
+    public ResponseEntity<LecturerInfo> update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         LecturerInfo lecturerInfo = lecturerService.addLecturerToPresentation(id, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
-        return lecturerInfo;
+        return new ResponseEntity<>(lecturerInfo, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

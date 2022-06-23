@@ -41,7 +41,7 @@ public class ParticipantController {
     @ApiResponse(responseCode = "201", description = "Participant has been created and added to a presentation")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be created")
     public ResponseEntity<ParticipantInfo> saveParticipant(@Valid @RequestBody ParticipantCreateCommand command) {
-        LOGGER.info(LOG_POST, String.format(command.toString()));
+        LOGGER.info(LOG_POST, command.toString());
         ParticipantInfo saved = participantService.saveParticipant(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -53,11 +53,11 @@ public class ParticipantController {
     @ApiResponse(responseCode = "200", description = "Participant has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
     @ApiResponse(responseCode = "404", description = "Participant has not been found")
-    public ParticipantInfo findById(@PathVariable("id") Integer id) {
+    public ResponseEntity<ParticipantInfo> findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         ParticipantInfo byId = participantService.findById(id);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", byId));
-        return byId;
+        return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
     @GetMapping
@@ -65,9 +65,11 @@ public class ParticipantController {
     @Operation(summary = "Lists all participants")
     @ApiResponse(responseCode = "200", description = "Participants have been listed")
     @ApiResponse(responseCode = "400", description = "Bad request, participants cannot be listed")
-    public List<ParticipantListItem> findAll() {
+    public ResponseEntity<List<ParticipantListItem>> findAll() {
         LOGGER.info(String.format(LOG_GET, ""));
-        return participantService.findAll();
+        List<ParticipantListItem> listItems = participantService.findAll();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", listItems));
+        return new ResponseEntity<>(listItems, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -75,11 +77,11 @@ public class ParticipantController {
     @Operation(summary = "Update a participant's institution")
     @ApiResponse(responseCode = "200", description = "Participant has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be updated")
-    public ParticipantInfo update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
+    public ResponseEntity<ParticipantInfo> update(@PathVariable("id") Integer id, @RequestBody ParticipantUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         ParticipantInfo info = participantService.update(id, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
-        return info;
+        return new ResponseEntity<>(info, HttpStatus.OK);
     }
 
     @GetMapping("findAllByName")
@@ -96,11 +98,13 @@ public class ParticipantController {
 
     @DeleteMapping("/{participantId}")
     @Operation(summary = "Cancels all participation of the participant")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteParticipations(@PathVariable("participantId") Integer participantId) {
+    @ApiResponse(responseCode = "200", description = "Participations has been cancelled")
+    @ApiResponse(responseCode = "400", description = "Bad request, participations cannot be candelled")
+    public ResponseEntity<Void> deleteParticipations(@PathVariable("participantId") Integer participantId) {
         LOGGER.info(String.format(LOG_DELETE, "/" + participantId));
         participationService.cancelParticipant(participantId);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

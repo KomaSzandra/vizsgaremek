@@ -42,7 +42,7 @@ public class PresentationController {
     @ApiResponse(responseCode = "201", description = "Presentation has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be created")
     public ResponseEntity<PresentationInfo> savePresentation(@Valid @RequestBody PresentationCreateCommand command) {
-        LOGGER.info(LOG_POST, String.format(command.toString()));
+        LOGGER.info(LOG_POST, command.toString());
         PresentationInfo saved = presentationService.savePresentation( command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -65,7 +65,7 @@ public class PresentationController {
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
     @ApiResponse(responseCode = "404", description = "Presentation has not been found")
     public ResponseEntity<PresentationInfo> findById(@PathVariable("id") Integer id) {
-        LOGGER.info(String.format(LOG_GET, "/", + id));
+        LOGGER.info(String.format(LOG_GET, "/" + id));
         PresentationInfo presentationInfo = presentationService.findById(id);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", presentationInfo));
         return new ResponseEntity<>(presentationInfo, HttpStatus.OK);
