@@ -1,5 +1,6 @@
 package hu.progmasters.conference.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 public class Participation {
 
     @Id
@@ -22,5 +24,4 @@ public class Participation {
 
     @ManyToOne
     private Presentation presentation;
-
 }

@@ -140,4 +140,13 @@ public class PresentationServiceTest {
         verify(presentationRepository, times(1)).findById(1);
         verifyNoMoreInteractions(presentationRepository);
     }
+
+    @Test
+    void testUpdatePresentation_presentationNotFound() {
+        when(presentationRepository.findById(8)).thenThrow(new PresentationNotFoundException(8));
+        assertThrows(PresentationNotFoundException.class, () -> presentationService.findById(8));
+        verify(presentationRepository, times(1)).findById(8);
+        verifyNoMoreInteractions(presentationRepository);
+    }
 }
+

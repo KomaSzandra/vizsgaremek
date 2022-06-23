@@ -1,7 +1,6 @@
 package hu.progmasters.conference.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PresentationControllerIt {
+public class PresentationControllerIT {
 
     private MockMvc mockMvc;
 

@@ -1,12 +1,9 @@
 package hu.progmasters.conference.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipantListItem;
-import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
@@ -31,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(controllers = ParticipantController.class)
-public class ParticipantControllerTest {
+public class ParticipantControllerIT {
 
     @MockBean
     ParticipantService participantService;

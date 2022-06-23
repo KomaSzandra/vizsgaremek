@@ -1,6 +1,7 @@
 package hu.progmasters.conference.controller;
 
-import hu.progmasters.conference.dto.*;
+import hu.progmasters.conference.dto.LecturerInfo;
+import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.LecturerUpdateCommand;
 import hu.progmasters.conference.service.LecturerService;
@@ -39,7 +40,7 @@ public class LecturerController {
     @ApiResponse(responseCode = "201", description = "Lecturer has been saved")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be created")
     public ResponseEntity<LecturerInfo> saveLecturer(@Valid @RequestBody LecturerCreateCommand command) {
-        LOGGER.info(LOG_POST, command.toString());
+        LOGGER.info(LOG_POST, String.format(command.toString()));
         LecturerInfo saved = lecturerService.saveLecturer(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -81,14 +82,15 @@ public class LecturerController {
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Set the lecturer for the presentation")
     @ApiResponse(responseCode = "200", description = "Lecturer has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be updated")
-    public ResponseEntity<LecturerInfo> update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
+    public LecturerInfo update(@PathVariable("id") Integer id, @Valid @RequestBody LecturerUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         LecturerInfo lecturerInfo = lecturerService.addLecturerToPresentation(id, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
-        return new ResponseEntity<>(lecturerInfo, HttpStatus.OK);
+        return lecturerInfo;
     }
 
     @DeleteMapping("/{id}")

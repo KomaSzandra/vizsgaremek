@@ -43,7 +43,6 @@ public class LecturerServiceTest {
     LecturerService lecturerService;
 
     private Presentation presentation;
-    private Presentation presentation2;
     private Lecturer lecturer;
     private Lecturer lecturer1;
     private LecturerCreateCommand createCommand;
@@ -54,12 +53,11 @@ public class LecturerServiceTest {
     private LecturerInfo lecturerInfo1;
 
 
-
     @BeforeEach
     void init() {
-        lecturerService = new LecturerService( lecturerRepository,new ModelMapper(), presentationService);
+        lecturerService = new LecturerService(lecturerRepository, new ModelMapper(), presentationService);
         presentation = new Presentation(1, new Lecturer(), "Reset", LocalDateTime.of(
-                2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
+                2022, Month.SEPTEMBER, 26, 8, 0, 0), new ArrayList<>());
         lecturer = new Lecturer(1, "Dr. John Doe", LocalDate.of(
                 1980, 8, 5), "CEU", AcademicRank.SENIOR_LECTURER,
                 "drDoe@lecturer.com", new Presentation());
@@ -111,8 +109,11 @@ public class LecturerServiceTest {
         when(lecturerRepository.save(any())).thenReturn(lecturer);
         when(lecturerRepository.findAll()).thenReturn(List.of(lecturer));
         lecturerService.saveLecturer(createCommand);
+        LecturerListInfo listInfo = new LecturerListInfo(1, "Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU",
+                "drDoe@lecturer.com");
         assertThat(lecturerService.findAllLecturer())
-                .hasSize(1);
+                .hasSize(1)
+                .containsExactly(listInfo);
         verify(lecturerRepository, times(1)).save(any());
         verify(lecturerRepository, times(1)).flush();
         verify(lecturerRepository, times(1)).findAll();
@@ -144,5 +145,13 @@ public class LecturerServiceTest {
         verify(lecturerRepository, times(1)).findById(2);
         verify(presentationService, times(1)).findPresentationById(2);
         verifyNoMoreInteractions(lecturerRepository, presentationService);
+    }
+
+    @Test
+    void testDeleteLecturer_exception() {
+        when(lecturerRepository.findById(2)).thenReturn(Optional.of(lecturer1));
+        assertThrows(LecturerAlreadyHasAPresentationException.class, () -> lecturerService.deleteLecturer(2));
+        verify(lecturerRepository, times(1)).findById(2);
+        verifyNoMoreInteractions(lecturerRepository);
     }
 }

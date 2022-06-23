@@ -1,7 +1,6 @@
 package hu.progmasters.conference.dto.command;
 
 import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.exceptionhandler.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

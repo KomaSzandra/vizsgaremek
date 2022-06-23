@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ParticipationControllerTest {
+public class ParticipationControllerIT {
 
     private MockMvc mockMvc;
 

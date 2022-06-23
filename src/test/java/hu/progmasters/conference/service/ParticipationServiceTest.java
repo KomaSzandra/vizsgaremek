@@ -1,79 +1,130 @@
 package hu.progmasters.conference.service;
 
-import hu.progmasters.conference.domain.AcademicRank;
+import hu.progmasters.conference.domain.*;
+import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.PresentationInfo;
-import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
-import hu.progmasters.conference.dto.command.PresentationCreateCommand;
+import hu.progmasters.conference.dto.command.ParticipationUpdateCommand;
+import hu.progmasters.conference.exceptionhandler.ParticipationNotFoundException;
+import hu.progmasters.conference.repository.ParticipationRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ParticipationServiceTest {
 
-    @Autowired
-    ParticipationService participationService;
-    @Autowired
+    @Mock
+    ParticipationRepository participationRepository;
+
+    @Mock
     ParticipantService participantService;
-    @Autowired
+
+    @Mock
     PresentationService presentationService;
 
-    @Test
-    void testRegistrate() {
-        ParticipantInfo participantInfo = createParticipant();
-        PresentationInfo presentationInfo = createPresentation();
+    @InjectMocks
+    ParticipationService participationService;
 
-        ParticipationCreateCommand command = new ParticipationCreateCommand();
+    private Participation participation;
+    private ParticipationCreateCommand createCommand;
+    private ParticipationInfo participationInfo;
+    private Participant participant;
+    private ParticipantInfo participantInfo;
+    private Presentation presentation;
+    private Presentation presentation1;
+    private PresentationInfo presentationInfo;
+    private PresentationInfo presentationInfo1;
+    private ParticipationInfo participationInfo1;
+    private ParticipationUpdateCommand updateCommand;
 
-        command.setParticipantId(participantInfo.getId());
-        command.setPresentationId(presentationInfo.getId());
-
-        ParticipationInfo participationInfo = null;
-        try {
-            participationInfo = participationService.registrate(command);
-        } catch (RuntimeException e) {
-            fail(e);
-        }
-
-        assertNotNull(participationInfo);
-        assertNotNull(participationInfo.getParticipant());
-        assertEquals(participantInfo.getId(), participationInfo.getParticipant().getId());
-        assertEquals(presentationInfo.getId(), participationInfo.getPresentation().getId());
-    }
-
-    private ParticipantInfo createParticipant() {
-        ParticipantCreateCommand command = new ParticipantCreateCommand();
-        LocalDate dateOfBirth = LocalDate.of(1990, Month.SEPTEMBER, 26);
-        command.setName("Dr. Jack Doe");
-        command.setAcademicRank(AcademicRank.CANDIDATE);
-        command.setEmail("lilDoe@uni.com");
-        command.setInstitution("BME");
-        command.setDateOfBirth(dateOfBirth);
-
-        ParticipantInfo info = participantService.saveParticipant(command);
-        return info;
-    }
-
-    private PresentationInfo createPresentation() {
-        PresentationCreateCommand command = new PresentationCreateCommand();
-        LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 10, 0, 0);
-        command.setTitle("Test project");
-        command.setStartTime(startTime);
-        PresentationInfo info = presentationService.savePresentation(command);
-        return info;
+    @BeforeEach
+    void init() {
+        participationService = new ParticipationService(new ModelMapper(), participationRepository,
+                presentationService, participantService);
+        participant = new Participant(1, "Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
+        presentation = new Presentation(1, new Lecturer(), "Reset", LocalDateTime.of(
+                2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
+        presentation1 = new Presentation(2, new Lecturer(), "Datas", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
+        participation = new Participation(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participant, presentation);
+        createCommand = new ParticipationCreateCommand(1,1);
+        participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu", AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
+        presentationInfo = new PresentationInfo(1, new LecturerListInfo(), "Reset", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0));
+        presentationInfo1 = new PresentationInfo(2, new LecturerListInfo(), "Datas", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0));
+        participationInfo = new ParticipationInfo(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo);
+        participationInfo1 = new ParticipationInfo(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo1);
+        updateCommand = new ParticipationUpdateCommand(2);
     }
 
     @Test
-    void testDeleteParticipation_success() {
-
+    void testList_atStart_emptyList() {
+        when(participationRepository.findAll()).thenReturn(List.of());
+        assertTrue(participationService.findAll().isEmpty());
+        verify(participationRepository, times(1)).findAll();
+        verifyNoMoreInteractions(participationRepository);
     }
+
+    @Test
+    void testFindById_success() {
+        when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
+        ParticipationInfo byId = participationService.findById(1);
+        assertEquals(participationInfo, byId);
+        verify(participationRepository, times(1)).findById(1);
+        verifyNoMoreInteractions(participationRepository);
+    }
+
+    @Test
+    void testFindById_participationNotFound() {
+        when(participationRepository.findById(9)).thenThrow(new ParticipationNotFoundException(9));
+        assertThrows(ParticipationNotFoundException.class, () -> participationService.findById(9));
+        verify(participationRepository, times(1)).findById(9);
+        verifyNoMoreInteractions(participationRepository);
+    }
+
+    @Test
+    void testList_singParticipationSaved_singParticipationInList() {
+        when(participationRepository.save(any())).thenReturn(participation);
+        when(presentationService.findPresentationById(1)).thenReturn(presentation);
+        when(participantService.findParticipantById(1)).thenReturn(participant);
+        when(participationRepository.findAll()).thenReturn(List.of(participation));
+        participationService.registrate(createCommand);
+        assertThat(participationService.findAll())
+                .hasSize(1);
+        verify(participationRepository, times(1)).save(any());
+        verify(participationRepository, times(1)).hasRegistration(participant, presentation);
+        verify(presentationService, times(1)).findPresentationById(1);
+        verify(participantService, times(1)).findParticipantById(1);
+        verify(participationRepository, times(1)).findAll();
+        verifyNoMoreInteractions(participationRepository, presentationService, participantService);
+    }
+
+    @Test
+    void testUpdateParticipantsPresentation_success() {
+        when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
+        when(presentationService.findPresentationById(updateCommand.getPresentationId())).thenReturn(presentation1);
+        ParticipationInfo info = participationService.updateParticipantsPresentation(1, updateCommand);
+        assertEquals(participationInfo1, info);
+        verify(participationRepository, times(1)).findById(1);
+        verify(presentationService, times(1)).findPresentationById(updateCommand.getPresentationId());
+        verify(participationRepository, times(1)).update(participation);
+        verifyNoMoreInteractions(participationRepository, presentationService);
+    }
+
 }
