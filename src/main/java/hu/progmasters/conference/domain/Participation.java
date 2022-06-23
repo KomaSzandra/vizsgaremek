@@ -22,4 +22,5 @@ public class Participation {
 
     @ManyToOne
     private Presentation presentation;
+
 }

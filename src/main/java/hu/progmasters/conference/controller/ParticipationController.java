@@ -95,7 +95,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Participation has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be updated")
     public ResponseEntity<ParticipationInfo> updateParticipantsPresentation(@PathVariable("id") Integer id,
-                                                          @RequestBody ParticipationUpdateCommand command) {
+                                                          @Valid @RequestBody ParticipationUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         ParticipationInfo info = participationService.updateParticipantsPresentation(id, command);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
