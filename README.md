@@ -116,4 +116,4 @@ Az azonos nevű és típusú adattagok egyik oldalról a másikra való leképez
 Adattárolásra SQL alapú MySQL adatbázist használ, melyben a táblákat Flyway hozza létre. Az adatbáziskezelés 
 Spring Data JPA technológiával történik. A beérkező adatok validálását a Spring Boot spring-boot-starter-validation 
 modulja végzi. Az alkalmazás tesztelésére integrációs és egység tesztek állnak rendelkezésre, melyek az src/test/java 
-mappában találhatók. A mellékelt Dockerfile segítségével az alkalmazásból layerelt Docker image készíthető.
+mappában találhatók. A mellékelt Dockerfile segítségével az alkalmazásból Docker image készíthető.
