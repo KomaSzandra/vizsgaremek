@@ -1,12 +1,15 @@
 Vizsgaremek
 
 Leírás
+
 Az alkalmazás tudományos konferenciák szervezőinek nyújt segítséget abban, hogy előadások, résztvevők és előadók
 adatait hatékonyan és kényelmesen lehessen adminisztrálni. Az előadóknak lehetőségük van előadást meghirdetni, 
 a különböző szervezetek, egyetemek és intézetek által delegált résztvevők pedig jelentkezhetnek ezekre az előadásokra.
 
 Entitások
+
 Lecturer
+
 A Lecturer entitás a következő attribútumokkal rendelkezik:
 -id (Az előadó egyedi azonosítója)
 -name (Az előadó neve)
@@ -29,6 +32,7 @@ A Lecturer és a Presentation entitás között egyirányú @OneToOne kapcsolat 
 
 
 Presentation
+
 A Presentation entitás a következő attribútumokkal rendelkezik:
 -id (Az előadás egyedi azonosítója)
 -lecturer (Az előadás előadója)
@@ -49,6 +53,7 @@ A Presentation és a Participation entitás között egyirányú @OneToMany-@Man
 
 
 Participant
+
 A Participant entitás a következő attribútumokkal rendelkezik:
 -id (A résztvevő egyedi azonosítója)
 -name (A résztvevő neve)
@@ -70,6 +75,7 @@ DELETE	"/api/participants/{id}"	           id alapján törli a résztvevő jele
 A Participant és a Participation entitás között egyirányú @OneToMany-@ManyToOne kapcsolat van.
 
 Participation
+
 A Participation entitás a következő attribútumokkal rendelkezik:
 -id (A jelentkezés egyedi azonosítója)
 -registration (A jelentkezés leadásának időpontja)
@@ -91,6 +97,7 @@ az adott jelentkezéshez kapcsolódó előadás id-jára.
 
 
 Technológiai részletek
+
 Ez egy klasszikus háromrétegű webes alkalmazás, controller, service és repository réteggel, entitásonként a rétegeknek 
 megfelelően elnevezett osztályokkal. A megvalósítás Java programnyelven, Spring Boot használatával történt. 
 Az alkalmazás HTTP kéréseket képes fogadni, ezt a RESTful webszolgáltatások segítségével valósítja meg. 
