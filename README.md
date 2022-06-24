@@ -102,8 +102,8 @@ A következő végpontokon érjük el az entitást:
 
 
 A Participation entitás adatai az adatbázisban a participation táblában tárolódnak, mely két külső kulcsot tartalmaz:
-az adott jelentkezéshez kapcsolódó résztvevő id-jára, valamint 
-az adott jelentkezéshez kapcsolódó előadás id-jára.
+* az adott jelentkezéshez kapcsolódó résztvevő id-jára, valamint 
+* az adott jelentkezéshez kapcsolódó előadás id-jára.
 ***
 
 **Technológiai részletek**
