@@ -96,6 +96,7 @@ az adott jelentkezéshez kapcsolódó résztvevő id-jára, valamint
 az adott jelentkezéshez kapcsolódó előadás id-jára.
 
 
+
 Technológiai részletek
 
 Ez egy klasszikus háromrétegű webes alkalmazás, controller, service és repository réteggel, entitásonként a rétegeknek 
