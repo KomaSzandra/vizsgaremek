@@ -8,7 +8,7 @@ a különböző szervezetek, egyetemek és intézetek által delegált résztvev
 
 Entitások
 
-Lecturer
+**Lecturer**
 
 A Lecturer entitás a következő attribútumokkal rendelkezik:
 -id (Az előadó egyedi azonosítója)
@@ -21,25 +21,20 @@ A Lecturer entitás a következő attribútumokkal rendelkezik:
 
 A következő végpontokon érjük el az entitást:
 
-GET	    "/api/lecturers"	          lekérdezi az összes előadót
-GET	    "/api/lecturers/{id}"	      lekérdez egy előadót id alapján
-GET     "/api/lecturers/findByName"   lekérdez egy előadót név alapján
-POST    "/api/lecturers"	          létrehoz egy előadót
-PUT	    "/api/lecturers/{id}"	      hozzárendel az előadóhoz egy előadást
-DELETE	"/api/lecturers/{id}"	      id alapján töröl egy passzív előadót
+
+| HTTP   | Végpont                     | Leírás                                |
+|:-------|:----------------------------|:--------------------------------------|
+| GET    | "/api/lecturers"            | lekérdezi az összes előadót           |
+| GET    | "/api/lecturers/{id}"       | lekérdez egy előadót id alapján       |
+| GET    | "/api/lecturers/findByName" | lekérdez egy előadót név alapján      |
+| POST   | "/api/lecturers"            | létrehoz egy előadót                  |
+| PUT    | "/api/lecturers/{id}"       | hozzárendel az előadóhoz egy előadást |
+| DELETE | "/api/lecturers/{id}"       | id alapján töröl egy passzív előadót  |
 
 A Lecturer és a Presentation entitás között egyirányú @OneToOne kapcsolat van.
 
-| HTTP | Végpont                     | Leírás                               |
-|:-----|:----------------------------|:-------------------------------------|
-| GET  | "/api/lecturers"            | lekérdezi az összes előadót          |
-| GET  | "/api/lecturers/{id}"       | lekérdez egy előadót id alapján      |
-| GET  | "/api/lecturers/findByName" | lekérdez egy előadót név alapján     |
-| POST | "/api/lecturers"            | létrehoz egy előadót                 |
-| PUT  | "/api/lecturers/{id}"       | id alapján töröl egy passzív előadót |
 
-
-Presentation
+**Presentation**
 
 A Presentation entitás a következő attribútumokkal rendelkezik:
 -id (Az előadás egyedi azonosítója)
