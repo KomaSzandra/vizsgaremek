@@ -2,7 +2,7 @@ Vizsgaremek
 
 Leírás
 Az alkalmazás tudományos konferenciák szervezőinek nyújt segítséget abban, hogy előadások, résztvevők és előadók
-adatait hatékonyan és kényelmesen lehessen adminisztrálni. Az előadóknak lehetsőgük van előadást meghirdetni, 
+adatait hatékonyan és kényelmesen lehessen adminisztrálni. Az előadóknak lehetőségük van előadást meghirdetni, 
 a különböző szervezetek, egyetemek és intézetek által delegált résztvevők pedig jelentkezhetnek ezekre az előadásokra.
 
 Entitások
@@ -25,6 +25,8 @@ POST    "/api/lecturers"	          létrehoz egy előadót
 PUT	    "/api/lecturers/{id}"	      hozzárendel az előadóhoz egy előadást
 DELETE	"/api/lecturers/{id}"	      id alapján töröl egy passzív előadót
 
+A Lecturer és a Presentation entitás között egyirányú @OneToOne kapcsolat van.
+
 
 Presentation
 A Presentation entitás a következő attribútumokkal rendelkezik:
@@ -42,6 +44,8 @@ GET     "/api/presentations/findByTitle"   lekérdez egy előadást cím alapjá
 POST    "/api/presentations"	           létrehoz egy előadást
 PUT	    "/api/presentations/{id}"	       módosítja az előadás kezdetét
 DELETE	"/api/presentations/{id}"	       id alapján törli az előadáshoz tartozó jelentkezéseket
+
+A Presentation és a Participation entitás között egyirányú @OneToMany-@ManyToOne kapcsolat van.
 
 
 Participant
@@ -63,6 +67,8 @@ POST    "/api/participants"	                   létrehoz egy résztvevőt
 PUT	    "/api/participants/{id}"	           módosítja egy résztvevő intézményét
 DELETE	"/api/participants/{id}"	           id alapján törli a résztvevő jelentkezéseit
 
+A Participant és a Participation entitás között egyirányú @OneToMany-@ManyToOne kapcsolat van.
+
 Participation
 A Participation entitás a következő attribútumokkal rendelkezik:
 -id (A jelentkezés egyedi azonosítója)
@@ -76,8 +82,12 @@ GET	    "/api/participations"	                        lekérdezi az összes jele
 GET	    "/api/participations/{id}"	                    lekérdez egy jelentkezést id alapján
 GET     "/api/participations/findByAllByParticipant"    lekérdezi egy résztvevő jelentkezéseit
 POST    "/api/participations"	                        létrehoz egy jelentkezést
-PUT	    "/api/participations/{id}"	                    átjelentkezés másik előadásra
+PUT	    "/api/participations/{id}"	                    átjelentkezés másik előadásra id alapján
 DELETE	"/api/participations/{id}"	                    id alapján törli jelentkezést
+
+A Participation entitás adatai az adatbázisban a participation táblában tárolódnak, mely két külső kulcsot tartalmaz:
+az adott jelentkezéshez kapcsolódó résztvevő id-jára, valamint 
+az adott jelentkezéshez kapcsolódó előadás id-jára.
 
 
 Technológiai részletek
@@ -85,7 +95,7 @@ Ez egy klasszikus háromrétegű webes alkalmazás, controller, service és repo
 megfelelően elnevezett osztályokkal. A megvalósítás Java programnyelven, Spring Boot használatával történt. 
 Az alkalmazás HTTP kéréseket képes fogadni, ezt a RESTful webszolgáltatások segítségével valósítja meg. 
 A dokumentáláshoz Open API interfészt használ, ahol a végpontok fix értékekkel feliratozva láthatóak. 
-Az azonos nevű és típusú adattagok egyik oldalról a másikra való leképezésére Modelmappert használ.
+Az azonos nevű és típusú adattagok egyik oldalról a másikra való leképezéséhez Modelmappert alkalmaz.
 Adattárolásra SQL alapú MySQL adatbázist használ, melyben a táblákat Flyway hozza létre. Az adatbáziskezelés 
 Spring Data JPA technológiával történik. A beérkező adatok validálását a Spring Boot spring-boot-starter-validation 
 modulja végzi. Az alkalmazás tesztelésére integrációs és egység tesztek állnak rendelkezésre, melyek az src/test/java 
