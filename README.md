@@ -30,6 +30,14 @@ DELETE	"/api/lecturers/{id}"	      id alapján töröl egy passzív előadót
 
 A Lecturer és a Presentation entitás között egyirányú @OneToOne kapcsolat van.
 
+| HTTP | Végpont                     | Leírás                               |
+|:-----|:----------------------------|:-------------------------------------|
+| GET  | "/api/lecturers"            | lekérdezi az összes előadót          |
+| GET  | "/api/lecturers/{id}"       | lekérdez egy előadót id alapján      |
+| GET  | "/api/lecturers/findByName" | lekérdez egy előadót név alapján     |
+| POST | "/api/lecturers"            | létrehoz egy előadót                 |
+| PUT  | "/api/lecturers/{id}"       | id alapján töröl egy passzív előadót |
+
 
 Presentation
 
@@ -84,6 +92,8 @@ A Participation entitás a következő attribútumokkal rendelkezik:
 
 A következő végpontokon érjük el az entitást:
 
+
+
 GET	    "/api/participations"	                        lekérdezi az összes jelentkezést
 GET	    "/api/participations/{id}"	                    lekérdez egy jelentkezést id alapján
 GET     "/api/participations/findByAllByParticipant"    lekérdezi egy résztvevő jelentkezéseit
@@ -94,7 +104,6 @@ DELETE	"/api/participations/{id}"	                    id alapján törli jelentk
 A Participation entitás adatai az adatbázisban a participation táblában tárolódnak, mely két külső kulcsot tartalmaz:
 az adott jelentkezéshez kapcsolódó résztvevő id-jára, valamint 
 az adott jelentkezéshez kapcsolódó előadás id-jára.
-
 
 
 Technológiai részletek
