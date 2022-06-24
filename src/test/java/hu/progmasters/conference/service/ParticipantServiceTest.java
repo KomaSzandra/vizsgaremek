@@ -12,6 +12,7 @@ import hu.progmasters.conference.exceptionhandler.ParticipantsByNameNotFoundExce
 import hu.progmasters.conference.repository.ParticipantRepository;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,7 +63,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindAll_emptyList() {
+    @DisplayName("Participant test findAll empty")
+    void testFindAll_participant_emptyList() {
         when(participantRepository.findAll()).thenReturn(List.of());
         assertThat(participantService.findAll()).isEmpty();
         verify(participantRepository, times(1)).findAll();
@@ -70,7 +72,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testSaveParticipant_success () {
+    @DisplayName("Participant test saveParticipant")
+    void testSaveParticipant_participant_success () {
         when(participantRepository.save(any())).thenReturn(participant);
         ParticipantInfo saved = participantService.saveParticipant(createCommand);
         assertEquals(participantInfo, saved);
@@ -80,6 +83,7 @@ public class ParticipantServiceTest {
     }
 
     @Test
+    @DisplayName("Participant test saveParticipant with invalid email")
     void testSaveParticipant_invalidEmail() {
         when(participantRepository.save(participant1)).thenThrow(new EmailNotValidException(participant1.getEmail()));
         assertThrows(EmailNotValidException.class, () -> participantService.saveParticipant(createCommand1));
@@ -88,7 +92,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testList_singParticipantSaved_singParticipantInList() {
+    @DisplayName("Participant test findAll")
+    void testList_singleParticipantSaved_singleParticipantInList() {
         when(participantRepository.save(any())).thenReturn(participant);
         when(participantRepository.findAll()).thenReturn(List.of(participant));
         participantService.saveParticipant(createCommand);
@@ -101,7 +106,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindById_successfulFind() {
+    @DisplayName("Participant test findById")
+    void testFindById_participant_successfulFind() {
         when(participantRepository.findById(1)).thenReturn(Optional.of(participant));
         assertEquals(participantService.findById(1), participantInfo);
         verify(participantRepository, times(1)).findById(1);
@@ -109,7 +115,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindById_participantNotFound() {
+    @DisplayName("Participant test findById not found")
+    void testFindById_participant_notFound() {
         when(participantRepository.findById(9)).thenThrow(new ParticipantNotFoundException(9));
         assertThrows(ParticipantNotFoundException.class, () -> participantService.findById(9));
         verify(participantRepository, times(1)).findById(9);
@@ -117,7 +124,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindParticipantById_success() {
+    @DisplayName("Participant test findParticipantById")
+    void testFindParticipantById_participant_success() {
         when(participantRepository.findById(1)).thenReturn(Optional.of(participant));
         assertEquals(participantService.findParticipantById(1), participant);
         verify(participantRepository, times(1)).findById(1);
@@ -125,7 +133,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindParticipantById_notFound() {
+    @DisplayName("Participant test findParticipantById not found")
+    void testFindParticipantById_participant_notFound() {
         when(participantRepository.findById(9)).thenThrow(new ParticipantNotFoundException(9));
         assertThrows(ParticipantNotFoundException.class, () -> participantService.findParticipantById(9));
         verify(participantRepository, times(1)).findById(9);
@@ -133,7 +142,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testUpdateParticipant_success() {
+    @DisplayName("Participant test update")
+    void testUpdateParticipant_institution_success() {
         when(participantRepository.findById(1)).thenReturn(Optional.of(participant));
         ParticipantInfo info = participantService.update(1, updateCommand);
         assertEquals(participantInfo1, info);
@@ -142,7 +152,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testUpdateParticipant_participantNotFound() {
+    @DisplayName("Participant test update not found")
+    void testUpdateParticipant_participant_notFound() {
         when(participantRepository.findById(8)).thenThrow(new ParticipantNotFoundException(8));
         assertThrows(ParticipantNotFoundException.class, () -> participantService.findById(8));
         verify(participantRepository, times(1)).findById(8);
@@ -150,7 +161,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindAllByName_success() {
+    @DisplayName("Participant test findAllByName")
+    void testFindAllByName_participant_success() {
         when(participantRepository.findAllByName("Dr. Jack Doe")).thenReturn(List.of(participant));
         List<ParticipantInfo> byName = participantService.findAllByName("Dr. Jack Doe");
         assertNotNull(byName);
@@ -161,7 +173,8 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    void testFindAllByName_notFound() {
+    @DisplayName("Participant test findAllByName not found")
+    void testFindAllByName_participant_notFound() {
         when(participantRepository.findAllByName("Dr. Jack")).thenThrow(new ParticipantsByNameNotFoundException("Dr. Jack"));
         assertThrows(ParticipantsByNameNotFoundException.class, () -> participantService.findAllByName("Dr. Jack"));
         verify(participantRepository, times(1)).findAllByName("Dr. Jack");

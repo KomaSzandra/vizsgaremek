@@ -39,7 +39,7 @@ public class ParticipationControllerIT {
 
     @Test
     @DisplayName("Participation test findAll")
-    void testFindAllParticipation_success() throws Exception {
+    void testFindAll_participation_success() throws Exception {
         mockMvc.perform(get("/api/participations"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -51,7 +51,8 @@ public class ParticipationControllerIT {
     }
 
     @Test
-    void testFindById_success() throws Exception {
+    @DisplayName("Participation test findById")
+    void testFindById_participation_success() throws Exception {
         mockMvc.perform(get("/api/participations/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
@@ -79,7 +80,8 @@ public class ParticipationControllerIT {
 //    }
 
     @Test
-    void testRegistrate_success() throws Exception {
+    @DisplayName("Participation test registrate")
+    void testRegistrate_participation_success() throws Exception {
         ParticipationCreateCommand command = new ParticipationCreateCommand();
         command.setParticipantId(1);
         command.setPresentationId(3);
@@ -92,7 +94,8 @@ public class ParticipationControllerIT {
     }
 
     @Test
-    void testRegistrate_participantNotFound() throws Exception {
+    @DisplayName("Participation test registrate fail")
+    void testRegistrate_participant_notFound() throws Exception {
         ParticipationCreateCommand command = new ParticipationCreateCommand();
         command.setParticipantId(2);
         command.setPresentationId(1);
@@ -107,14 +110,16 @@ public class ParticipationControllerIT {
     }
 
     @Test
-    void testFindAllByParticipant_success() throws Exception {
+    @DisplayName("Participation test findAllByParticipant")
+    void testFindAllByParticipant_participation_success() throws Exception {
         mockMvc.perform(get("/api/participations/findAllByParticipant")
                         .param("participantId", String.valueOf(1)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testUpdateParticipantsPresentation_success() throws Exception {
+    @DisplayName("Participation test updateParticipantsPresentation")
+    void testUpdateParticipantsPresentation_participation_success() throws Exception {
         ParticipationUpdateCommand command = new ParticipationUpdateCommand();
         command.setPresentationId(2);
 

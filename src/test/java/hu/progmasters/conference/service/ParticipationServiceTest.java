@@ -10,6 +10,7 @@ import hu.progmasters.conference.dto.command.ParticipationUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.ParticipationNotFoundException;
 import hu.progmasters.conference.repository.ParticipationRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -74,6 +75,7 @@ public class ParticipationServiceTest {
     }
 
     @Test
+    @DisplayName("Participation test findAll empty")
     void testList_atStart_emptyList() {
         when(participationRepository.findAll()).thenReturn(List.of());
         assertTrue(participationService.findAll().isEmpty());
@@ -82,7 +84,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testFindById_success() {
+    @DisplayName("Participation test findById")
+    void testFindById_participation_success() {
         when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
         ParticipationInfo byId = participationService.findById(1);
         assertEquals(participationInfo, byId);
@@ -91,7 +94,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testFindById_participationNotFound() {
+    @DisplayName("Participation test findById not found")
+    void testFindById_participation_notFound() {
         when(participationRepository.findById(9)).thenThrow(new ParticipationNotFoundException(9));
         assertThrows(ParticipationNotFoundException.class, () -> participationService.findById(9));
         verify(participationRepository, times(1)).findById(9);
@@ -99,7 +103,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testList_singParticipationSaved_singParticipationInList() {
+    @DisplayName("Participation test findAll")
+    void testList_singleParticipationSaved_singleParticipationInList() {
         when(participationRepository.save(any())).thenReturn(participation);
         when(presentationService.findPresentationById(1)).thenReturn(presentation);
         when(participantService.findParticipantById(1)).thenReturn(participant);
@@ -116,7 +121,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testUpdateParticipantsPresentation_success() {
+    @DisplayName("Participation test updateParticipantsPresentation")
+    void testUpdateParticipantsPresentation_participation_success() {
         when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
         when(presentationService.findPresentationById(updateCommand.getPresentationId())).thenReturn(presentation1);
         ParticipationInfo info = participationService.updateParticipantsPresentation(1, updateCommand);
@@ -128,7 +134,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testFindByParticipant_success() {
+    @DisplayName("Participation test findAllByParticipant")
+    void testFindByParticipant_participation_success() {
         when(participationRepository.findByParticipant(1)).thenReturn(List.of(participation));
         List<ParticipationInfo> byParticipant = participationService.findByParticipant(1);
         assertNotNull(byParticipant);
@@ -139,7 +146,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testDeleteParticipation_success() {
+    @DisplayName("Participation test delete")
+    void testDelete_participation_success() {
         when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
         participationService.deleteParticipation(1);
         verify(participationRepository, times(1)).findById(1);
@@ -148,7 +156,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testDeleteParticipation_notFound() {
+    @DisplayName("Participation test delete not found")
+    void testDelete_participation_notFound() {
         when(participationRepository.findById(3)).thenThrow(new ParticipationNotFoundException(3));
         assertThrows(ParticipationNotFoundException.class, () -> participationService.deleteParticipation(3));
         verify(participationRepository, times(1)).findById(3);
@@ -156,7 +165,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testCancelPresentation_success() {
+    @DisplayName("Participation test cancelPresentation")
+    void testCancelPresentation_participation_success() {
         when(presentationService.findPresentationById(1)).thenReturn(presentation);
         when(participationRepository.findAll()).thenReturn(List.of(participation));
         participationService.cancelPresentation(1);
@@ -168,7 +178,8 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    void testCancelParticipant_success() {
+    @DisplayName("Participation test cancelParticipant")
+    void testCancelParticipant_participation_success() {
         when(participantService.findParticipantById(1)).thenReturn(participant);
         when(participationRepository.findAll()).thenReturn(List.of(participation));
         participationService.cancelParticipant(1);

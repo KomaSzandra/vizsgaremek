@@ -44,8 +44,7 @@ public class LecturerControllerIT {
 
     @Test
     @DisplayName("Lecturer test findAll")
-    void testFindAllLecturer_lecturer_success() throws Exception {
-
+    void testFindAll_lecturer_success() throws Exception {
         mockMvc.perform(get("/api/lecturers"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -53,7 +52,8 @@ public class LecturerControllerIT {
     }
 
     @Test
-    void testCreateLecturer_success() throws Exception {
+    @DisplayName("Lecturer test saveLecturer")
+    void testSaveLecturer_lecturer_success() throws Exception {
         LecturerCreateCommand command = new LecturerCreateCommand();
         command.setInstitution("BMX");
         command.setEmail("bb@bmx.yu");
@@ -71,7 +71,8 @@ public class LecturerControllerIT {
     }
 
     @Test
-    void testFindLecturerByName_success() throws Exception {
+    @DisplayName("Lecturer test findByName")
+    void testFindByName_lecturer_success() throws Exception {
         LecturerCreateCommand command = new LecturerCreateCommand();
         command.setName("Jsoa");
         command.setAcademicRank(AcademicRank.CANDIDATE);
@@ -93,7 +94,8 @@ public class LecturerControllerIT {
     }
 
     @Test
-    void testAddLecturerToPresentation() throws Exception {
+    @DisplayName("Lecturer test update")
+    void testAddLecturerToAPresentation_success() throws Exception {
         LecturerUpdateCommand command = new LecturerUpdateCommand();
         command.setLecturerId(1);
 
@@ -144,7 +146,8 @@ public class LecturerControllerIT {
 //    }
 
     @Test
-    void testFindById_success() throws Exception {
+    @DisplayName("Lecturer test findById")
+    void testFindById_lecturer_success() throws Exception {
         mockMvc.perform(get("/api/lecturers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))

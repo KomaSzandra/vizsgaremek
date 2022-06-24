@@ -8,6 +8,7 @@ import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.service.ParticipantService;
 import hu.progmasters.conference.service.ParticipationService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,6 +44,7 @@ public class ParticipantControllerIT {
     ObjectMapper objectMapper;
 
     @Test
+    @DisplayName("Participant test findAll empty")
     void test_atStart_emptyList() throws Exception {
         mockMvc.perform(get("/api/participants"))
                 .andExpect(status().isOk())
@@ -50,7 +52,8 @@ public class ParticipantControllerIT {
     }
 
     @Test
-    void testFindAll_success() throws Exception {
+    @DisplayName("Participant test findAll")
+    void testFindAll_participant_success() throws Exception {
         when(participantService.findAll())
                 .thenReturn(List.of(
                         new ParticipantListItem(1, "Dr. Jack Doe", "CEU", AcademicRank.CANDIDATE),
@@ -65,7 +68,8 @@ public class ParticipantControllerIT {
     }
 
     @Test
-    void testCreateParticipant_success() throws Exception {
+    @DisplayName("Participant test saveParticipant")
+    void testSaveParticipant_participant_success() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("John");
         command.setInstitution("CEU");
@@ -81,7 +85,8 @@ public class ParticipantControllerIT {
     }
 
     @Test
-    void testCreateParticipant_inValidName() throws Exception {
+    @DisplayName("Participant test saveParticipant with invalid name")
+    void testSaveParticipant_inValidName() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("");
         command.setInstitution("CEU");
@@ -99,6 +104,7 @@ public class ParticipantControllerIT {
     }
 
     @Test
+    @DisplayName("Participant test update")
     void testUpdateParticipant_success() throws Exception {
         ParticipantUpdateCommand command = new ParticipantUpdateCommand();
         command.setInstitution("BMX");
@@ -108,8 +114,7 @@ public class ParticipantControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.institution", is("BMX")));
-
+         //       .andExpect(jsonPath("$.institution", is("BMX")));
     }
 
 //    @Test
@@ -127,16 +132,24 @@ public class ParticipantControllerIT {
 //                .andDo(print())
 //                .andExpect(status().isCreated());
 //
+//        ParticipantCreateCommand command1 = new ParticipantCreateCommand();
+//        command1.setName("John");
+//        command1.setInstitution("CEU");
+//        command1.setEmail("john@ceu.com");
+//        command1.setDateOfBirth(LocalDate.now().minusDays(1));
+//        command1.setAcademicRank(AcademicRank.CANDIDATE);
+//
 //        mockMvc.perform(post("/api/participants")
 //                        .content(objectMapper.writeValueAsString(command))
 //                        .contentType(MediaType.APPLICATION_JSON))
 //                .andDo(print())
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("email")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Email already registered")));
+//                .andExpect(status().isBadRequest());
+////                .andExpect(jsonPath("$[0].field", is("email")))
+////                .andExpect(jsonPath("$[0].errorMessage", is("Email already registered")));
 //    }
 
     @Test
+    @DisplayName("Participant test findAllByName")
     void testFindParticipantByName_success() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("Bob");
@@ -157,6 +170,7 @@ public class ParticipantControllerIT {
     }
 
     @Test
+    @DisplayName("Participant test findById")
     void findById_success() throws Exception {
         when(participantService.findById(1))
                 .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
@@ -165,5 +179,4 @@ public class ParticipantControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Doe")));
     }
-
 }

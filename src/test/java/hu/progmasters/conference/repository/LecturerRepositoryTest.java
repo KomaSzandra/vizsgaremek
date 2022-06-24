@@ -2,6 +2,7 @@ package hu.progmasters.conference.repository;
 
 import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Lecturer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

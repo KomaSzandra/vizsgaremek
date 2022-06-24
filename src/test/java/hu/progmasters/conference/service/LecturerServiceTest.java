@@ -12,6 +12,7 @@ import hu.progmasters.conference.exceptionhandler.LecturerAlreadyHasAPresentatio
 import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
 import hu.progmasters.conference.repository.LecturerRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,6 +80,7 @@ public class LecturerServiceTest {
     }
 
     @Test
+    @DisplayName("Lecturer test findAll empty")
     void testList_atStart_emptyList() {
         when(lecturerRepository.findAll()).thenReturn(List.of());
         assertTrue(lecturerService.findAllLecturer().isEmpty());
@@ -87,7 +89,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testSaveLecturer_success() {
+    @DisplayName("Lecturer test saveLecturer")
+    void testSaveLecturer_lecturer_success() {
         when(lecturerRepository.save(any())).thenReturn(lecturer);
         LecturerInfo saved = lecturerService.saveLecturer(createCommand);
         assertEquals(lecturerInfo, saved);
@@ -97,7 +100,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testSaveLecturer_invalidEmail() {
+    @DisplayName("Lecturer test saveLecturer invalid email")
+    void testSaveLecturer_lecturer_invalidEmail() {
         when(lecturerRepository.save(lecturer1)).thenThrow(new EmailNotValidException(lecturer1.getEmail()));
         assertThrows(EmailNotValidException.class, () -> lecturerService.saveLecturer(createCommand1));
         verify(lecturerRepository, times(1)).save(any());
@@ -105,6 +109,7 @@ public class LecturerServiceTest {
     }
 
     @Test
+    @DisplayName("Lecturer test findAll")
     void testList_singleLecturerSaved_singleLecturerInList() {
         when(lecturerRepository.save(any())).thenReturn(lecturer);
         when(lecturerRepository.findAll()).thenReturn(List.of(lecturer));
@@ -121,7 +126,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testFindById_successfulFind() {
+    @DisplayName("Lecturer test findById")
+    void testFindById_lecturer_successfulFind() {
         when(lecturerRepository.findById(1)).thenReturn(Optional.of(lecturer));
         assertEquals(lecturerService.findById(1), lecturerInfo);
         verify(lecturerRepository, times(1)).findById(1);
@@ -129,7 +135,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testFindById_LecturerNotFound() {
+    @DisplayName("Lecturer test findById not found")
+    void testFindById_lecturer_notFound() {
         when(lecturerRepository.findById(9)).thenThrow(new LecturerNotFoundException(9));
         assertThrows(LecturerNotFoundException.class, () -> lecturerService.findById(9));
         verify(lecturerRepository, times(1)).findById(9);
@@ -137,7 +144,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testAddLecturerToPresentation_alreadyHas() {
+    @DisplayName("Lecturer test update exception")
+    void testAddLecturerToPresentation_lecturer_alreadyHas() {
         when(presentationService.findPresentationById(2)).thenReturn(presentation);
         when(lecturerRepository.findById(2)).thenReturn(Optional.of(lecturer1));
         assertThrows(LecturerAlreadyHasAPresentationException.class, ()
@@ -148,7 +156,8 @@ public class LecturerServiceTest {
     }
 
     @Test
-    void testDeleteLecturer_exception() {
+    @DisplayName("Lecturer test deleteLecturer exception")
+    void testDeleteLecturer_lecturer_alreadyHasAPresentationexception() {
         when(lecturerRepository.findById(2)).thenReturn(Optional.of(lecturer1));
         assertThrows(LecturerAlreadyHasAPresentationException.class, () -> lecturerService.deleteLecturer(2));
         verify(lecturerRepository, times(1)).findById(2);

@@ -11,6 +11,7 @@ import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -75,6 +76,7 @@ public class PresentationServiceTest {
     }
 
     @Test
+    @DisplayName("Presentation test findAll empty")
     void testList_atStart_emptyList() {
         when(presentationRepository.findAll()).thenReturn(List.of());
         assertTrue(presentationService.findAll().isEmpty());
@@ -83,7 +85,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testSavePresentation_success() {
+    @DisplayName("Presentation test savePresentation")
+    void testSavePresentation_presentation_success() {
         when(presentationRepository.save(any())).thenReturn(presentation);
         PresentationInfo saved = presentationService.savePresentation(createCommand);
         assertEquals(presentationInfo, saved);
@@ -93,7 +96,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testSavePresentation_invalidTitle() {
+    @DisplayName("Presentation test savePresentation with invalid title")
+    void testSavePresentation_presentation_invalidTitle() {
         when(presentationRepository.save(presentation1)).thenThrow(new TitleNotValidException(presentation1.getTitle()));
         assertThrows(TitleNotValidException.class, () -> presentationService.savePresentation(createCommand));
         verify(presentationRepository, times(1)).save(any());
@@ -101,7 +105,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testFindById_success() {
+    @DisplayName("Presentation test findById")
+    void testFindById_presentation_success() {
         when(presentationRepository.findById(1)).thenReturn(Optional.of(presentation));
         PresentationInfo byId = presentationService.findById(1);
         assertEquals(presentationInfo, byId);
@@ -110,7 +115,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testFindById_PresentationNotFound() {
+    @DisplayName("Presentation test findById not found")
+    void testFindById_presentation_notFound() {
         when(presentationRepository.findById(9)).thenThrow(new PresentationNotFoundException(9));
         assertThrows(PresentationNotFoundException.class, () ->presentationService.findById(9));
         verify(presentationRepository, times(1)).findById(9);
@@ -118,6 +124,7 @@ public class PresentationServiceTest {
     }
 
     @Test
+    @DisplayName("Presentation test findAll")
     void testList_twoPresentationSaved_twoPresentationInList() {
         when(presentationRepository.save(any())).thenReturn(presentation);
         when(presentationRepository.save(any())).thenReturn(presentation2);
@@ -133,7 +140,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testUpdatePresentationStart_success() {
+    @DisplayName("Presentation test updatePresentation")
+    void testUpdate_presentation_startTime_success() {
         when(presentationRepository.findById(1)).thenReturn(Optional.of(presentation));
         PresentationInfo info = presentationService.updatePresentation(1, updateCommand);
         assertEquals(presentationInfo1, info);
@@ -142,7 +150,8 @@ public class PresentationServiceTest {
     }
 
     @Test
-    void testUpdatePresentation_presentationNotFound() {
+    @DisplayName("Presentation test updatePresentation not found")
+    void testUpdate_presentation_startTime_presentationNotFound() {
         when(presentationRepository.findById(8)).thenThrow(new PresentationNotFoundException(8));
         assertThrows(PresentationNotFoundException.class, () -> presentationService.findById(8));
         verify(presentationRepository, times(1)).findById(8);

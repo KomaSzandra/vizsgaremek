@@ -40,7 +40,8 @@ public class PresentationControllerIT {
     ObjectMapper objectMapper;
 
     @Test
-    void testCreatePresentation_success() throws Exception {
+    @DisplayName("Presentation test savePresentation")
+    void testSavePresentation_presentation_success() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Title");
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0,0,0));
@@ -53,7 +54,8 @@ public class PresentationControllerIT {
     }
 
     @Test
-    void testCreatePresentation_inValidTitle() throws Exception {
+    @DisplayName("Presentation test savePresentation invalid title")
+    void testSavePresentation_presentation_inValidTitle() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("");
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0,0,0));
@@ -63,12 +65,13 @@ public class PresentationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-//                .andExpect(jsonPath("$[0].field", is("title")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("must not be blank")));
+//                .andExpect(jsonPath("$[0].field", equalTo("title")))
+//                .andExpect(jsonPath("$[0].errorMessage", equalTo("must not be blank")));
     }
 
     @Test
-    void testCreatePresentation_inValidStartTime() throws Exception {
+    @DisplayName("Presentation test savePresentation invalid start time")
+    void testSavePresentation_presentation_inValidStartTime() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Reset");
         command.setStartTime(null);
@@ -85,7 +88,7 @@ public class PresentationControllerIT {
 
     @Test
     @DisplayName("Presentation test findAll")
-    void testFindAllPresentation_success() throws Exception {
+    void testFindAll_presentation_success() throws Exception {
         mockMvc.perform(get("/api/presentations"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -93,7 +96,8 @@ public class PresentationControllerIT {
     }
 
     @Test
-    void testFindById_success() throws Exception {
+    @DisplayName("Presentation test findById")
+    void testFindById_presentation_success() throws Exception {
         mockMvc.perform(get("/api/presentations/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
@@ -101,7 +105,8 @@ public class PresentationControllerIT {
     }
 
     @Test
-    void testFindPresentationByTitle_success() throws Exception {
+    @DisplayName("Presentation test findByTitle")
+    void testFindByTitle_presentation_success() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Test title");
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 00, 00));
@@ -120,7 +125,8 @@ public class PresentationControllerIT {
     }
 
     @Test
-    void testUpdatePresentation_success() throws Exception {
+    @DisplayName("Presentation test updatePresentation")
+    void testUpdatePresentation_startTime_success() throws Exception {
         PresentationUpdateCommand command = new PresentationUpdateCommand();
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 12, 0, 0, 0));
 

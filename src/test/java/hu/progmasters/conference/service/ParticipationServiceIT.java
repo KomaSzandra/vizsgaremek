@@ -7,6 +7,7 @@ import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,8 @@ public class ParticipationServiceIT {
     PresentationService presentationService;
 
     @Test
-    void testRegistrate() {
+    @DisplayName("Participation test registrate")
+    void testRegistrate_participation_success() {
         ParticipantInfo participantInfo = createParticipant();
         PresentationInfo presentationInfo = createPresentation();
 
