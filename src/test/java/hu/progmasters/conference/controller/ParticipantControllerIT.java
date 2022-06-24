@@ -139,11 +139,11 @@ public class ParticipantControllerIT {
     @Test
     void testFindParticipantByName_success() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
-        command.setName("Jsoa");
+        command.setName("Bob");
         command.setAcademicRank(AcademicRank.CANDIDATE);
-        command.setEmail("dasha@gmowe.hu");
+        command.setEmail("bob@gmowe.hu");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setInstitution("Bla");
+        command.setInstitution("BMX");
 
         mockMvc.perform(post("/api/participants")
                         .content(objectMapper.writeValueAsString(command))
@@ -152,7 +152,7 @@ public class ParticipantControllerIT {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/participants/findAllByName")
-                        .param("name", "Jsoa"))
+                        .param("name", "Bob"))
                 .andExpect(status().isOk());
     }
 

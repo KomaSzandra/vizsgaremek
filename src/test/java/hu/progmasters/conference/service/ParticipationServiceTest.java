@@ -127,4 +127,55 @@ public class ParticipationServiceTest {
         verifyNoMoreInteractions(participationRepository, presentationService);
     }
 
+    @Test
+    void testFindByParticipant_success() {
+        when(participationRepository.findByParticipant(1)).thenReturn(List.of(participation));
+        List<ParticipationInfo> byParticipant = participationService.findByParticipant(1);
+        assertNotNull(byParticipant);
+        assertEquals(byParticipant.get(0), participationInfo);
+        assertEquals(byParticipant.get(0).getParticipant().getId(), participant.getId());
+        verify(participationRepository, times(1)).findByParticipant(1);
+        verifyNoMoreInteractions(participationRepository);
+    }
+
+    @Test
+    void testDeleteParticipation_success() {
+        when(participationRepository.findById(1)).thenReturn(Optional.of(participation));
+        participationService.deleteParticipation(1);
+        verify(participationRepository, times(1)).findById(1);
+        verify(participationRepository, times(1)).delete(participation);
+        verifyNoMoreInteractions(participationRepository);
+    }
+
+    @Test
+    void testDeleteParticipation_notFound() {
+        when(participationRepository.findById(3)).thenThrow(new ParticipationNotFoundException(3));
+        assertThrows(ParticipationNotFoundException.class, () -> participationService.deleteParticipation(3));
+        verify(participationRepository, times(1)).findById(3);
+        verifyNoMoreInteractions(participationRepository);
+    }
+
+    @Test
+    void testCancelPresentation_success() {
+        when(presentationService.findPresentationById(1)).thenReturn(presentation);
+        when(participationRepository.findAll()).thenReturn(List.of(participation));
+        participationService.cancelPresentation(1);
+        assertTrue(presentation.getParticipations().isEmpty());
+        verify(presentationService, times(1)).findPresentationById(1);
+        verify(participationRepository, times(1)).findAll();
+        verify(participationRepository, times(1)).delete(participation);
+        verifyNoMoreInteractions(presentationService, participationRepository);
+    }
+
+    @Test
+    void testCancelParticipant_success() {
+        when(participantService.findParticipantById(1)).thenReturn(participant);
+        when(participationRepository.findAll()).thenReturn(List.of(participation));
+        participationService.cancelParticipant(1);
+        assertTrue(participant.getParticipations().isEmpty());
+        verify(participantService, times(1)).findParticipantById(1);
+        verify(participationRepository, times(1)).findAll();
+        verify(participationRepository, times(1)).delete(participation);
+        verifyNoMoreInteractions(participantService, participationRepository);
+    }
 }

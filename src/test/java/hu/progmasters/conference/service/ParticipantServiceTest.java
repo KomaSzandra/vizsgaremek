@@ -3,10 +3,12 @@ package hu.progmasters.conference.service;
 import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.dto.ParticipantInfo;
+import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
 import hu.progmasters.conference.exceptionhandler.ParticipantNotFoundException;
+import hu.progmasters.conference.exceptionhandler.ParticipantsByNameNotFoundException;
 import hu.progmasters.conference.repository.ParticipantRepository;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
@@ -145,6 +146,25 @@ public class ParticipantServiceTest {
         when(participantRepository.findById(8)).thenThrow(new ParticipantNotFoundException(8));
         assertThrows(ParticipantNotFoundException.class, () -> participantService.findById(8));
         verify(participantRepository, times(1)).findById(8);
+        verifyNoMoreInteractions(participantRepository);
+    }
+
+    @Test
+    void testFindAllByName_success() {
+        when(participantRepository.findAllByName("Dr. Jack Doe")).thenReturn(List.of(participant));
+        List<ParticipantInfo> byName = participantService.findAllByName("Dr. Jack Doe");
+        assertNotNull(byName);
+        assertEquals(byName.get(0), participantInfo);
+        assertEquals(byName.get(0).getId(), participant.getId());
+        verify(participantRepository, times(1)).findAllByName("Dr. Jack Doe");
+        verifyNoMoreInteractions(participantRepository);
+    }
+
+    @Test
+    void testFindAllByName_notFound() {
+        when(participantRepository.findAllByName("Dr. Jack")).thenThrow(new ParticipantsByNameNotFoundException("Dr. Jack"));
+        assertThrows(ParticipantsByNameNotFoundException.class, () -> participantService.findAllByName("Dr. Jack"));
+        verify(participantRepository, times(1)).findAllByName("Dr. Jack");
         verifyNoMoreInteractions(participantRepository);
     }
 

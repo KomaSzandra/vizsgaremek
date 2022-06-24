@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class PresentationRepositoryTest {
@@ -24,16 +23,13 @@ public class PresentationRepositoryTest {
     @Transactional
     void testSave() {
         Presentation toSave = new Presentation();
-        toSave.setTitle("Datas");
+        toSave.setTitle("Testing");
         LocalDateTime startTime = LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0, 0);
         toSave.setStartTime(startTime);
 
-        Optional<Presentation> expectedNull = repository.findById(3);
-        assertTrue(expectedNull.isEmpty());
-
         Presentation saved = repository.save(toSave);
-        assertEquals(3, saved.getId());
-        assertEquals("Datas", saved.getTitle());
+        assertEquals(4, saved.getId());
+        assertEquals("Testing", saved.getTitle());
         assertEquals(startTime, saved.getStartTime());
 
         Optional<Presentation> foundById = repository.findById(1);

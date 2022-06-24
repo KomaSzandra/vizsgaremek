@@ -2,6 +2,7 @@ package hu.progmasters.conference.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.dto.command.ParticipationCreateCommand;
+import hu.progmasters.conference.dto.command.ParticipationUpdateCommand;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,10 +79,10 @@ public class ParticipationControllerIT {
 //    }
 
     @Test
-    void testCreateParticipation_success() throws Exception {
+    void testRegistrate_success() throws Exception {
         ParticipationCreateCommand command = new ParticipationCreateCommand();
         command.setParticipantId(1);
-        command.setPresentationId(2);
+        command.setPresentationId(3);
 
         mockMvc.perform(post("/api/participations")
                         .content(objectMapper.writeValueAsString(command))
@@ -91,7 +92,7 @@ public class ParticipationControllerIT {
     }
 
     @Test
-    void testCreateParticipation_participantNotFound() throws Exception {
+    void testRegistrate_participantNotFound() throws Exception {
         ParticipationCreateCommand command = new ParticipationCreateCommand();
         command.setParticipantId(2);
         command.setPresentationId(1);
@@ -105,6 +106,24 @@ public class ParticipationControllerIT {
 //                .andExpect(jsonPath("$[0].errorMessage", is("No participant found with id")));
     }
 
+    @Test
+    void testFindAllByParticipant_success() throws Exception {
+        mockMvc.perform(get("/api/participations/findAllByParticipant")
+                        .param("participantId", String.valueOf(1)))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    void testUpdateParticipantsPresentation_success() throws Exception {
+        ParticipationUpdateCommand command = new ParticipationUpdateCommand();
+        command.setPresentationId(2);
 
+        mockMvc.perform(put("/api/participations/1")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.presentation.title", is("Structures")));
+    }
 }
