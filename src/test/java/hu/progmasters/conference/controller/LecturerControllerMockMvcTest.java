@@ -2,49 +2,62 @@ package hu.progmasters.conference.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.domain.AcademicRank;
+import hu.progmasters.conference.dto.LecturerInfo;
+import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.command.LecturerCreateCommand;
 import hu.progmasters.conference.dto.command.LecturerUpdateCommand;
-import org.junit.jupiter.api.BeforeAll;
+import hu.progmasters.conference.exceptionhandler.LecturerNotFoundException;
+import hu.progmasters.conference.service.LecturerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LecturerControllerIT {
+@WebMvcTest(controllers = LecturerController.class)
+public class LecturerControllerMockMvcTest {
 
-    private MockMvc mockMvc;
+    @MockBean
+    LecturerService lecturerService;
 
     @Autowired
-    LecturerController lecturerController;
-
-    @BeforeAll
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(this.lecturerController).build();
-    }
+    private MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
 
 
     @Test
+    @DisplayName("Lecturer test findAll empty")
+    void test_atStart_emptyList() throws Exception {
+        mockMvc.perform(get("/api/lecturers"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
     @DisplayName("Lecturer test findAll")
     void testFindAll_lecturer_success() throws Exception {
+        when(lecturerService.findAllLecturer())
+                .thenReturn(List.of(
+                        new LecturerListInfo(1, "Dr. John Doe", AcademicRank.PROFESSOR, "CEU",
+                                "ludwig@ceu.com"),
+                        new LecturerListInfo(2, "Dr. Jack Doe", AcademicRank.PROFESSOR, "CEU",
+                                "doe@ceu.com")
+                ));
         mockMvc.perform(get("/api/lecturers"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -60,20 +73,36 @@ public class LecturerControllerIT {
     @DisplayName("Lecturer test saveLecturer")
     void testSaveLecturer_lecturer_success() throws Exception {
         LecturerCreateCommand command = new LecturerCreateCommand();
+        command.setName("Dr. Yu");
         command.setInstitution("BMX");
         command.setEmail("bb@bmx.yu");
         command.setAcademicRank(AcademicRank.SENIOR_RESEARCH_FELLOW);
-        command.setName("Dr. Yu");
         command.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 10));
 
         mockMvc.perform(post("/api/lecturers")
                         .content(objectMapper.writeValueAsString(command))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", equalTo("Dr. Yu")))
-                .andExpect(jsonPath("$.institution", equalTo("BMX")))
-                .andExpect(jsonPath("$.email", equalTo("bb@bmx.yu")));
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Lecturer test saveLecturer with invalid name")
+    void testSaveParticipant_participant_inValidName() throws Exception {
+        LecturerCreateCommand command = new LecturerCreateCommand();
+        command.setName("");
+        command.setInstitution("CEU");
+        command.setEmail("john@ceu.com");
+        command.setDateOfBirth(LocalDate.now().minusDays(1));
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+
+        mockMvc.perform(post("/api/lecturers")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
     }
 
     @Test
@@ -94,9 +123,7 @@ public class LecturerControllerIT {
 
         mockMvc.perform(get("/api/lecturers/findByName")
                         .param("name", "Dr. Bob"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo("Dr. Bob")))
-                .andDo(print());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -109,22 +136,40 @@ public class LecturerControllerIT {
                         .content(objectMapper.writeValueAsString(command))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.presentationTitle", is("Reset")))
-                .andExpect(jsonPath("$.presentationId", is(1)))
-                .andExpect(jsonPath("$.email", is("ludwig@ceu.com")))
-                .andExpect(jsonPath("$.institution", is("Central European University")));
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("Lecturer test findById")
     void testFindById_lecturer_success() throws Exception {
+        when(lecturerService.findById(1)).thenReturn(new LecturerInfo(1, "Dr. Bob",
+                        LocalDate.of(1930, Month.SEPTEMBER, 1), "MTA", "drBob@mta.hu",
+                        AcademicRank.PROFESSOR_EMERITUS, 1, "Reset"));
         mockMvc.perform(get("/api/lecturers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.name", equalTo("Dr. John Doe")))
-                .andExpect(jsonPath("$.email", equalTo("ludwig@ceu.com")))
-                .andExpect(jsonPath("$.academicRank", equalTo("PROFESSOR")));
+                .andExpect(jsonPath("$.name", equalTo("Dr. Bob")))
+                .andExpect(jsonPath("$.email", equalTo("drBob@mta.hu")))
+                .andExpect(jsonPath("$.academicRank", equalTo("PROFESSOR_EMERITUS")));
+    }
+
+    @Test
+    @DisplayName("Lecturer test findById not found")
+    void testFindById_lecturer_notFound() throws Exception {
+        when(lecturerService.findById(11))
+                .thenThrow(LecturerNotFoundException.class);
+
+        mockMvc.perform(get("/api/lecturers/11"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("id")))
+                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
+    }
+
+    @Test
+    void testDeleteLecturer_lecturer_success() throws Exception {
+        when(lecturerService.findById(1)).thenReturn(new LecturerInfo());
+
+        mockMvc.perform(delete("/api/lecturers/1"))
+                .andExpect(status().isOk());
     }
 }

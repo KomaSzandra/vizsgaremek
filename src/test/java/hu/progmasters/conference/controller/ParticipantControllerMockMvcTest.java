@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(controllers = ParticipantController.class)
-public class ParticipantControllerIT {
+public class ParticipantControllerMockMvcTest {
 
     @MockBean
     ParticipantService participantService;
@@ -46,6 +46,7 @@ public class ParticipantControllerIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
 
     @Test
     @DisplayName("Participant test findAll empty")
@@ -125,6 +126,7 @@ public class ParticipantControllerIT {
     }
 
     @Test
+    @DisplayName("Participant test saveParticipant with invalid email")
     void testSaveParticipant_participant_invalidEmail() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("Dr. John");
@@ -132,7 +134,9 @@ public class ParticipantControllerIT {
         command.setEmail("john@ceu.com");
         command.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 16));
         command.setAcademicRank(AcademicRank.CANDIDATE);
-        when(participantService.saveParticipant(command)).thenReturn(new ParticipantInfo(1, "Dr. John", "CEU", "john@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
+        when(participantService.saveParticipant(command)).thenReturn(new ParticipantInfo(1, "Dr. John",
+                "CEU", "john@ceu.com", AcademicRank.CANDIDATE,
+                LocalDate.of(1980, Month.JANUARY, 16)));
 
         mockMvc.perform(post("/api/participants")
                         .content(objectMapper.writeValueAsString(command))
@@ -202,6 +206,7 @@ public class ParticipantControllerIT {
     }
 
     @Test
+    @DisplayName("Participant test deleteParticipations")
     void testDeleteParticipations_participant_success() throws Exception {
         when(participationService.findByParticipant(1)).thenReturn(new ArrayList<ParticipationInfo>());
 

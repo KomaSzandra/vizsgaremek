@@ -57,14 +57,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailNotValidException.class)
-    public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException(EmailNotValidException e) {
+    public ResponseEntity<List<ValidationError>> handleEmailNotUniqueException() {
         return new ResponseEntity<>(
                 List.of(new ValidationError("email", "Email already registered")),
                 HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TitleNotValidException.class)
-    public ResponseEntity<List<ValidationError>> handleTitleNotUniqueException(TitleNotValidException e) {
+    public ResponseEntity<List<ValidationError>> handleTitleNotUniqueException() {
         return new ResponseEntity<>(
                 List.of(new ValidationError("title", "The title already exists")),
                 HttpStatus.BAD_REQUEST);
@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AlreadyRegisteredException.class)
-    public ResponseEntity<List<ValidationError>> handleAlreadyRegisteredException(AlreadyRegisteredException e) {
+    public ResponseEntity<List<ValidationError>> handleAlreadyRegisteredException() {
         return new ResponseEntity<>(
                 List.of(new ValidationError("participantId",
                         "Participant already registered to this presentation")),
@@ -86,10 +86,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ParticipationNotFoundException.class)
-    public ResponseEntity<List<ValidationError>> handleParticipationNotFoundException(ParticipationNotFoundException e) {
+    public ResponseEntity<List<ValidationError>> handleParticipationNotFoundException() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("participationId", "No participation found with id: "
-                        + e.getId())),
+                List.of(new ValidationError("participationId", "No participation found with id")),
                 HttpStatus.BAD_REQUEST);
     }
 

@@ -137,25 +137,4 @@ public class PresentationControllerIT {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
-    @Test
-    @DisplayName("Lecturer test deleteLecturer")
-    void testDeletePresentation_participation_success() throws Exception {
-        PresentationCreateCommand command = new PresentationCreateCommand();
-        command.setTitle("Title for delete");
-        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 00, 00));
-
-        mockMvc.perform(post("/api/presentations")
-                        .content(objectMapper.writeValueAsString(command))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", equalTo(3)));
-
-        mockMvc.perform(delete("/api/presentations/3")
-                        .content(objectMapper.writeValueAsString(command))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
 }
