@@ -1,6 +1,7 @@
 package hu.progmasters.conference.exceptionhandler;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -8,8 +9,9 @@ import java.time.LocalDate;
 
 public class MinDateValidator implements ConstraintValidator<MinDate, LocalDate> {
 
-    @Value("1900-04-20")
-    private LocalDate minValue;
+    @Value("${minDate}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate minDate;
 
     @Override
     public void initialize(MinDate constraintAnnotation) {
@@ -17,6 +19,15 @@ public class MinDateValidator implements ConstraintValidator<MinDate, LocalDate>
 
     @Override
     public boolean isValid(LocalDate value, ConstraintValidatorContext constraintValidatorContext) {
-        return value != null && value.isAfter(minValue);
+        return minDate.isBefore(value);
+    }
+
+    public LocalDate getMinDate() {
+        return minDate;
+    }
+
+    public MinDateValidator setMinDate(LocalDate minDate) {
+        this.minDate = minDate;
+        return this;
     }
 }
