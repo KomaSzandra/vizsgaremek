@@ -31,7 +31,7 @@ A következő végpontokon érjük el az entitást:
 | PUT    | "/api/lecturers/{id}"       | hozzárendel az előadóhoz egy előadást |
 | DELETE | "/api/lecturers/{id}"       | id alapján töröl egy passzív előadót  |
 
-A Lecturer és a Presentation entitás között egyirányú @OneToOne kapcsolat van.
+A Lecturer és a Presentation entitások között egyirányú @OneToOne kapcsolat van.
 ***
 **Presentation**
 
@@ -55,7 +55,7 @@ A következő végpontokon érjük el az entitást:
 | DELETE | "/api/presentations/{id}"        | id alapján törli az előadáshoz tartozó jelentkezéseket  |
 
 
-A Presentation és a Participation entitás között egyirányú @OneToMany-@ManyToOne kapcsolat van.
+A Presentation és a Participation entitások között egyirányú @OneToMany-@ManyToOne kapcsolat van.
 ***
 **Participant**
 
@@ -79,7 +79,7 @@ A következő végpontokon érjük el az entitást:
 | PUT    | "/api/participants/{id}"            | módosítja egy résztvevő intézményét          |
 | DELETE | "/api/participants/{id}"            | id alapján törli a résztvevő jelentkezéseit  |
 
-A Participant és a Participation entitás között egyirányú @OneToMany-@ManyToOne kapcsolat van.
+A Participant és a Participation entitások között egyirányú @OneToMany-@ManyToOne kapcsolat van.
 ***
 **Participation**
 
@@ -98,7 +98,7 @@ A következő végpontokon érjük el az entitást:
 | GET    | "/api/participations/findByAllByParticipant" | lekérdezi egy résztvevő jelentkezéseit   |
 | POST   | "/api/participations"                        | regisztrál egy jelentkezést              |
 | PUT    | "/api/participations/{id}"                   | átjelentkezés másik előadásra id alapján |
-| DELETE | "/api/participations/{id}"                   | id alapján törli jelentkezést            |
+| DELETE | "/api/participations/{id}"                   | id alapján törli a jelentkezést          |
 
 
 A Participation entitás adatai az adatbázisban a participation táblában tárolódnak, mely két külső kulcsot tartalmaz:
@@ -109,10 +109,10 @@ A Participation entitás adatai az adatbázisban a participation táblában tár
 **Technológiai részletek**
 
 Ez egy klasszikus háromrétegű webes alkalmazás, controller, service és repository réteggel, entitásonként a rétegeknek 
-megfelelően elnevezett osztályokkal. A megvalósítás Java programnyelven, Spring Boot használatával történt. 
-Az alkalmazás HTTP kéréseket képes fogadni, ezt a RESTful webszolgáltatások segítségével valósítja meg. 
-A dokumentáláshoz Open API interfészt használ, ahol a végpontok fix értékekkel feliratozva láthatóak. 
+megfelelően elnevezett osztályokkal. A megvalósítás Java programnyelven, Spring Boot használatával történt.
 Az azonos nevű és típusú adattagok egyik oldalról a másikra való leképezéséhez Modelmappert alkalmaz.
+Az alkalmazás HTTP kéréseket képes fogadni, ezt a RESTful webszolgáltatások segítségével valósítja meg. 
+A dokumentáláshoz Open API interfészt használ, ahol a végpontok fix értékekkel feliratozva láthatóak.
 Adattárolásra SQL alapú MySQL adatbázist használ, melyben a táblákat Flyway hozza létre. Az adatbáziskezelés 
 Spring Data JPA technológiával történik. A beérkező adatok validálását a Spring Boot spring-boot-starter-validation 
 modulja végzi. Az alkalmazás tesztelésére integrációs és egység tesztek állnak rendelkezésre, melyek az src/test/java 
