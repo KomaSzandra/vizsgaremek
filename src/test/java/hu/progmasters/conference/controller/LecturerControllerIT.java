@@ -48,7 +48,12 @@ public class LecturerControllerIT {
         mockMvc.perform(get("/api/lecturers"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$[0].name", equalTo("Dr. John Doe")));
+                .andExpect(jsonPath("$[0].name", equalTo("Dr. John Doe")))
+                .andExpect(jsonPath("$[1].name", equalTo("Dr. Jack Doe")))
+                .andExpect(jsonPath("$[0].email", equalTo("ludwig@ceu.com")))
+                .andExpect(jsonPath("$[1].email", equalTo("doe@ceu.com")))
+                .andExpect(jsonPath("$[0].academicRank", equalTo("PROFESSOR")))
+                .andExpect(jsonPath("$[1].academicRank", equalTo("PROFESSOR")));
     }
 
     @Test
@@ -66,6 +71,7 @@ public class LecturerControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", equalTo("Dr. Yu")))
                 .andExpect(jsonPath("$.institution", equalTo("BMX")))
                 .andExpect(jsonPath("$.email", equalTo("bb@bmx.yu")));
     }
@@ -74,11 +80,11 @@ public class LecturerControllerIT {
     @DisplayName("Lecturer test findByName")
     void testFindByName_lecturer_success() throws Exception {
         LecturerCreateCommand command = new LecturerCreateCommand();
-        command.setName("Jsoa");
+        command.setName("Dr. Bob");
         command.setAcademicRank(AcademicRank.CANDIDATE);
-        command.setEmail("dasha@gmowe.hu");
+        command.setEmail("bob@gbob.bob");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setInstitution("Bla");
+        command.setInstitution("BOB");
 
         mockMvc.perform(post("/api/lecturers")
                         .content(objectMapper.writeValueAsString(command))
@@ -87,21 +93,21 @@ public class LecturerControllerIT {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/lecturers/findByName")
-                        .param("name", "Jsoa"))
+                        .param("name", "Dr. Bob"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo("Jsoa")))
+                .andExpect(jsonPath("$.name", equalTo("Dr. Bob")))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("Lecturer test update")
-    void testAddLecturerToAPresentation_success() throws Exception {
+    void testAddLecturerToAPresentation_lecturer_success() throws Exception {
         LecturerUpdateCommand command = new LecturerUpdateCommand();
         command.setLecturerId(1);
 
         mockMvc.perform(put("/api/lecturers/1")
-                .content(objectMapper.writeValueAsString(command))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -111,62 +117,20 @@ public class LecturerControllerIT {
                 .andExpect(jsonPath("$.institution", is("Central European University")));
     }
 
-//    @Test
-//    void testAddLecturerToPresentation_alreadyHas() throws Exception {
-//        LecturerUpdateCommand command = new LecturerUpdateCommand();
-//        command.setLecturerId(1);
-//
-//        mockMvc.perform(put("/api/lecturers/1")
-//                        .content(objectMapper.writeValueAsString(command))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//
-//        mockMvc.perform(put("/api/lecturers/2")
-//                        .content(objectMapper.writeValueAsString(command))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("lecturerId")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Reserved, lecturer already has a lecture")));
-//    }
-
-//    @Test
-//    void testLecturerNotFound() throws Exception {
-//        LecturerUpdateCommand command = new LecturerUpdateCommand();
-//        command.setLecturerId(3);
-//
-//        mockMvc.perform(put("/api/lecturers/1")
-//        .content(objectMapper.writeValueAsString(command))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("lecturerId")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
-//    }
-
     @Test
     @DisplayName("Lecturer test findById")
     void testFindById_lecturer_success() throws Exception {
         mockMvc.perform(get("/api/lecturers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.name", equalTo("Dr. John Doe")));
-               /* .andExpect(jsonPath("$.academicRank", equalTo(AcademicRank.PROFESSOR)));*/
+                .andExpect(jsonPath("$.name", equalTo("Dr. John Doe")))
+                .andExpect(jsonPath("$.email", equalTo("ludwig@ceu.com")))
+                .andExpect(jsonPath("$.academicRank", equalTo("PROFESSOR")));
     }
 
 //    @Test
-//    void testFindById_notFound() throws Exception {
-//        mockMvc.perform(get("/api/lecturers/7"))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("id")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
-//    }
-
-
-
-//    @Test
-//    void deleteLecturer() throws Exception {
+//    @DisplayName("Lecturer test deleteLecturer")
+//    void testDeleteLecturer_lecturer_success() throws Exception {
 //        LecturerCreateCommand command = new LecturerCreateCommand();
 //        command.setName("Dr. Yu");
 //        command.setAcademicRank(AcademicRank.CANDIDATE);
@@ -178,9 +142,10 @@ public class LecturerControllerIT {
 //                        .content(objectMapper.writeValueAsString(command))
 //                        .contentType(MediaType.APPLICATION_JSON))
 //                .andDo(print())
-//                .andExpect(status().isCreated());
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.id", equalTo(4)));
 //
-//        mockMvc.perform(delete("/api/lecturers/1")
+//        mockMvc.perform(delete("/api/lecturers/4")
 //                        .content(objectMapper.writeValueAsString(command))
 //                        .contentType(MediaType.APPLICATION_JSON))
 //                .andDo(print())

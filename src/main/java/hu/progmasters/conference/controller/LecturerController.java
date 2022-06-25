@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Tag(name = "The Controller for lecturers")
+@Tag(name = "The controller for lecturers")
 @RequestMapping("/api/lecturers")
 @AllArgsConstructor
 public class LecturerController {

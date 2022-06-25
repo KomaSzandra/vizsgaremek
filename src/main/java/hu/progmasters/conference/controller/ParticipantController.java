@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@Tag(name = "The Controller for participants")
+@Tag(name = "The controller for participants")
 @RequestMapping("/api/participants")
 public class ParticipantController {
 

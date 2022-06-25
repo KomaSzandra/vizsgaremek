@@ -1,6 +1,7 @@
 package hu.progmasters.conference.dto.command;
 
 import hu.progmasters.conference.domain.AcademicRank;
+import hu.progmasters.conference.exceptionhandler.MinDate;
 import hu.progmasters.conference.exceptionhandler.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class ParticipantCreateCommand {
 
     @NotNull(message = "Date of birth should not be empty")
     @Past(message = "Date of birth should be in the past")
+    @MinDate
     @Schema(description = "The participant's date of birth", type = "string", format = "date", example = "1964-04-20")
     private LocalDate dateOfBirth;
 

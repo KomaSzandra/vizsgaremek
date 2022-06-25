@@ -10,6 +10,7 @@ import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,7 +24,6 @@ public class PresentationService {
 
     private PresentationRepository presentationRepository;
     private ModelMapper modelMapper;
-
 
     public PresentationInfo savePresentation(PresentationCreateCommand command) {
         Presentation toSave = modelMapper.map(command, Presentation.class);

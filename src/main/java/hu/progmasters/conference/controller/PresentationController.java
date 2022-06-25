@@ -96,7 +96,7 @@ public class PresentationController {
     }
 
     @DeleteMapping("/{presentationId}")
-    @Operation(summary = "Cancellation of presentation")
+    @Operation(summary = "Cancellation of the presentation")
     @ApiResponse(responseCode = "200", description = "Presentation has been cancelled")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be cancelled")
     public ResponseEntity<Void> cancelPresentation(@PathVariable("presentationId") Integer presentationId) {

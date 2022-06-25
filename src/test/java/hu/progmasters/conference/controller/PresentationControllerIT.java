@@ -44,13 +44,14 @@ public class PresentationControllerIT {
     void testSavePresentation_presentation_success() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Title");
-        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0,0,0));
+        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0, 0, 0));
 
         mockMvc.perform(post("/api/presentations")
                         .content(objectMapper.writeValueAsString(command))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", equalTo("Title")));
     }
 
     @Test
@@ -58,7 +59,7 @@ public class PresentationControllerIT {
     void testSavePresentation_presentation_inValidTitle() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("");
-        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0,0,0));
+        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 0, 0, 0));
 
         mockMvc.perform(post("/api/presentations")
                         .content(objectMapper.writeValueAsString(command))
@@ -112,13 +113,13 @@ public class PresentationControllerIT {
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 00, 00));
 
         mockMvc.perform(post("/api/presentations")
-                .content(objectMapper.writeValueAsString(command))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/presentations/findByTitle")
-                .param("title", "Test title"))
+                        .param("title", "Test title"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", equalTo("Test title")))
                 .andDo(print());
@@ -131,6 +132,27 @@ public class PresentationControllerIT {
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 12, 0, 0, 0));
 
         mockMvc.perform(put("/api/presentations/1")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Lecturer test deleteLecturer")
+    void testDeletePresentation_participation_success() throws Exception {
+        PresentationCreateCommand command = new PresentationCreateCommand();
+        command.setTitle("Title for delete");
+        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 00, 00));
+
+        mockMvc.perform(post("/api/presentations")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", equalTo(3)));
+
+        mockMvc.perform(delete("/api/presentations/3")
                         .content(objectMapper.writeValueAsString(command))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

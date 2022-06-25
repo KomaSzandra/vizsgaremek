@@ -131,4 +131,24 @@ public class ParticipationControllerIT {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.presentation.title", is("Structures")));
     }
+
+//    @Test
+//    void testDelete_participation_success() throws Exception {
+//        ParticipationCreateCommand command = new ParticipationCreateCommand();
+//        command.setPresentationId(2);
+//        command.setParticipantId(1);
+//
+//        mockMvc.perform(post("/api/participations")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.id", equalTo(2)));
+//
+//        mockMvc.perform(delete("/api/participations/2")
+//                        .content(objectMapper.writeValueAsString(command))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
 }
