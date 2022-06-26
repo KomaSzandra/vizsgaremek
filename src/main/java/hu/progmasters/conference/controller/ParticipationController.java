@@ -68,7 +68,7 @@ public class ParticipationController {
     }
 
     @GetMapping("findAllByParticipant")
-    @Operation(summary = "Get participations by participant")
+    @Operation(summary = "Get all applications from a participant")
     @ApiResponse(responseCode = "200", description = "Participations have been listed")
     @ApiResponse(responseCode = "400", description = "Bad request, participations cannot be listed")
     public ResponseEntity<List<ParticipationInfo>> findAllByParticipant(@RequestParam("participantId")
@@ -91,7 +91,7 @@ public class ParticipationController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Transferring a participant to another presentation")
+    @Operation(summary = "Transferring the application to another presentation")
     @ApiResponse(responseCode = "200", description = "Participation has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be updated")
     public ResponseEntity<ParticipationInfo> updateParticipantsPresentation(
