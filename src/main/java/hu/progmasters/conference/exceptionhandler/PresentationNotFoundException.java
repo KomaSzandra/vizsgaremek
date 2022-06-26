@@ -2,7 +2,7 @@ package hu.progmasters.conference.exceptionhandler;
 
 public class PresentationNotFoundException extends RuntimeException {
 
-    private Integer presentationId;
+    private final Integer presentationId;
 
     public PresentationNotFoundException(Integer presentationId) {
         this.presentationId = presentationId;
@@ -10,10 +10,5 @@ public class PresentationNotFoundException extends RuntimeException {
 
     public Integer getPresentationId() {
         return presentationId;
-    }
-
-    public PresentationNotFoundException setPresentationId(Integer presentationId) {
-        this.presentationId = presentationId;
-        return this;
     }
 }

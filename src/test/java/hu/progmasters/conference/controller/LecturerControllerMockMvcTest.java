@@ -162,7 +162,7 @@ public class LecturerControllerMockMvcTest {
         mockMvc.perform(get("/api/lecturers/11"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$[0].field", is("id")))
-                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with id")));
+                .andExpect(jsonPath("$[0].errorMessage", is("No lecturer found with the given id")));
     }
 
     @Test

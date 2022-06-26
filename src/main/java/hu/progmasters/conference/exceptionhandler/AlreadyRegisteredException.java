@@ -16,5 +16,4 @@ public class AlreadyRegisteredException extends RuntimeException {
     public Integer getParticipantId() {
         return participantId;
     }
-
 }

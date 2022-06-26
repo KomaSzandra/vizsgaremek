@@ -44,7 +44,6 @@ public class ParticipationService {
         }
 
         Participation participationSaved = participationRepository.save(participationToSave);
-
         return modelMapper.map(participationSaved, ParticipationInfo.class);
     }
 

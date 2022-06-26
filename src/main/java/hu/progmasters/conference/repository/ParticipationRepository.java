@@ -43,8 +43,7 @@ public class ParticipationRepository {
     }
 
     public Participation update(Participation participationToUpdate) {
-        Participation merged = entityManager.merge(participationToUpdate);
-        return merged;
+        return entityManager.merge(participationToUpdate);
     }
 
     public List<Participation> findByParticipant(Integer participantId) {

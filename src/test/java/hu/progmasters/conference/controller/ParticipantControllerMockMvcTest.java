@@ -202,7 +202,7 @@ public class ParticipantControllerMockMvcTest {
         mockMvc.perform(get("/api/participants/11"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$[0].field", is("participantId")))
-                .andExpect(jsonPath("$[0].errorMessage", is("No participant found with id")));
+                .andExpect(jsonPath("$[0].errorMessage", is("No participant found with the given id")));
     }
 
     @Test

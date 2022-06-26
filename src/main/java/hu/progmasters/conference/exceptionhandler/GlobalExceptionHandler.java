@@ -38,21 +38,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ParticipantNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleParticipantNotFound() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("participantId", "No participant found with id")),
+                List.of(new ValidationError("participantId", "No participant found with the given id")),
                 HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(LecturerNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleLecturerNotFound() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("id", "No lecturer found with id")),
+                List.of(new ValidationError("id", "No lecturer found with the given id")),
                 HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ParticipantsByNameNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleParticipantsByNameNotFoundException() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("name", "No participant found with a given name")),
+                List.of(new ValidationError("name", "No participant found with the given name")),
                 HttpStatus.BAD_REQUEST);
     }
 
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(LecturerAlreadyHasAPresentationException.class)
     public ResponseEntity<List<ValidationError>> handleLecturerHasAPresentation() {
         return new ResponseEntity<>(
-                List.of(new ValidationError("lecturerId", "Reserved, lecturer already has a lecture")),
+                List.of(new ValidationError("presentationId", "Reserved, lecturer already has a lecture")),
                 HttpStatus.BAD_REQUEST);
     }
 
@@ -89,14 +89,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ValidationError>> handleParticipationNotFoundException() {
         return new ResponseEntity<>(
                 List.of(new ValidationError("participationId", "No participation found with id")),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(AlreadyHasAParticipationException.class)
-    public ResponseEntity<List<ValidationError>> handleAlreadyHasAParticipation(AlreadyHasAParticipationException e) {
-        return new ResponseEntity<>(
-                List.of(new ValidationError("id", "Participant with id:" + e.getId() +
-                        " already has a participation")),
                 HttpStatus.BAD_REQUEST);
     }
 }

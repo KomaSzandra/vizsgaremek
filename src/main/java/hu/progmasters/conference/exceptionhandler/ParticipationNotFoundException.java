@@ -11,8 +11,4 @@ public class ParticipationNotFoundException extends RuntimeException {
         return id;
     }
 
-    public ParticipationNotFoundException setId(Integer id) {
-        this.id = id;
-        return this;
-    }
 }

@@ -11,9 +11,4 @@ public class RegistrationClosedException extends RuntimeException {
     public Integer getPresentationId() {
         return presentationId;
     }
-
-    public RegistrationClosedException setPresentationId(Integer presentationId) {
-        this.presentationId = presentationId;
-        return this;
-    }
 }

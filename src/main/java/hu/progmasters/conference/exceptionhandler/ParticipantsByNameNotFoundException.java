@@ -12,8 +12,4 @@ public class ParticipantsByNameNotFoundException extends RuntimeException {
         return name;
     }
 
-    public ParticipantsByNameNotFoundException setName(String name) {
-        this.name = name;
-        return this;
-    }
 }

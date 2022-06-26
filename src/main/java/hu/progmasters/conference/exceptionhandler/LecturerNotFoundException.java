@@ -2,7 +2,7 @@ package hu.progmasters.conference.exceptionhandler;
 
 public class LecturerNotFoundException extends RuntimeException {
 
-    private Integer id;
+    private final Integer id;
 
     public LecturerNotFoundException(Integer id) {
         this.id = id;
@@ -12,8 +12,4 @@ public class LecturerNotFoundException extends RuntimeException {
         return id;
     }
 
-    public LecturerNotFoundException setId(Integer id) {
-        this.id = id;
-        return this;
-    }
 }

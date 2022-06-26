@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +37,8 @@ public class LecturerService {
         toSave.setDateOfBirth(command.getDateOfBirth());
         Lecturer saved;
         try {
-             saved = lecturerRepository.save(toSave);
-             lecturerRepository.flush();
+            saved = lecturerRepository.save(toSave);
+            lecturerRepository.flush();
         } catch (RuntimeException e) {
             throw new EmailNotValidException(toSave.getEmail());
         }
@@ -54,12 +53,9 @@ public class LecturerService {
     }
 
     public LecturerInfo findById(Integer id) {
-        Optional<Lecturer> lecturer = lecturerRepository.findById(id);
-        if(lecturer.isPresent()) {
-            return modelMapper.map(lecturer.get(), LecturerInfo.class);
-        } else {
-            throw new LecturerNotFoundException(id);
-        }
+        Lecturer lecturerFound = lecturerRepository.findById(id).orElseThrow(() ->
+                new LecturerNotFoundException(id));
+        return modelMapper.map(lecturerFound, LecturerInfo.class);
     }
 
     public LecturerInfo findByName(String name) {
@@ -67,28 +63,26 @@ public class LecturerService {
     }
 
     public void deleteLecturer(Integer id) {
-        Optional<Lecturer> lecturer = lecturerRepository.findById(id);
-        if (lecturer.isEmpty()) {
-            throw new LecturerNotFoundException(id);
-        }
-        Lecturer lecturerFound = lecturer.get();
+        Lecturer lecturerFound = lecturerRepository.findById(id).orElseThrow(() ->
+                new LecturerNotFoundException(id));
+
         Presentation presentation = lecturerFound.getPresentation();
-        if(presentation != null) {
-            throw new LecturerAlreadyHasAPresentationException(presentation.getId(), id);
+        if (presentation != null) {
+            throw new LecturerAlreadyHasAPresentationException(presentation.getId());
         }
         lecturerRepository.deleteLecturer(lecturerFound);
     }
 
     public LecturerInfo addLecturerToPresentation(Integer id, LecturerUpdateCommand command) {
-        Presentation presentation = presentationService.findPresentationById(id);
-        Lecturer lecturer = lecturerRepository.findById(command.getLecturerId()).orElseThrow(() ->
+        Presentation presentationFound = presentationService.findPresentationById(id);
+        Lecturer lecturerFound = lecturerRepository.findById(command.getLecturerId()).orElseThrow(() ->
                 new LecturerNotFoundException(command.getLecturerId()));
 
-        if(lecturer.getPresentation() != null || presentation.getLecturer() != null) {
-            throw new LecturerAlreadyHasAPresentationException(command.getLecturerId(), id);
+        if (lecturerFound.getPresentation() != null || presentationFound.getLecturer() != null) {
+            throw new LecturerAlreadyHasAPresentationException(id);
         }
-        presentation.setLecturer(lecturer);
-        lecturer.setPresentation(presentation);
-        return modelMapper.map(lecturer, LecturerInfo.class);
+        presentationFound.setLecturer(lecturerFound);
+        lecturerFound.setPresentation(presentationFound);
+        return modelMapper.map(lecturerFound, LecturerInfo.class);
     }
 }
