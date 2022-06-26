@@ -42,7 +42,7 @@ public class ParticipantCreateCommand {
     private String institution;
 
     @Email(message = "Must be an e-mail address")
-    @NotNull(message = "Must not be null")
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "E-mail address", example = "Dr.doe@participant.com")
     private String email;
 

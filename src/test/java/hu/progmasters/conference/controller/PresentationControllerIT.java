@@ -55,7 +55,7 @@ public class PresentationControllerIT {
     }
 
     @Test
-    @DisplayName("Presentation test savePresentation invalid title")
+    @DisplayName("Presentation test savePresentation with blank title")
     void testSavePresentation_presentation_inValidTitle() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("");
@@ -66,8 +66,6 @@ public class PresentationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-//                .andExpect(jsonPath("$[0].field", equalTo("title")))
-//                .andExpect(jsonPath("$[0].errorMessage", equalTo("must not be blank")));
     }
 
     @Test
@@ -82,9 +80,6 @@ public class PresentationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-//                .andExpect(jsonPath("$[0].field", is("startTime")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("must not be null")));
-
     }
 
     @Test
@@ -110,7 +105,7 @@ public class PresentationControllerIT {
     void testFindByTitle_presentation_success() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Test title");
-        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 00, 00));
+        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 13, 0, 0));
 
         mockMvc.perform(post("/api/presentations")
                         .content(objectMapper.writeValueAsString(command))
@@ -129,7 +124,8 @@ public class PresentationControllerIT {
     @DisplayName("Presentation test updatePresentation")
     void testUpdatePresentation_startTime_success() throws Exception {
         PresentationUpdateCommand command = new PresentationUpdateCommand();
-        command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 12, 0, 0, 0));
+        command.setStartTime(LocalDateTime.of(
+                2022, Month.SEPTEMBER, 26, 12, 0, 0, 0));
 
         mockMvc.perform(put("/api/presentations/1")
                         .content(objectMapper.writeValueAsString(command))

@@ -64,8 +64,8 @@ public class PresentationControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("Presentation test savePresentation with invalid title")
-    void testSavePresentation_presentation_inValidName() throws Exception {
+    @DisplayName("Presentation test savePresentation with blank title")
+    void testSavePresentation_presentation_invalidTitle() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("");
         command.setStartTime(LocalDateTime.of(2022, Month.SEPTEMBER, 26, 10,0,0));
@@ -80,7 +80,7 @@ public class PresentationControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("Presentation test savePresentation with invalid email")
+    @DisplayName("Presentation test savePresentation with same title")
     void testSavePresentation_presentationTitle_alreadyExists() throws Exception {
         PresentationCreateCommand command = new PresentationCreateCommand();
         command.setTitle("Test title");
@@ -108,6 +108,4 @@ public class PresentationControllerMockMvcTest {
                 .andExpect(jsonPath("$[0].field", is("title")))
                 .andExpect(jsonPath("$[0].errorMessage", is("The title already exists")));
     }
-
-
 }

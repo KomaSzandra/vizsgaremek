@@ -3,7 +3,6 @@ package hu.progmasters.conference.service;
 import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Participant;
 import hu.progmasters.conference.dto.ParticipantInfo;
-import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
@@ -53,12 +52,18 @@ public class ParticipantServiceTest {
     @BeforeEach
     void init() {
         participantService = new ParticipantService(participantRepository, modelMapper);
-        participant = new Participant(1, "Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
-        participant1 = new Participant(2, "Dr. Jane Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
-        createCommand = new ParticipantCreateCommand("Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
-        createCommand1 = new ParticipantCreateCommand("Dr. Jane Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
-        participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu", AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
-        participantInfo1 = new ParticipantInfo(1, "Dr. Jack Doe", "BME", "jackDr@bmx.hu", AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
+        participant = new Participant(1, "Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20),
+                AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
+        participant1 = new Participant(2, "Dr. Jane Doe", LocalDate.of(1980, Month.APRIL, 20),
+                AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
+        createCommand = new ParticipantCreateCommand("Dr. Jack Doe", LocalDate.of(
+                1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
+        createCommand1 = new ParticipantCreateCommand("Dr. Jane Doe", LocalDate.of(
+                1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
+        participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu",
+                AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
+        participantInfo1 = new ParticipantInfo(1, "Dr. Jack Doe", "BME", "jackDr@bmx.hu",
+                AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
         updateCommand = new ParticipantUpdateCommand("BME");
     }
 

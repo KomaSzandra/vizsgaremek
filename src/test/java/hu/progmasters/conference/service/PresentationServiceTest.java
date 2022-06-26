@@ -7,6 +7,7 @@ import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
+import hu.progmasters.conference.exceptionhandler.GlobalExceptionHandler;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
@@ -45,6 +46,7 @@ public class PresentationServiceTest {
     private PresentationCreateCommand createCommand;
     private PresentationCreateCommand createCommand1;
     private PresentationUpdateCommand updateCommand;
+    private PresentationUpdateCommand updateCommand1;
     private PresentationInfo presentationInfo;
     private PresentationInfo presentationInfo1;
     private Lecturer lecturer;
@@ -68,6 +70,8 @@ public class PresentationServiceTest {
                 2022, Month.SEPTEMBER, 26, 8, 0,0));
         updateCommand = new PresentationUpdateCommand(LocalDateTime.of(
                 2022, Month.SEPTEMBER, 26, 10, 0,0));
+        updateCommand1 = new PresentationUpdateCommand(LocalDateTime.of(
+                2022, Month.APRIL, 26, 10, 0,0));
         presentationInfo = new PresentationInfo(1, new LecturerListInfo(), "Reset",
                 LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0));
         presentationInfo1 = new PresentationInfo(1, new LecturerListInfo(), "Reset",
@@ -146,15 +150,6 @@ public class PresentationServiceTest {
         PresentationInfo info = presentationService.updatePresentation(1, updateCommand);
         assertEquals(presentationInfo1, info);
         verify(presentationRepository, times(1)).findById(1);
-        verifyNoMoreInteractions(presentationRepository);
-    }
-
-    @Test
-    @DisplayName("Presentation test updatePresentation not found")
-    void testUpdate_presentation_startTime_presentationNotFound() {
-        when(presentationRepository.findById(8)).thenThrow(new PresentationNotFoundException(8));
-        assertThrows(PresentationNotFoundException.class, () -> presentationService.findById(8));
-        verify(presentationRepository, times(1)).findById(8);
         verifyNoMoreInteractions(presentationRepository);
     }
 }

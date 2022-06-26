@@ -35,6 +35,7 @@ public class LecturerCreateCommand {
     private String institution;
 
     @Email(message = "Email should be valid")
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "The Lecturer's e-mail address", example = "doeProfessor@lecturer.com")
     private String email;
 

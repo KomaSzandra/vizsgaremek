@@ -90,8 +90,8 @@ public class ParticipantControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("Participant test saveParticipant with invalid name")
-    void testSaveParticipant_participant_inValidName() throws Exception {
+    @DisplayName("Participant test saveParticipant with blank name")
+    void testSaveParticipant_participant_invalidName() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("");
         command.setInstitution("CEU");
@@ -109,13 +109,34 @@ public class ParticipantControllerMockMvcTest {
     }
 
     @Test
+    @DisplayName("Participant test saveParticipant with invalid email")
+    void testSaveParticipant_participant_invalidEmail() throws Exception {
+        ParticipantCreateCommand command = new ParticipantCreateCommand();
+        command.setName("Dr. Bob");
+        command.setInstitution("CEU");
+        command.setEmail("1234password");
+        command.setDateOfBirth(LocalDate.now().minusDays(1));
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+
+        mockMvc.perform(post("/api/participants")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("email")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Must be an e-mail address")));
+    }
+
+    @Test
     @DisplayName("Participant test update")
     void testUpdate_participant_success() throws Exception {
         when(participantService.findById(1))
-                .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
+                .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com",
+                        AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
         ParticipantUpdateCommand command1 = new ParticipantUpdateCommand();
         command1.setInstitution("BMX");
-        when(participantService.update(1, command1)).thenReturn(new ParticipantInfo(1, "Doe", "BMX", "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
+        when(participantService.update(1, command1)).thenReturn(new ParticipantInfo(1, "Doe", "BMX",
+                "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
 
         mockMvc.perform(put("/api/participants/1")
                         .content(objectMapper.writeValueAsString(command1))
@@ -127,7 +148,7 @@ public class ParticipantControllerMockMvcTest {
 
     @Test
     @DisplayName("Participant test saveParticipant with invalid email")
-    void testSaveParticipant_participant_invalidEmail() throws Exception {
+    void testSaveParticipant_participant_sameEmail() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("Dr. John");
         command.setInstitution("CEU");
@@ -186,7 +207,8 @@ public class ParticipantControllerMockMvcTest {
     @DisplayName("Participant test findById")
     void testFindById_participant_success() throws Exception {
         when(participantService.findById(1))
-                .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com", AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
+                .thenReturn(new ParticipantInfo(1, "Doe", "CEU", "d@ceu.com",
+                        AcademicRank.CANDIDATE, LocalDate.of(1980, Month.JANUARY, 16)));
 
         mockMvc.perform(get("/api/participants/1"))
                 .andExpect(status().isOk())

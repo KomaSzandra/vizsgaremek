@@ -100,7 +100,7 @@ public class LecturerServiceTest {
     }
 
     @Test
-    @DisplayName("Lecturer test saveLecturer invalid email")
+    @DisplayName("Lecturer test saveLecturer with invalid email")
     void testSaveLecturer_lecturer_invalidEmail() {
         when(lecturerRepository.save(lecturer1)).thenThrow(new EmailNotValidException(lecturer1.getEmail()));
         assertThrows(EmailNotValidException.class, () -> lecturerService.saveLecturer(createCommand1));
@@ -114,8 +114,8 @@ public class LecturerServiceTest {
         when(lecturerRepository.save(any())).thenReturn(lecturer);
         when(lecturerRepository.findAll()).thenReturn(List.of(lecturer));
         lecturerService.saveLecturer(createCommand);
-        LecturerListInfo listInfo = new LecturerListInfo(1, "Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU",
-                "drDoe@lecturer.com");
+        LecturerListInfo listInfo = new LecturerListInfo(1, "Dr. John Doe", AcademicRank.SENIOR_LECTURER,
+                "CEU", "drDoe@lecturer.com");
         assertThat(lecturerService.findAllLecturer())
                 .hasSize(1)
                 .containsExactly(listInfo);

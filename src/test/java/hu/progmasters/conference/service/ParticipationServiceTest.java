@@ -60,17 +60,25 @@ public class ParticipationServiceTest {
     void init() {
         participationService = new ParticipationService(new ModelMapper(), participationRepository,
                 presentationService, participantService);
-        participant = new Participant(1, "Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
+        participant = new Participant(1, "Dr. Jack Doe", LocalDate.of(1980, Month.APRIL, 20),
+                AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
         presentation = new Presentation(1, new Lecturer(), "Reset", LocalDateTime.of(
                 2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
-        presentation1 = new Presentation(2, new Lecturer(), "Datas", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
-        participation = new Participation(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participant, presentation);
+        presentation1 = new Presentation(2, new Lecturer(), "Datas", LocalDateTime.of(
+                2022, Month.SEPTEMBER, 26, 8, 0,0), new ArrayList<>());
+        participation = new Participation(1, LocalDateTime.of(
+                2022, Month.AUGUST, 1, 0,0,0), participant, presentation);
         createCommand = new ParticipationCreateCommand(1,1);
-        participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu", AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
-        presentationInfo = new PresentationInfo(1, new LecturerListInfo(), "Reset", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0));
-        presentationInfo1 = new PresentationInfo(2, new LecturerListInfo(), "Datas", LocalDateTime.of(2022, Month.SEPTEMBER, 26, 8, 0,0));
-        participationInfo = new ParticipationInfo(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo);
-        participationInfo1 = new ParticipationInfo(1, LocalDateTime.of(2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo1);
+        participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu",
+                AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
+        presentationInfo = new PresentationInfo(1, new LecturerListInfo(), "Reset", LocalDateTime.of(
+                2022, Month.SEPTEMBER, 26, 8, 0,0));
+        presentationInfo1 = new PresentationInfo(2, new LecturerListInfo(), "Datas", LocalDateTime.of(
+                2022, Month.SEPTEMBER, 26, 8, 0,0));
+        participationInfo = new ParticipationInfo(1, LocalDateTime.of(
+                2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo);
+        participationInfo1 = new ParticipationInfo(1, LocalDateTime.of(
+                2022, Month.AUGUST, 1, 0,0,0), participantInfo, presentationInfo1);
         updateCommand = new ParticipationUpdateCommand(2);
     }
 
@@ -166,7 +174,7 @@ public class ParticipationServiceTest {
 
     @Test
     @DisplayName("Participation test cancelPresentation")
-    void testCancelPresentation_participation_success() {
+    void testCancelPresentation_participations_success() {
         when(presentationService.findPresentationById(1)).thenReturn(presentation);
         when(participationRepository.findAll()).thenReturn(List.of(participation));
         participationService.cancelPresentation(1);
@@ -179,7 +187,7 @@ public class ParticipationServiceTest {
 
     @Test
     @DisplayName("Participation test cancelParticipant")
-    void testCancelParticipant_participation_success() {
+    void testCancelParticipant_participations_success() {
         when(participantService.findParticipantById(1)).thenReturn(participant);
         when(participationRepository.findAll()).thenReturn(List.of(participation));
         participationService.cancelParticipant(1);

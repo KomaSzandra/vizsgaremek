@@ -87,8 +87,8 @@ public class LecturerControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("Lecturer test saveLecturer with invalid name")
-    void testSaveParticipant_participant_inValidName() throws Exception {
+    @DisplayName("Lecturer test saveLecturer with blank name")
+    void testSaveLecturer_lecturer_invalidName() throws Exception {
         LecturerCreateCommand command = new LecturerCreateCommand();
         command.setName("");
         command.setInstitution("CEU");
@@ -102,6 +102,25 @@ public class LecturerControllerMockMvcTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
+    }
+
+    @Test
+    @DisplayName("Lecturer test saveLecturer with blank email")
+    void testSaveLecturer_lecturer_invalidEmail() throws Exception {
+        LecturerCreateCommand command = new LecturerCreateCommand();
+        command.setName("Dr. Bob");
+        command.setInstitution("CEU");
+        command.setEmail("");
+        command.setDateOfBirth(LocalDate.now().minusDays(1));
+        command.setAcademicRank(AcademicRank.CANDIDATE);
+
+        mockMvc.perform(post("/api/lecturers")
+                        .content(objectMapper.writeValueAsString(command))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("email")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
     }
 
