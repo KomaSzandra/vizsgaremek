@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -39,7 +38,7 @@ public class ParticipantCreateCommand {
     private AcademicRank academicRank;
 
     @NotBlank(message = "Must not be blank")
-    @Schema(description = "Name of the institution", example = "Wigner Adatközpont")
+    @Schema(description = "The institution which employs the participant", example = "Wigner Adatközpont")
     private String institution;
 
     @Email(message = "Must be an e-mail address")

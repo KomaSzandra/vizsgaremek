@@ -1,14 +1,11 @@
 package hu.progmasters.conference.dto.command;
 
 import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.exceptionhandler.MinDate;
 import hu.progmasters.conference.exceptionhandler.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -91,7 +91,7 @@ public class PresentationController {
                                                    @Valid @RequestBody PresentationUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         PresentationInfo updated = presentationService.updatePresentation(id, command);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", updated));
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 

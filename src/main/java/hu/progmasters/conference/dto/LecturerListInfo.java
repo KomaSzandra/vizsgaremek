@@ -11,16 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LecturerListInfo {
 
-    @Schema(description = "Id of the Lecturer", example = "1")
+    @Schema(description = "Id of the lecturer", example = "1")
     private Integer id;
 
-    @Schema(description = "Name of the Lecturer", example = "Dr. John Doe")
+    @Schema(description = "Name of the lecturer", example = "Dr. John Doe")
     private String name;
 
     @Schema(description = "Rank of the lecturer")
     private AcademicRank academicRank;
 
-    @Schema(description = "Name of the Institution", example = "Central European University")
+    @Schema(description = "The institution which employs the lecturer", example = "Central European University")
     private String institution;
 
     @Schema(description = "Lecturer's email address", example = "doedr@lecturer.com")

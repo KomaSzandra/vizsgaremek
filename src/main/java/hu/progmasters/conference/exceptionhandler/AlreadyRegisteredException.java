@@ -5,7 +5,6 @@ public class AlreadyRegisteredException extends RuntimeException {
     private final Integer participantId;
 
     public AlreadyRegisteredException(Integer presentationId, Integer participantId) {
-        //super(presentationId + "," + participantId);
         this.presentationId = presentationId;
         this.participantId = participantId;
     }
@@ -17,6 +16,5 @@ public class AlreadyRegisteredException extends RuntimeException {
     public Integer getParticipantId() {
         return participantId;
     }
-
 
 }

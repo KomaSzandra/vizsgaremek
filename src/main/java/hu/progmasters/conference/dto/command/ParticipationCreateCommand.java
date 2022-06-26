@@ -12,11 +12,11 @@ import javax.validation.constraints.NotNull;
 public class ParticipationCreateCommand {
 
     @NotNull(message = "Must not be null")
-    @Schema(description = "Id of participant")
+    @Schema(description = "Id of the participant")
     private Integer participantId;
 
     @NotNull(message = "Must not be null")
-    @Schema(description = "Id of presentation")
+    @Schema(description = "Id of the presentation")
     private Integer presentationId;
 
 }

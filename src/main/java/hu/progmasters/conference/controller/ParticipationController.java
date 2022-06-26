@@ -51,9 +51,9 @@ public class ParticipationController {
     @ApiResponse(responseCode = "400", description = "Bad request, participations cannot be listed")
     public ResponseEntity<List<ParticipationInfo>> findAll() {
         LOGGER.info(String.format(LOG_GET, ""));
-        List<ParticipationInfo> infos = participationService.findAll();
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", infos));
-        return new ResponseEntity<>(infos, HttpStatus.OK);
+        List<ParticipationInfo> infoList = participationService.findAll();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", infoList));
+        return new ResponseEntity<>(infoList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -71,7 +71,8 @@ public class ParticipationController {
     @Operation(summary = "Get participations by participant")
     @ApiResponse(responseCode = "200", description = "Participations have been listed")
     @ApiResponse(responseCode = "400", description = "Bad request, participations cannot be listed")
-    public ResponseEntity<List<ParticipationInfo>> findAllByParticipant(@RequestParam("participantId") Integer participantId) {
+    public ResponseEntity<List<ParticipationInfo>> findAllByParticipant(@RequestParam("participantId")
+                                                                                    Integer participantId) {
         LOGGER.info(String.format(LOG_GET, "/" + participantId));
         List<ParticipationInfo> participations = participationService.findByParticipant(participantId);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", participations));
@@ -80,8 +81,8 @@ public class ParticipationController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a participation")
-    @ApiResponse(responseCode = "200", description = "Participations has been deleted")
-    @ApiResponse(responseCode = "400", description = "Bad request, participations cannot be deleted")
+    @ApiResponse(responseCode = "200", description = "Participation has been deleted")
+    @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be deleted")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_DELETE, "/" + id));
         participationService.deleteParticipation(id);
@@ -90,7 +91,7 @@ public class ParticipationController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Transferring a participant's participation to another presentation")
+    @Operation(summary = "Transferring a participant to another presentation")
     @ApiResponse(responseCode = "200", description = "Participation has been updated")
     @ApiResponse(responseCode = "400", description = "Bad request, participation cannot be updated")
     public ResponseEntity<ParticipationInfo> updateParticipantsPresentation(

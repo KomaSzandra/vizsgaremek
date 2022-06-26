@@ -13,16 +13,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class LecturerInfo {
 
-    @Schema(description = "Id of the Lecturer", example = "1")
+    @Schema(description = "Id of the lecturer", example = "1")
     private Integer id;
 
-    @Schema(description = "Name of the Lecturer", example = "Dr. John Doe")
+    @Schema(description = "Name of the lecturer", example = "Dr. John Doe")
     private String name;
 
     @Schema(description = "The lecturer's date of birth", format = "date", example = "1964-04-20")
     private LocalDate dateOfBirth;
 
-    @Schema(description = "Name of the Institution", example = "Central European University")
+    @Schema(description = "The institution which employs the lecturer", example = "Central European University")
     private String institution;
 
     @Schema(description = "The Lecturer's e-mail address", example = "ludwig@ceu.com")
@@ -31,10 +31,10 @@ public class LecturerInfo {
     @Schema(description = "Rank of the lecturer")
     private AcademicRank academicRank;
 
-    @Schema(description = "Id of a presenattion")
+    @Schema(description = "Id of the lecturer's presentation")
     private Integer presentationId;
 
-    @Schema(description = "Title of a presentation")
+    @Schema(description = "Title of the lecturer's presentation")
     private String presentationTitle;
 
 }

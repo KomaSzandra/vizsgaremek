@@ -15,7 +15,7 @@ public class PresentationInfo {
     @Schema(description = "Id of the presentation", example = "1")
     private Integer id;
 
-    @Schema(description = "Info of the lecturer")
+    @Schema(description = "Info about the lecturer of the presentation")
     private LecturerListInfo lecturer;
 
     @Schema(description = "Title of the presentation", example = "Researchers in the cloud")

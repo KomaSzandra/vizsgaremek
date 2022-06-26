@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ParticipantListItem {
 
+    @Schema(description = "Id of the participant", example = "1")
     private Integer id;
 
     @Schema(description = "Name of the participant", example = "Dr. Jack Doe")
     private String name;
 
-    @Schema(description = "Name of the institution", example = "Wigner Adatközpont")
+    @Schema(description = "The institution which employs the participant", example = "Wigner Adatközpont")
     private String institution;
 
     @Schema(description = "Rank of the lecturer")

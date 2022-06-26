@@ -19,7 +19,7 @@ public class ParticipantInfo {
     @Schema(description = "Name of the participant", example = "Dr. Jack Doe")
     private String name;
 
-    @Schema(description = "Name of the institution", example = "Wigner Adatközpont")
+    @Schema(description = "The institution which employs the participant", example = "Wigner Adatközpont")
     private String institution;
 
     @Schema(description = "E-mail address", example = "doedr@participant.com")

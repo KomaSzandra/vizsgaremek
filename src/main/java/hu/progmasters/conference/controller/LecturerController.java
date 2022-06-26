@@ -38,7 +38,7 @@ public class LecturerController {
     @PostMapping
     @Operation(summary = "Save a lecturer")
     @ApiResponse(responseCode = "201", description = "Lecturer has been saved")
-    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be created")
+    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be saved")
     public ResponseEntity<LecturerInfo> saveLecturer(@Valid @RequestBody LecturerCreateCommand command) {
         LOGGER.info(LOG_POST, command.toString());
         LecturerInfo saved = lecturerService.saveLecturer(command);
@@ -52,9 +52,9 @@ public class LecturerController {
     @ApiResponse(responseCode = "400", description = "Bad request, lecturers cannot be listed")
     public ResponseEntity<List<LecturerListInfo>> findAllLecturer() {
         LOGGER.info(String.format(LOG_GET, ""));
-        List<LecturerListInfo> lecturerInfos = lecturerService.findAllLecturer();
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerInfos));
-        return new ResponseEntity<>(lecturerInfos, HttpStatus.OK);
+        List<LecturerListInfo> infoList = lecturerService.findAllLecturer();
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", infoList));
+        return new ResponseEntity<>(infoList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -90,7 +90,7 @@ public class LecturerController {
                                                @Valid @RequestBody LecturerUpdateCommand command) {
         LOGGER.info(String.format(LOG_PUT, "/" + id, command.toString()));
         LecturerInfo lecturerInfo = lecturerService.addLecturerToPresentation(id, command);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", ""));
+        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerInfo));
         return new ResponseEntity<>(lecturerInfo, HttpStatus.OK);
     }
 
