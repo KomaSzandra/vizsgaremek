@@ -117,3 +117,11 @@ Adattárolásra SQL alapú MySQL adatbázist használ, melyben a táblákat Flyw
 Spring Data JPA technológiával történik. A beérkező adatok validálását a Spring Boot spring-boot-starter-validation 
 modulja végzi. Az alkalmazás tesztelésére integrációs és egység tesztek állnak rendelkezésre, melyek az src/test/java 
 mappában találhatók. A mellékelt Dockerfile segítségével az alkalmazásból Docker image készíthető.
+###
+***
+**Indítás**
+
+* **hálózat létrehozás**: docker network create conferencenetwork
+* **docker mysql konténer létrehozása** : docker run --name conferencedb --network conferencenetwork -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=conference -d -p 3307:3306 mysql:latest
+* **docker image létrehozása**: docker build -t conferenceapp .
+* **docker alkalmazás konténer létrehozása és indítása**: docker run --name conferenceapp --network conferencenetwork -p 8080:8080 -d conferenceapp
