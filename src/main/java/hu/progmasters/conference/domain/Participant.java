@@ -36,8 +36,7 @@ public class Participant {
     @Column(name ="email", unique = true)
     private String email;
 
-    @OneToMany
-    @JoinColumn(name = "participation_id")
+    @OneToMany(mappedBy = "participant")
     private List<Participation> participations;
 
 }

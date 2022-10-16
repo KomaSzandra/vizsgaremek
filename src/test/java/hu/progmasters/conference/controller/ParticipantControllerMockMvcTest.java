@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.dto.ParticipantInfo;
 import hu.progmasters.conference.dto.ParticipantListItem;
-import hu.progmasters.conference.dto.ParticipationInfo;
 import hu.progmasters.conference.dto.command.ParticipantCreateCommand;
 import hu.progmasters.conference.dto.command.ParticipantUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.EmailNotValidException;
@@ -80,7 +79,7 @@ public class ParticipantControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("john@ceu.com");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
 
         mockMvc.perform(post("/api/participants")
                         .content(objectMapper.writeValueAsString(command))
@@ -97,7 +96,7 @@ public class ParticipantControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("john@ceu.com");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
 
         mockMvc.perform(post("/api/participants")
                         .content(objectMapper.writeValueAsString(command))
@@ -116,7 +115,7 @@ public class ParticipantControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("1234password");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
 
         mockMvc.perform(post("/api/participants")
                         .content(objectMapper.writeValueAsString(command))
@@ -154,7 +153,7 @@ public class ParticipantControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("john@ceu.com");
         command.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 16));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
         when(participantService.saveParticipant(command)).thenReturn(new ParticipantInfo(1, "Dr. John",
                 "CEU", "john@ceu.com", AcademicRank.CANDIDATE,
                 LocalDate.of(1980, Month.JANUARY, 16)));
@@ -170,7 +169,7 @@ public class ParticipantControllerMockMvcTest {
         command1.setInstitution("CEU");
         command1.setEmail("john@ceu.com");
         command1.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 16));
-        command1.setAcademicRank(AcademicRank.CANDIDATE);
+        command1.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
         when(participantService.saveParticipant(command)).thenThrow(EmailNotValidException.class);
 
         mockMvc.perform(post("/api/participants")
@@ -187,7 +186,7 @@ public class ParticipantControllerMockMvcTest {
     void testFindAllByName_participant_success() throws Exception {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         command.setName("Bob");
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
         command.setEmail("bob@gmowe.hu");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
         command.setInstitution("BMX");
@@ -228,9 +227,9 @@ public class ParticipantControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("Participant test deleteParticipations")
+    @DisplayName("Participant test delete Participations")
     void testDeleteParticipations_participant_success() throws Exception {
-        when(participationService.findByParticipant(1)).thenReturn(new ArrayList<ParticipationInfo>());
+        when(participationService.findByParticipant(1)).thenReturn(new ArrayList<>());
 
         mockMvc.perform(delete("/api/participants/1"))
                 .andExpect(status().isOk());

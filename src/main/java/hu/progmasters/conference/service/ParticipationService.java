@@ -59,12 +59,17 @@ public class ParticipationService {
     }
 
     public ParticipationInfo findById(Integer id) {
-        Participation participationById = participationRepository.findById(id)
-                .orElseThrow(()-> new ParticipationNotFoundException(id));
+        Participation participationById = getParticipation(id);
         return modelMapper.map(participationById, ParticipationInfo.class);
     }
 
+    private Participation getParticipation(Integer id) {
+        return participationRepository.findById(id)
+                .orElseThrow(() -> new ParticipationNotFoundException(id));
+    }
+
     public List<ParticipationInfo> findByParticipant(Integer participantId) {
+        participantService.findParticipantById(participantId);
         List<Participation> byParticipant = participationRepository.findByParticipant(participantId);
         return byParticipant.stream()
                 .map(participation -> modelMapper.map(participation, ParticipationInfo.class))
@@ -72,8 +77,7 @@ public class ParticipationService {
     }
 
     public void deleteParticipation(Integer participationId) {
-        Participation participation = participationRepository.findById(participationId).orElseThrow(()->
-                new ParticipationNotFoundException(participationId));
+        Participation participation = getParticipation(participationId);
         participationRepository.delete(participation);
     }
 
@@ -97,11 +101,9 @@ public class ParticipationService {
     }
 
     public ParticipationInfo updateParticipantsPresentation(Integer participationId, ParticipationUpdateCommand command) {
-        Participation participation = participationRepository.findById(participationId).orElseThrow(()
-                -> new ParticipationNotFoundException(participationId));
+        Participation participation = getParticipation(participationId);
         Presentation presentation = presentationService.findPresentationById(command.getPresentationId());
         participation.setPresentation(presentation);
-        participationRepository.update(participation);
         return modelMapper.map(participation, ParticipationInfo.class);
     }
 }

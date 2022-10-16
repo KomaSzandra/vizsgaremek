@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class ParticipantController {
     @Operation(summary = "Save a participant")
     @ApiResponse(responseCode = "201", description = "Participant has been created")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be created")
-    public ResponseEntity<ParticipantInfo> saveParticipant(@Valid @RequestBody ParticipantCreateCommand command) {
+    public ResponseEntity<ParticipantInfo> saveParticipant(@Valid @RequestBody ParticipantCreateCommand command) throws SQLException {
         LOGGER.info(LOG_POST, command.toString());
         ParticipantInfo saved = participantService.saveParticipant(command);
         LOGGER.info(String.format(HTTP_RESPONSE, "CREATED", saved));
@@ -52,7 +53,6 @@ public class ParticipantController {
     @Operation(summary = "Get a participant by given id")
     @ApiResponse(responseCode = "200", description = "Participant has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, participant cannot be found")
-    @ApiResponse(responseCode = "404", description = "Participant has not been found")
     public ResponseEntity<ParticipantInfo> findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         ParticipantInfo byId = participantService.findById(id);

@@ -9,6 +9,7 @@ import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.GlobalExceptionHandler;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
+import hu.progmasters.conference.exceptionhandler.PresentationTitleNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -124,6 +125,15 @@ public class PresentationServiceTest {
         when(presentationRepository.findById(9)).thenThrow(new PresentationNotFoundException(9));
         assertThrows(PresentationNotFoundException.class, () ->presentationService.findById(9));
         verify(presentationRepository, times(1)).findById(9);
+        verifyNoMoreInteractions(presentationRepository);
+    }
+
+    @Test
+    @DisplayName("Presentation test findByTitle not found")
+    void testFindByTitle_presentation_notFound() {
+        when(presentationRepository.findPresentationByTitle("Resett")).thenThrow(new PresentationTitleNotFoundException("Resett"));
+        assertThrows(PresentationTitleNotFoundException.class, () ->presentationService.findByTitle("Resett"));
+        verify(presentationRepository, times(1)).findPresentationByTitle("Resett");
         verifyNoMoreInteractions(presentationRepository);
     }
 

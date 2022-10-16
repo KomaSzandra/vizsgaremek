@@ -6,6 +6,7 @@ import hu.progmasters.conference.dto.LecturerListInfo;
 import hu.progmasters.conference.dto.PresentationInfo;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
+import hu.progmasters.conference.exceptionhandler.PresentationTitleNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.service.ParticipationService;
 import hu.progmasters.conference.service.PresentationService;

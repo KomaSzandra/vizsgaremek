@@ -63,7 +63,6 @@ public class PresentationController {
     @Operation(summary = "Get an exact presentation by given id")
     @ApiResponse(responseCode = "200", description = "Presentation has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
-    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
     public ResponseEntity<PresentationInfo> findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         PresentationInfo presentationInfo = presentationService.findById(id);
@@ -75,7 +74,6 @@ public class PresentationController {
     @Operation(summary = "Finds the presentation by title")
     @ApiResponse(responseCode = "200", description = "Presentation has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, presentation cannot be found")
-    @ApiResponse(responseCode = "404", description = "Presentation has not been found")
     public ResponseEntity<PresentationInfo> findByTitle(@RequestParam("title") String title) {
         LOGGER.info(String.format(LOG_GET, "/" + title));
         PresentationInfo presentationFound = presentationService.findByTitle(title);

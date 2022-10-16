@@ -30,8 +30,7 @@ public class Presentation {
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @OneToMany
-    @JoinColumn(name = "participation_id")
+    @OneToMany(mappedBy = "presentation")
     private List<Participation> participations;
 
 }

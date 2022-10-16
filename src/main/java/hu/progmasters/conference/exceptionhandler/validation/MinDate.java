@@ -1,4 +1,4 @@
-package hu.progmasters.conference.exceptionhandler;
+package hu.progmasters.conference.exceptionhandler.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = MinDateValidator.class)
 public @interface MinDate {
 
-    String message() default "No ghosts! You have to be born after 1900";
+    String message() default "You have to be born after 1900";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

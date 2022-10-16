@@ -11,6 +11,4 @@ public class EmailNotValidException extends RuntimeException{
     public String getEmail() {
         return email;
     }
-
-
 }

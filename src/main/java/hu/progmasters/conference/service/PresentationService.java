@@ -6,11 +6,11 @@ import hu.progmasters.conference.dto.PresentationListItem;
 import hu.progmasters.conference.dto.command.PresentationCreateCommand;
 import hu.progmasters.conference.dto.command.PresentationUpdateCommand;
 import hu.progmasters.conference.exceptionhandler.PresentationNotFoundException;
+import hu.progmasters.conference.exceptionhandler.PresentationTitleNotFoundException;
 import hu.progmasters.conference.exceptionhandler.TitleNotValidException;
 import hu.progmasters.conference.repository.PresentationRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,8 +38,7 @@ public class PresentationService {
     }
 
     public PresentationInfo findById(Integer id) {
-        Presentation presentationFound = presentationRepository.findById(id).orElseThrow(() ->
-                new PresentationNotFoundException(id));
+        Presentation presentationFound = findPresentationById(id);
         return modelMapper.map(presentationFound, PresentationInfo.class);
     }
 
@@ -50,12 +49,14 @@ public class PresentationService {
     }
 
     public PresentationInfo findByTitle(String title) {
+        if (presentationRepository.findPresentationByTitle(title) == null) {
+            throw new PresentationTitleNotFoundException(title);
+        }
         return modelMapper.map(presentationRepository.findPresentationByTitle(title), PresentationInfo.class);
     }
 
     public PresentationInfo updatePresentation(Integer id, PresentationUpdateCommand command) {
-        Presentation presentationFound = presentationRepository.findById(id).orElseThrow(() ->
-                new PresentationNotFoundException(id));
+        Presentation presentationFound = findPresentationById(id);
         presentationFound.setStartTime(command.getStartTime());
         return modelMapper.map(presentationFound, PresentationInfo.class);
     }

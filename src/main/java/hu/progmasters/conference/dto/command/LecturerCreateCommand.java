@@ -1,7 +1,7 @@
 package hu.progmasters.conference.dto.command;
 
 import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.exceptionhandler.Rank;
+import hu.progmasters.conference.exceptionhandler.validation.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,13 +22,10 @@ public class LecturerCreateCommand {
     @Schema(description = "Name of the Lecturer", example = "Dr. John Doe")
     private String name;
 
+    @Rank(enumClass = AcademicRank.class)
     @NotNull(message = "Must not be null")
-    @Rank(anyOf = {AcademicRank.ASSISTANT_LECTURER, AcademicRank.CANDIDATE, AcademicRank.PROFESSOR,
-            AcademicRank.ASSISTANT_RESEARCH_FELLOW, AcademicRank.ASSOCIATE_PROFESSOR, AcademicRank.SCIENTIFIC_ADVISOR,
-            AcademicRank.PROFESSOR_EMERITUS, AcademicRank.SENIOR_LECTURER, AcademicRank.RESEARCH_FELLOW,
-            AcademicRank.RESEARCH_PROFESSOR, AcademicRank.SENIOR_RESEARCH_FELLOW})
     @Schema(description = "Rank of the lecturer", example = "PROFESSOR")
-    private AcademicRank academicRank;
+    private String academicRank;
 
     @NotBlank(message = "Must not be blank")
     @Schema(description = "Name of the Institution", example = "Central European University")

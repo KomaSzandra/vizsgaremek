@@ -91,4 +91,11 @@ public class GlobalExceptionHandler {
                 List.of(new ValidationError("participationId", "No participation found with id")),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PresentationTitleNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handlePresentationTitleNotFound() {
+        return new ResponseEntity<>(
+                List.of(new ValidationError("title", "No presentation found with given title")),
+                HttpStatus.BAD_REQUEST);
+    }
 }

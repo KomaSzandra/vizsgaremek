@@ -1,6 +1,4 @@
-package hu.progmasters.conference.exceptionhandler;
-
-import hu.progmasters.conference.domain.AcademicRank;
+package hu.progmasters.conference.exceptionhandler.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,8 +13,8 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = RankValidator.class)
 public @interface Rank {
 
-    AcademicRank[] anyOf();
-    String message() default "Must be any of{anyOf}";
+    Class<? extends Enum<?>> enumClass();
+    String message() default "Must be any of{enumClass}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

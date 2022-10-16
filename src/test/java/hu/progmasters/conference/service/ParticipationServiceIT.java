@@ -55,7 +55,7 @@ public class ParticipationServiceIT {
         ParticipantCreateCommand command = new ParticipantCreateCommand();
         LocalDate dateOfBirth = LocalDate.of(1990, Month.SEPTEMBER, 26);
         command.setName("Dr. Jack Doe");
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
         command.setEmail("lilDoe@uni.com");
         command.setInstitution("BME");
         command.setDateOfBirth(dateOfBirth);

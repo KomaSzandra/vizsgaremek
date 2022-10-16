@@ -1,5 +1,6 @@
 package hu.progmasters.conference.service;
 
+import hu.progmasters.conference.domain.AcademicRank;
 import hu.progmasters.conference.domain.Lecturer;
 import hu.progmasters.conference.domain.Presentation;
 import hu.progmasters.conference.dto.LecturerInfo;
@@ -31,7 +32,7 @@ public class LecturerService {
     public LecturerInfo saveLecturer(LecturerCreateCommand command) {
         Lecturer toSave = new Lecturer();
         toSave.setName(command.getName());
-        toSave.setAcademicRank(command.getAcademicRank());
+        toSave.setAcademicRank(AcademicRank.valueOf(command.getAcademicRank()));
         toSave.setInstitution(command.getInstitution());
         toSave.setEmail(command.getEmail());
         toSave.setDateOfBirth(command.getDateOfBirth());
@@ -53,19 +54,12 @@ public class LecturerService {
     }
 
     public LecturerInfo findById(Integer id) {
-        Lecturer lecturerFound = lecturerRepository.findById(id).orElseThrow(() ->
-                new LecturerNotFoundException(id));
+        Lecturer lecturerFound = findLecturerById(id);
         return modelMapper.map(lecturerFound, LecturerInfo.class);
     }
 
-    public LecturerInfo findByName(String name) {
-        return modelMapper.map(lecturerRepository.findByName(name), LecturerInfo.class);
-    }
-
     public void deleteLecturer(Integer id) {
-        Lecturer lecturerFound = lecturerRepository.findById(id).orElseThrow(() ->
-                new LecturerNotFoundException(id));
-
+        Lecturer lecturerFound = findLecturerById(id);
         Presentation presentation = lecturerFound.getPresentation();
         if (presentation != null) {
             throw new LecturerAlreadyHasAPresentationException(presentation.getId());
@@ -75,8 +69,7 @@ public class LecturerService {
 
     public LecturerInfo addLecturerToPresentation(Integer id, LecturerUpdateCommand command) {
         Presentation presentationFound = presentationService.findPresentationById(id);
-        Lecturer lecturerFound = lecturerRepository.findById(command.getLecturerId()).orElseThrow(() ->
-                new LecturerNotFoundException(command.getLecturerId()));
+        Lecturer lecturerFound = findLecturerById(command.getLecturerId());
 
         if (lecturerFound.getPresentation() != null || presentationFound.getLecturer() != null) {
             throw new LecturerAlreadyHasAPresentationException(id);
@@ -84,5 +77,10 @@ public class LecturerService {
         presentationFound.setLecturer(lecturerFound);
         lecturerFound.setPresentation(presentationFound);
         return modelMapper.map(lecturerFound, LecturerInfo.class);
+    }
+
+    private Lecturer findLecturerById(Integer id) {
+        return lecturerRepository.findById(id).orElseThrow(() ->
+                new LecturerNotFoundException(id));
     }
 }

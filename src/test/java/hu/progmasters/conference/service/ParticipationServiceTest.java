@@ -137,7 +137,6 @@ public class ParticipationServiceTest {
         assertEquals(participationInfo1, info);
         verify(participationRepository, times(1)).findById(1);
         verify(presentationService, times(1)).findPresentationById(updateCommand.getPresentationId());
-        verify(participationRepository, times(1)).update(participation);
         verifyNoMoreInteractions(participationRepository, presentationService);
     }
 

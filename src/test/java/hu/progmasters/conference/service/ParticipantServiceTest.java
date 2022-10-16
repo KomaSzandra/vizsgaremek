@@ -57,9 +57,9 @@ public class ParticipantServiceTest {
         participant1 = new Participant(2, "Dr. Jane Doe", LocalDate.of(1980, Month.APRIL, 20),
                 AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu", new ArrayList<>());
         createCommand = new ParticipantCreateCommand("Dr. Jack Doe", LocalDate.of(
-                1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
+                1980, Month.APRIL, 20), String.valueOf(AcademicRank.RESEARCH_FELLOW), "BMX", "jackDr@bmx.hu");
         createCommand1 = new ParticipantCreateCommand("Dr. Jane Doe", LocalDate.of(
-                1980, Month.APRIL, 20), AcademicRank.RESEARCH_FELLOW, "BMX", "jackDr@bmx.hu");
+                1980, Month.APRIL, 20), String.valueOf(AcademicRank.RESEARCH_FELLOW), "BMX", "jackDr@bmx.hu");
         participantInfo = new ParticipantInfo(1, "Dr. Jack Doe", "BMX", "jackDr@bmx.hu",
                 AcademicRank.RESEARCH_FELLOW,  LocalDate.of(1980, Month.APRIL, 20));
         participantInfo1 = new ParticipantInfo(1, "Dr. Jack Doe", "BME", "jackDr@bmx.hu",

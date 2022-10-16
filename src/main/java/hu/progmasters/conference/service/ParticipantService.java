@@ -39,8 +39,7 @@ public class ParticipantService {
     }
 
     public ParticipantInfo findById(Integer id) {
-        Participant participantById = participantRepository.findById(id).orElseThrow(()
-                -> new ParticipantNotFoundException(id));
+        Participant participantById = findParticipantById(id);
         return modelMapper.map(participantById, ParticipantInfo.class);
     }
 
@@ -52,8 +51,7 @@ public class ParticipantService {
     }
 
     public ParticipantInfo update(Integer id, ParticipantUpdateCommand command) {
-        Participant participantById = participantRepository.findById(id).orElseThrow(()
-                -> new ParticipantNotFoundException(id));
+        Participant participantById = findParticipantById(id);
         participantById.setInstitution(command.getInstitution());
         return modelMapper.map(participantById, ParticipantInfo.class);
     }

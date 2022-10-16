@@ -1,4 +1,4 @@
-package hu.progmasters.conference.exceptionhandler;
+package hu.progmasters.conference.exceptionhandler.validation;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;

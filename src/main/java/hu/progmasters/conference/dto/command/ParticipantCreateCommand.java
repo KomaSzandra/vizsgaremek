@@ -1,8 +1,8 @@
 package hu.progmasters.conference.dto.command;
 
 import hu.progmasters.conference.domain.AcademicRank;
-import hu.progmasters.conference.exceptionhandler.MinDate;
-import hu.progmasters.conference.exceptionhandler.Rank;
+import hu.progmasters.conference.exceptionhandler.validation.MinDate;
+import hu.progmasters.conference.exceptionhandler.validation.Rank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,13 +29,10 @@ public class ParticipantCreateCommand {
     @Schema(description = "The participant's date of birth", type = "string", format = "date", example = "1964-04-20")
     private LocalDate dateOfBirth;
 
-    @Rank(anyOf = {AcademicRank.ASSISTANT_LECTURER, AcademicRank.CANDIDATE, AcademicRank.PROFESSOR,
-            AcademicRank.ASSISTANT_RESEARCH_FELLOW, AcademicRank.ASSOCIATE_PROFESSOR, AcademicRank.SCIENTIFIC_ADVISOR,
-            AcademicRank.PROFESSOR_EMERITUS, AcademicRank.SENIOR_LECTURER, AcademicRank.RESEARCH_FELLOW,
-            AcademicRank.RESEARCH_PROFESSOR, AcademicRank.SENIOR_RESEARCH_FELLOW})
+    @Rank(enumClass = AcademicRank.class)
     @NotNull(message = "Must not be null")
-    @Schema(description = "Rank of the lecturer")
-    private AcademicRank academicRank;
+    @Schema(description = "Rank of the lecturer", example = "PROFESSOR")
+    private String academicRank;
 
     @NotBlank(message = "Must not be blank")
     @Schema(description = "The institution which employs the participant", example = "Wigner Adatközpont")

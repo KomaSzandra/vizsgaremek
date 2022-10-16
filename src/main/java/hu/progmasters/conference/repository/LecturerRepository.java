@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +27,6 @@ public class LecturerRepository {
 
     public Optional<Lecturer> findById(Integer id) {
         return Optional.ofNullable(entityManager.find(Lecturer.class, id));
-    }
-
-    public Lecturer findByName(String name) {
-        TypedQuery<Lecturer> query = entityManager.createQuery("SELECT l FROM Lecturer l WHERE l.name = :nameParam", Lecturer.class);
-        query.setParameter("nameParam", name);
-        return query.getSingleResult();
     }
 
     public void deleteLecturer(Lecturer toDelete) {

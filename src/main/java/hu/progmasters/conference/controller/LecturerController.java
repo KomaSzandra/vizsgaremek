@@ -61,24 +61,11 @@ public class LecturerController {
     @Operation(summary = "Get an exact lecturer by given id")
     @ApiResponse(responseCode = "200", description = "Lecturer has been found")
     @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
-    @ApiResponse(responseCode = "404", description = "Lecturer has not been found")
     public ResponseEntity<LecturerInfo> findById(@PathVariable("id") Integer id) {
         LOGGER.info(String.format(LOG_GET, "/" + id));
         LecturerInfo byId = lecturerService.findById(id);
         LOGGER.info(String.format(HTTP_RESPONSE, "OK", byId));
         return new ResponseEntity<>(byId, HttpStatus.OK);
-    }
-
-    @GetMapping("findByName")
-    @Operation(summary = "Finds the lecturer by name")
-    @ApiResponse(responseCode = "200", description = "Lecturer has been found")
-    @ApiResponse(responseCode = "400", description = "Bad request, lecturer cannot be found")
-    @ApiResponse(responseCode = "404", description = "Lecturer has not been found")
-    public ResponseEntity<LecturerInfo> findByName(@RequestParam("name") String name) {
-        LOGGER.info(String.format(LOG_GET, "/" + name));
-        LecturerInfo lecturerFound = lecturerService.findByName(name);
-        LOGGER.info(String.format(HTTP_RESPONSE, "OK", lecturerFound));
-        return new ResponseEntity<>(lecturerFound, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

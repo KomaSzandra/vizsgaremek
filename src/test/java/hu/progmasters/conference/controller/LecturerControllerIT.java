@@ -62,7 +62,7 @@ public class LecturerControllerIT {
         LecturerCreateCommand command = new LecturerCreateCommand();
         command.setInstitution("BMX");
         command.setEmail("bb@bmx.yu");
-        command.setAcademicRank(AcademicRank.SENIOR_RESEARCH_FELLOW);
+        command.setAcademicRank(String.valueOf(AcademicRank.SENIOR_RESEARCH_FELLOW));
         command.setName("Dr. Yu");
         command.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 10));
 
@@ -74,29 +74,6 @@ public class LecturerControllerIT {
                 .andExpect(jsonPath("$.name", equalTo("Dr. Yu")))
                 .andExpect(jsonPath("$.institution", equalTo("BMX")))
                 .andExpect(jsonPath("$.email", equalTo("bb@bmx.yu")));
-    }
-
-    @Test
-    @DisplayName("Lecturer test findByName")
-    void testFindByName_lecturer_success() throws Exception {
-        LecturerCreateCommand command = new LecturerCreateCommand();
-        command.setName("Dr. Bob");
-        command.setAcademicRank(AcademicRank.CANDIDATE);
-        command.setEmail("bob@gbob.bob");
-        command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setInstitution("BOB");
-
-        mockMvc.perform(post("/api/lecturers")
-                        .content(objectMapper.writeValueAsString(command))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        mockMvc.perform(get("/api/lecturers/findByName")
-                        .param("name", "Dr. Bob"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo("Dr. Bob")))
-                .andDo(print());
     }
 
     @Test

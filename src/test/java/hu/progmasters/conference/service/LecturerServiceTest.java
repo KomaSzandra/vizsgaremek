@@ -73,9 +73,9 @@ public class LecturerServiceTest {
                 AcademicRank.SENIOR_RESEARCH_FELLOW, 1, "Reset");
         updateCommand = new LecturerUpdateCommand(1);
         updateCommand1 = new LecturerUpdateCommand(2);
-        createCommand = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_LECTURER, "CEU",
+        createCommand = new LecturerCreateCommand("Dr. John Doe", String.valueOf(AcademicRank.SENIOR_LECTURER), "CEU",
                 "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
-        createCommand1 = new LecturerCreateCommand("Dr. John Doe", AcademicRank.SENIOR_RESEARCH_FELLOW,
+        createCommand1 = new LecturerCreateCommand("Dr. John Doe", String.valueOf(AcademicRank.SENIOR_RESEARCH_FELLOW),
                 "CEU", "drDoe@lecturer.com", LocalDate.of(1980, 8, 5));
     }
 

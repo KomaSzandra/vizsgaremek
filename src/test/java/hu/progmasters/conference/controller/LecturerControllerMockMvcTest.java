@@ -76,7 +76,7 @@ public class LecturerControllerMockMvcTest {
         command.setName("Dr. Yu");
         command.setInstitution("BMX");
         command.setEmail("bb@bmx.yu");
-        command.setAcademicRank(AcademicRank.SENIOR_RESEARCH_FELLOW);
+        command.setAcademicRank(String.valueOf(AcademicRank.SENIOR_RESEARCH_FELLOW));
         command.setDateOfBirth(LocalDate.of(1980, Month.JANUARY, 10));
 
         mockMvc.perform(post("/api/lecturers")
@@ -94,7 +94,7 @@ public class LecturerControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("john@ceu.com");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
 
         mockMvc.perform(post("/api/lecturers")
                         .content(objectMapper.writeValueAsString(command))
@@ -113,7 +113,7 @@ public class LecturerControllerMockMvcTest {
         command.setInstitution("CEU");
         command.setEmail("");
         command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setAcademicRank(AcademicRank.CANDIDATE);
+        command.setAcademicRank(String.valueOf(AcademicRank.CANDIDATE));
 
         mockMvc.perform(post("/api/lecturers")
                         .content(objectMapper.writeValueAsString(command))
@@ -122,27 +122,6 @@ public class LecturerControllerMockMvcTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$[0].field", is("email")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Must not be blank")));
-    }
-
-    @Test
-    @DisplayName("Lecturer test findByName")
-    void testFindByName_lecturer_success() throws Exception {
-        LecturerCreateCommand command = new LecturerCreateCommand();
-        command.setName("Dr. Bob");
-        command.setAcademicRank(AcademicRank.CANDIDATE);
-        command.setEmail("bob@gbob.bob");
-        command.setDateOfBirth(LocalDate.now().minusDays(1));
-        command.setInstitution("BOB");
-
-        mockMvc.perform(post("/api/lecturers")
-                        .content(objectMapper.writeValueAsString(command))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        mockMvc.perform(get("/api/lecturers/findByName")
-                        .param("name", "Dr. Bob"))
-                .andExpect(status().isOk());
     }
 
     @Test
